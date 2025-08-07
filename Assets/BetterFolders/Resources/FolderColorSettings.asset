@@ -198,3 +198,59 @@ MonoBehaviour:
     applyColorToSubfolders: 0
     applyIconToSubfolders: 0
     materialColor: 0
+  - folderName: Audios
+    folderColor: {r: 0.6320754, g: 0.89349854, b: 1, a: 1}
+    fullPath: Assets/Kaede/Script/Audios
+    icon: {fileID: 0}
+    applyToAllFolders: 0
+    applyColorToSubfolders: 0
+    applyIconToSubfolders: 0
+    materialColor: 0
+  - folderName: Characters
+    folderColor: {r: 1, g: 0.64716977, b: 0.64716977, a: 1}
+    fullPath: Assets/Kaede/Script/Characters
+    icon: {fileID: 0}
+    applyToAllFolders: 0
+    applyColorToSubfolders: 0
+    applyIconToSubfolders: 0
+    materialColor: 0
+  - folderName: Inputs
+    folderColor: {r: 1, g: 0.73018867, b: 0.915682, a: 1}
+    fullPath: Assets/Kaede/Script/Inputs
+    icon: {fileID: 0}
+    applyToAllFolders: 0
+    applyColorToSubfolders: 0
+    applyIconToSubfolders: 0
+    materialColor: 0
+  - folderName: Item
+    folderColor: {r: 0.9060578, g: 0.7150943, b: 1, a: 1}
+    fullPath: Assets/Kaede/Script/Item
+    icon: {fileID: 0}
+    applyToAllFolders: 0
+    applyColorToSubfolders: 0
+    applyIconToSubfolders: 0
+    materialColor: 0
+  - folderName: Manager
+    folderColor: {r: 0.7528302, g: 0.75570124, b: 1, a: 1}
+    fullPath: Assets/Kaede/Script/Manager
+    icon: {fileID: 0}
+    applyToAllFolders: 0
+    applyColorToSubfolders: 0
+    applyIconToSubfolders: 0
+    materialColor: 0
+  - folderName: Managers
+    folderColor: {r: 0.7075472, g: 0.9059297, b: 1, a: 1}
+    fullPath: Assets/Kaede/Script/Managers
+    icon: {fileID: 0}
+    applyToAllFolders: 0
+    applyColorToSubfolders: 0
+    applyIconToSubfolders: 0
+    materialColor: 0
+  - folderName: Utils
+    folderColor: {r: 0.72264147, g: 1, b: 0.90236866, a: 1}
+    fullPath: Assets/Kaede/Script/Utils
+    icon: {fileID: 0}
+    applyToAllFolders: 0
+    applyColorToSubfolders: 0
+    applyIconToSubfolders: 0
+    materialColor: 0
