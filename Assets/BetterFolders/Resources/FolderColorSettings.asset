@@ -15,11 +15,11 @@ MonoBehaviour:
   modifierKey: 8
   folderRules:
   - folderName: Scripts
-    folderColor: {r: 0.7607844, g: 0.25490198, b: 0.04705883, a: 1}
-    fullPath: 
+    folderColor: {r: 0, g: 0.98589945, b: 1, a: 1}
+    fullPath: Assets/Kaede/Scripts
     icon: {fileID: 2800000, guid: e8f773ed12919704f8da008b216e3427, type: 3}
     applyToAllFolders: 1
-    applyColorToSubfolders: 1
+    applyColorToSubfolders: 0
     applyIconToSubfolders: 0
     materialColor: 0
   - folderName: Scenes
@@ -104,10 +104,10 @@ MonoBehaviour:
     materialColor: 0
   - folderName: Prefabs
     folderColor: {r: 0.63529414, g: 0.10980393, b: 0.6862745, a: 1}
-    fullPath: 
+    fullPath: Assets/Kaede/Prefabs
     icon: {fileID: 2800000, guid: fb0e68a1a82c3a04c9e5a953987f5d2c, type: 3}
     applyToAllFolders: 1
-    applyColorToSubfolders: 1
+    applyColorToSubfolders: 0
     applyIconToSubfolders: 0
     materialColor: 0
   - folderName: Shaders
@@ -190,65 +190,65 @@ MonoBehaviour:
     applyColorToSubfolders: 1
     applyIconToSubfolders: 0
     materialColor: 0
-  - folderName: Script
-    folderColor: {r: 0, g: 1, b: 0.9679289, a: 1}
-    fullPath: Assets/Kaede/Script
-    icon: {fileID: 2800000, guid: e8f773ed12919704f8da008b216e3427, type: 3}
-    applyToAllFolders: 0
-    applyColorToSubfolders: 0
-    applyIconToSubfolders: 0
-    materialColor: 0
   - folderName: Audios
-    folderColor: {r: 0.6320754, g: 0.89349854, b: 1, a: 1}
-    fullPath: Assets/Kaede/Script/Audios
+    folderColor: {r: 1, g: 0.6999999, b: 0.6999999, a: 1}
+    fullPath: Assets/Kaede/Scripts/Audios
     icon: {fileID: 0}
     applyToAllFolders: 0
     applyColorToSubfolders: 0
     applyIconToSubfolders: 0
     materialColor: 0
   - folderName: Characters
-    folderColor: {r: 1, g: 0.64716977, b: 0.64716977, a: 1}
-    fullPath: Assets/Kaede/Script/Characters
+    folderColor: {r: 1, g: 0.7377358, b: 0.84179324, a: 1}
+    fullPath: Assets/Kaede/Scripts/Characters
+    icon: {fileID: 0}
+    applyToAllFolders: 0
+    applyColorToSubfolders: 0
+    applyIconToSubfolders: 0
+    materialColor: 0
+  - folderName: Example
+    folderColor: {r: 0.87957466, g: 0.7830188, b: 1, a: 1}
+    fullPath: Assets/Kaede/Scripts/Example
     icon: {fileID: 0}
     applyToAllFolders: 0
     applyColorToSubfolders: 0
     applyIconToSubfolders: 0
     materialColor: 0
   - folderName: Inputs
-    folderColor: {r: 1, g: 0.73018867, b: 0.915682, a: 1}
-    fullPath: Assets/Kaede/Script/Inputs
+    folderColor: {r: 0.60188675, g: 0.6631563, b: 1, a: 1}
+    fullPath: Assets/Kaede/Scripts/Inputs
     icon: {fileID: 0}
     applyToAllFolders: 0
     applyColorToSubfolders: 0
     applyIconToSubfolders: 0
     materialColor: 0
   - folderName: Item
-    folderColor: {r: 0.9060578, g: 0.7150943, b: 1, a: 1}
-    fullPath: Assets/Kaede/Script/Item
+    folderColor: {r: 0, g: 0.9770379, b: 1, a: 1}
+    fullPath: Assets/Kaede/Prefabs/Item
     icon: {fileID: 0}
     applyToAllFolders: 0
     applyColorToSubfolders: 0
     applyIconToSubfolders: 0
     materialColor: 0
-  - folderName: Manager
-    folderColor: {r: 0.7528302, g: 0.75570124, b: 1, a: 1}
-    fullPath: Assets/Kaede/Script/Manager
+  - folderName: ItemSO
+    folderColor: {r: 0.49622637, g: 1, b: 0.7330731, a: 1}
+    fullPath: Assets/Kaede/Scripts/ItemSO
     icon: {fileID: 0}
     applyToAllFolders: 0
     applyColorToSubfolders: 0
     applyIconToSubfolders: 0
     materialColor: 0
   - folderName: Managers
-    folderColor: {r: 0.7075472, g: 0.9059297, b: 1, a: 1}
-    fullPath: Assets/Kaede/Script/Managers
+    folderColor: {r: 0.72544545, g: 1, b: 0.57924527, a: 1}
+    fullPath: Assets/Kaede/Scripts/Managers
     icon: {fileID: 0}
     applyToAllFolders: 0
     applyColorToSubfolders: 0
     applyIconToSubfolders: 0
     materialColor: 0
   - folderName: Utils
-    folderColor: {r: 0.72264147, g: 1, b: 0.90236866, a: 1}
-    fullPath: Assets/Kaede/Script/Utils
+    folderColor: {r: 0.85547847, g: 1, b: 0.57169807, a: 1}
+    fullPath: Assets/Kaede/Scripts/Utils
     icon: {fileID: 0}
     applyToAllFolders: 0
     applyColorToSubfolders: 0
