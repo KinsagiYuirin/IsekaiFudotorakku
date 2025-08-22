@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 31dd0b972bd18894aadeaa14ba68ef51, type: 3}
+  m_Name: Test 2
+  m_EditorClassIdentifier: 
+  <ItemName>k__BackingField: Circle
+  <Rarity>k__BackingField: 1
+  <Type>k__BackingField: 1
+  <IngredientType>k__BackingField: 1
+  <MeatType>k__BackingField: 2
+  <VegetableType>k__BackingField: 0
+  <AnimalProductType>k__BackingField: 0
+  <ItemDescription>k__BackingField: Normal Pork
+  <ItemIcon>k__BackingField: {fileID: -5626483540472518896, guid: 538417ee8324608439b4115e3c460825, type: 3}
+  <ItemPrefab>k__BackingField: {fileID: 5824431044200324641, guid: 7071d60145b8b38409c8f71638b13d48, type: 3}

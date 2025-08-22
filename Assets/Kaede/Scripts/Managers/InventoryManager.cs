@@ -23,13 +23,20 @@ namespace Yuirin.Script.Inventory
             
             LoadInventory();
         }
-        
+
         private void LoadInventory()
         {
 
-            foreach (var inventoryData in inventoryEvent.InventoryDataList)
+            /*foreach (var inventoryData in inventoryEvent.InventoryDataList)
             {
                 var itemSlot = itemSlots[0];
+                itemSlot.Initialize(inventoryData.itemData);
+            }*/
+            
+            for (int i = 0; i < inventoryEvent.InventoryDataList.Count; i++)
+            {
+                var inventoryData = inventoryEvent.InventoryDataList[i];
+                var itemSlot = itemSlots[i];
                 itemSlot.Initialize(inventoryData.itemData);
             }
         }
