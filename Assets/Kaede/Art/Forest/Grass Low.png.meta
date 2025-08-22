@@ -156,6 +156,19 @@ TextureImporter:
     ignorePlatformSupport: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: WebGL
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
   spriteSheet:
     serializedVersion: 2
     sprites:
@@ -634,7 +647,28 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      Grass Low_0: -7069206818551612603
+      Grass Low_1: 3336831770232531438
+      Grass Low_10: -8428405116346466729
+      Grass Low_11: -1899929683170658595
+      Grass Low_12: -361642492835420620
+      Grass Low_13: -275506347697603416
+      Grass Low_14: 2336828253714756999
+      Grass Low_15: 8944104267504620723
+      Grass Low_16: -7410582550715304859
+      Grass Low_17: 2923061466372173216
+      Grass Low_18: 1016743230822070051
+      Grass Low_19: -7625675057957768635
+      Grass Low_2: -1463038925918652782
+      Grass Low_20: 244898388987805351
+      Grass Low_3: -4209124135335807879
+      Grass Low_4: 1400475944123698186
+      Grass Low_5: 2784125576365291483
+      Grass Low_6: -5659951743560583418
+      Grass Low_7: 1299162088734848590
+      Grass Low_8: -7734342330797628536
+      Grass Low_9: -5690873811358706626
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
