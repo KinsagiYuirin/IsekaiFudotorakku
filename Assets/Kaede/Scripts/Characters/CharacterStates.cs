@@ -6,7 +6,8 @@ namespace MadDuck.Scripts.Characters
     public enum CharacterMovementState
     {
         Idle,
-        Walking
+        Walking,
+        Dashing
     }
 
     public struct MovementStateEvent : ICharacterHubIdentifier
