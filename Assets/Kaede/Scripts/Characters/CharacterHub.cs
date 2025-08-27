@@ -86,6 +86,8 @@ namespace MadDuck.Scripts.Characters
             {
                 Debug.LogError($"{nameof(PlayerInput)} component not found in player object.");
             }
+            
+            modules = GetComponentsInChildren<CharacterModule>(true).ToList();
             foreach (var module in modules)
             {
                 module.Initialize(this);

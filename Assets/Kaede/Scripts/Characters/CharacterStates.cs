@@ -27,6 +27,8 @@ namespace MadDuck.Scripts.Characters
     public enum CharacterActionState
     {
         None,
+        MeleeAttacking,
+        RangeAttacking,
         Fishing,
         Sailing
     }

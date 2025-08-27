@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace MadDuck.Scripts.Utils
+namespace Kaede.Scripts.Utils.Others
 {
     public static class LayerMaskUtils
     {

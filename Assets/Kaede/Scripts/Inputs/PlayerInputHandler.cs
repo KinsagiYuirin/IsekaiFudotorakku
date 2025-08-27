@@ -55,9 +55,9 @@ namespace MadDuck.Scripts.Inputs
         [field: SerializeField, ReadOnly] 
         public InputBinding[] JerkBindings { get; private set; }
         [field: SerializeField, ReadOnly] 
-        public SerializableReactiveProperty<InputButton> Action0Button { get; private set; }
+        public SerializableReactiveProperty<InputButton> LeftMouseClick { get; private set; }
         [field: SerializeField, ReadOnly] 
-        public SerializableReactiveProperty<InputButton> Action1Button { get; private set; }
+        public SerializableReactiveProperty<InputButton> RightMouseClick { get; private set; }
         [field: SerializeField, ReadOnly] 
         public SerializableReactiveProperty<InputButton> ReelingButton { get; private set; }
         [field: SerializeField, ReadOnly]
@@ -89,10 +89,10 @@ namespace MadDuck.Scripts.Inputs
         private void RegisterInputAction()
         {
             InteractButton.Value = new InputButton(_playerInputAction.Player.Interact);
+            LeftMouseClick.Value = new InputButton(_playerInputAction.Player.MeleeAttack);
+            RightMouseClick.Value = new InputButton(_playerInputAction.Player.RangeAttack);
             
             /*JerkBaitButton.Value = new InputButton(_playerInputAction.Player.JerkBait);
-            Action0Button.Value = new InputButton(_playerInputAction.Player.Action0);
-            Action1Button.Value = new InputButton(_playerInputAction.Player.Action1);
             ReelingButton.Value = new InputButton(_playerInputAction.Player.Reeling);
             JerkBindings = _playerInputAction.Player.JerkBait.bindings.ToArray();*/
         }
@@ -134,12 +134,12 @@ namespace MadDuck.Scripts.Inputs
 
         public void OnMeleeAttack(InputAction.CallbackContext context)
         {
-            throw new NotImplementedException();
+            BindPressButton(LeftMouseClick, context);
         }
 
         public void OnRangeAttack(InputAction.CallbackContext context)
         {
-            throw new NotImplementedException();
+            BindPressButton(RightMouseClick, context);
         }
 
         /*public void OnControlBoat(InputAction.CallbackContext context)
