@@ -1,10 +1,13 @@
 fileFormatVersion: 2
-guid: b59868ed4c625c742a7aaeb38aea6b5f
+guid: 65b40e7aa992482409ceb9596db9fa0e
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 5547272991861453948
-    second: WhiteHair_tiny_0
+      213: -4426971226796577932
+    second: Green Tree 1_0
+  - first:
+      213: 5693548724609676798
+    second: Green Tree 1_1
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -113,13 +116,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: WhiteHair_tiny_0
+      name: Green Tree 1_0
       rect:
         serializedVersion: 2
-        x: 7
-        y: 3
-        width: 114
-        height: 118
+        x: 39
+        y: 27
+        width: 286
+        height: 302
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -128,8 +131,30 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: c743508356fdbfc40800000000000000
-      internalID: 5547272991861453948
+      spriteID: 47b2ae3df1d3092c0800000000000000
+      internalID: -4426971226796577932
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Green Tree 1_1
+      rect:
+        serializedVersion: 2
+        x: 443
+        y: 27
+        width: 286
+        height: 302
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ef5fcb9366c830f40800000000000000
+      internalID: 5693548724609676798
       vertices: []
       indices: 
       edges: []
@@ -147,8 +172,7 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable:
-      WhiteHair_tiny_0: 5547272991861453948
+    nameFileIdTable: {}
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
