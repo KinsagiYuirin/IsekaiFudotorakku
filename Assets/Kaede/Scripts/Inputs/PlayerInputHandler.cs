@@ -62,9 +62,10 @@ namespace MadDuck.Scripts.Inputs
         public SerializableReactiveProperty<InputButton> ReelingButton { get; private set; }
         [field: SerializeField, ReadOnly]
         public SerializableReactiveProperty<InputButton> PauseGameButton { get; private set; }
-
         
-
+        [field: SerializeField, ReadOnly]
+        public SerializableReactiveProperty<InputButton> ComboButton { get; private set; }
+        
         #endregion
         
         #endregion
@@ -161,11 +162,15 @@ namespace MadDuck.Scripts.Inputs
             BindPressButton(PauseGameButton, context);
         }
 
+        public void OnComboKey(InputAction.CallbackContext context)
+        {
+            BindPressButton(ComboButton, context);
+        }
+
         public void OnInteract(InputAction.CallbackContext context)
         {
             BindPressButton(InteractButton, context);
         }
-
         #endregion
 
         #region Button
