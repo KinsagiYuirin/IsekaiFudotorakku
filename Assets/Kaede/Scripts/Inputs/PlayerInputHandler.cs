@@ -64,7 +64,16 @@ namespace MadDuck.Scripts.Inputs
         public SerializableReactiveProperty<InputButton> PauseGameButton { get; private set; }
         
         [field: SerializeField, ReadOnly]
-        public SerializableReactiveProperty<InputButton> ComboButton { get; private set; }
+        public SerializableReactiveProperty<InputButton> ComboUpButton { get; private set; }
+        
+        [field: SerializeField, ReadOnly]
+        public SerializableReactiveProperty<InputButton> ComboDownButton { get; private set; }
+        
+        [field: SerializeField, ReadOnly]
+        public SerializableReactiveProperty<InputButton> ComboLeftButton { get; private set; }
+        
+        [field: SerializeField, ReadOnly]
+        public SerializableReactiveProperty<InputButton> ComboRightButton { get; private set; }
         
         #endregion
         
@@ -92,6 +101,7 @@ namespace MadDuck.Scripts.Inputs
             InteractButton.Value = new InputButton(_playerInputAction.Player.Interact);
             LeftMouseClick.Value = new InputButton(_playerInputAction.Player.MeleeAttack);
             RightMouseClick.Value = new InputButton(_playerInputAction.Player.RangeAttack);
+            PauseGameButton.Value = new InputButton(_playerInputAction.Player.Pause);
             
             /*JerkBaitButton.Value = new InputButton(_playerInputAction.Player.JerkBait);
             ReelingButton.Value = new InputButton(_playerInputAction.Player.Reeling);
@@ -161,16 +171,32 @@ namespace MadDuck.Scripts.Inputs
         {
             BindPressButton(PauseGameButton, context);
         }
-
-        public void OnComboKey(InputAction.CallbackContext context)
-        {
-            BindPressButton(ComboButton, context);
-        }
-
+        
         public void OnInteract(InputAction.CallbackContext context)
         {
             BindPressButton(InteractButton, context);
         }
+
+        public void OnComboUp(InputAction.CallbackContext context)
+        {
+            BindPressButton(ComboUpButton, context);
+        }
+        
+        public void OnComboDown(InputAction.CallbackContext context)
+        {
+            BindPressButton(ComboDownButton, context);
+        }
+
+        public void OnComboLeft(InputAction.CallbackContext context)
+        {
+            BindPressButton(ComboLeftButton, context);
+        }
+        
+        public void OnComboRight(InputAction.CallbackContext context)
+        {
+            BindPressButton(ComboRightButton, context);
+        }
+
         #endregion
 
         #region Button

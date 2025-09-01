@@ -8,112 +8,94 @@ using UnityEngine.UI;
 
 namespace Kaede.Scripts.GamePlay
 {
+    public enum ComboKey
+    {
+        None,
+        W,
+        A,
+        S,
+        D
+    }
+    
     [System.Serializable]
     public class KeySpriteMapping
     {
-        public Key key;
+        public ComboKey key;
         public Sprite sprite;
     }
     
     public class ComboCookingView : MonoSingleton<ComboCookingView>
     {
         [Title("References")]
-        [SerializeField] private Transform comboPanel;
+        [field: SerializeField] public Transform ComboPanel { get; private set; }
         [SerializeField] private GameObject keyIconPrefab;
         [SerializeField] private Sprite defaultSprite;
-        [SerializeField] private List<KeySpriteMapping> keySprite;
-        
-        private int _currentMenuIndex = 0;
-        private Dictionary<Key, Sprite> _spriteLookup;
+        [field: SerializeField] public List<KeySpriteMapping> KeySprite {get; private set;}
+        [field: SerializeField, DisplayAsString] public int CurrentMenuIndex { get; private set; }
+        private Dictionary<ComboKey, Sprite> _spriteLookup;
 
         protected override void Awake()
         {
-            _spriteLookup = new Dictionary<Key, Sprite>();
-            foreach (var mapping in keySprite)
+            _spriteLookup = new Dictionary<ComboKey, Sprite>();
+            foreach (var mapping in KeySprite)
             {
                 if (!_spriteLookup.ContainsKey(mapping.key))
                     _spriteLookup.Add(mapping.key, mapping.sprite);
             }
         }
-
         
-        /// <summary>
-        /// สร้าง UI แสดงปุ่มที่ต้องกดตาม combo
-        /// </summary>
-        public void ShowCombo(List<Key> keys)
+        public void ShowCombo(List<ComboKey> keys)
         {
-            foreach (Transform child in comboPanel)
+            foreach (Transform child in ComboPanel)
             {
                 Destroy(child.gameObject);
             }
             
             foreach (var key in keys)
             {
-                var icon = Instantiate(keyIconPrefab, comboPanel);
+                var icon = Instantiate(keyIconPrefab, ComboPanel);
                 var img = icon.GetComponent<Image>();
 
                 img.sprite = _spriteLookup.GetValueOrDefault(key, defaultSprite);
             }
         }
         
-        public void OnKeyPress(Key key)
+        public void PressCorrectKey()
         {
-            if (_currentMenuIndex >= comboPanel.childCount) return;
-
-            var currentIcon = comboPanel.GetChild(_currentMenuIndex).GetComponent<Image>();
-            var expectedKey = Key.None;
-            foreach (var mapping in keySprite)
+            var currentIcon = ComboPanel.GetChild(CurrentMenuIndex).GetComponent<Image>();
+            currentIcon.color = Color.green;
+            CurrentMenuIndex++;
+        }
+        
+        public void PressWrongKey()
+        {
+            var currentIcon = ComboPanel.GetChild(CurrentMenuIndex).GetComponent<Image>();
+            currentIcon.color = Color.red;
+            CurrentMenuIndex = 0;
+        }
+        
+        public void CompleteCombo()
+        {
+            foreach (Transform child in ComboPanel)
             {
-                if (mapping.sprite == currentIcon.sprite)
-                {
-                    expectedKey = mapping.key;
-                    break;
-                }
-            }
-
-            if (key == expectedKey)
-            {
-                currentIcon.color = Color.green;
-                _currentMenuIndex++;
-            }
-            else
-            {
-                currentIcon.color = Color.red;
-                _currentMenuIndex = 0;
-
-                foreach (Transform child in comboPanel)
-                {
-                    var img = child.GetComponent<Image>();
-                    img.color = Color.white;
-                }
-            }
-            
-            if (_currentMenuIndex >= comboPanel.childCount)
-            {
-                Debug.Log("Combo Complete!");
-                // รีเซ็ตสำหรับรอบถัดไป
-                foreach (Transform child in comboPanel)
-                {
-                    var img = child.GetComponent<Image>();
-                    img.color = Color.yellow;
-                }
-                
+                var img = child.GetComponent<Image>();
+                img.color = Color.yellow;
             }
         }
 
         public void ClearCombo()
         {
-            foreach (Transform child in comboPanel)
+            foreach (Transform child in ComboPanel)
             {
                 Destroy(child.gameObject);
             }
-            _currentMenuIndex = 0;
+            CurrentMenuIndex = 0;
         }
         
         public void ResetCombo()
         {
-            _currentMenuIndex = 0;
-            foreach (Transform child in comboPanel)
+            CurrentMenuIndex = 0;
+            foreach (Transform child in ComboPanel)
             {
                 var img = child.GetComponent<Image>();
                 img.color = Color.white;

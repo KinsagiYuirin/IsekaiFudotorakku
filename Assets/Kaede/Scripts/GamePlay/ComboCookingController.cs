@@ -1,8 +1,10 @@
 using System.Collections.Generic;
+using MadDuck.Scripts.Inputs;
 using Sirenix.OdinInspector;
 using UnityCommunity.UnitySingleton;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.UI;
 
 namespace Kaede.Scripts.GamePlay
 {
@@ -14,11 +16,13 @@ namespace Kaede.Scripts.GamePlay
 
         private ComboCookingModel _model;
         private ComboCookingView _view;
+        private PlayerInputHandler _inputHandler;
 
         void Start()
         {
             _model = new ComboCookingModel(menuDatasList, maxTimePerCombo);
             _view = GetComponent<ComboCookingView>();
+            _inputHandler = FindObjectOfType<PlayerInputHandler>();
 
             ShowCurrentCombo();
         }
@@ -30,6 +34,7 @@ namespace Kaede.Scripts.GamePlay
             if (_model.CurrentTimer <= 0f)
             {
                 _model.ResetCombo();
+                _view.ResetCombo();
                 return;
             }
 
@@ -44,26 +49,71 @@ namespace Kaede.Scripts.GamePlay
             if (_model.CurrentComboIndex >= currentMenu.ComboKeys.Count) return;
 
             var expectedKey = currentMenu.ComboKeys[_model.CurrentComboIndex];
-            
-            if (Keyboard.current[expectedKey] != null && Keyboard.current[expectedKey].wasPressedThisFrame)
+            if (IsExpectedInputPressed(expectedKey))
             {
                 _model.NextCombo();
-                _view.OnKeyPress(expectedKey);
+                OnKeyPress(expectedKey);
 
                 if (_model.CurrentComboIndex >= currentMenu.ComboKeys.Count)
                 {
                     NextMenu();
-                    _view.OnKeyPress(expectedKey);
+                    OnKeyPress(expectedKey);
 
                     if (_model.CurrentMenuIndex >= _model.MenuDatas.Count)
                     {
                         _model.CompleteMenu();
-                        _view.OnKeyPress(expectedKey);
+                        _view.CompleteCombo();
                     }
                 }
             }
         }
+        
+        private bool IsExpectedInputPressed(ComboKey expectedKey)
+        {
+            if (_inputHandler == null) return false;
 
+            switch (expectedKey)
+            {
+                case ComboKey.W:
+                    return _inputHandler.ComboUpButton?.Value.isDown == true;
+
+                case ComboKey.S:
+                    return _inputHandler.ComboDownButton?.Value.isDown == true;
+
+                case ComboKey.A:
+                    return _inputHandler.ComboLeftButton?.Value.isDown == true;
+
+                case ComboKey.D:
+                    return _inputHandler.ComboRightButton?.Value.isDown == true;
+
+                default:
+                    return false;
+            }
+        }
+
+        private void OnKeyPress(ComboKey key)
+        {
+            var currentIcon = _view.ComboPanel.GetChild(_view.CurrentMenuIndex).GetComponent<Image>();
+            var expectedKey = ComboKey.None;
+            foreach (var mapping in _view.KeySprite)
+            {
+                if (mapping.sprite == currentIcon.sprite)
+                {
+                    expectedKey = mapping.key;
+                    break;
+                }
+            }
+            
+            if (key == expectedKey)
+            {
+                _view.PressCorrectKey();
+            }
+            else
+            {
+                _view.PressWrongKey();
+            }
+        }
+        
         private void NextMenu()
         {
             _model.NextMenu();

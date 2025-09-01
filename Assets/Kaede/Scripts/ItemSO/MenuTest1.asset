@@ -14,5 +14,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   <MenuName>k__BackingField: Test1
   <MenuLevel>k__BackingField: 1
-  <ComboKeys>k__BackingField: 250000000f000000
+  <ComboKeys>k__BackingField: 0100000002000000
   <MenuIcon>k__BackingField: {fileID: 0}

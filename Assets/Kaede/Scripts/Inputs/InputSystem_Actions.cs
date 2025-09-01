@@ -137,9 +137,36 @@ public partial class @PlayerInputAction: IInputActionCollection2, IDisposable
                     ""initialStateCheck"": false
                 },
                 {
-                    ""name"": ""ComboKey"",
+                    ""name"": ""Combo Up"",
                     ""type"": ""Button"",
-                    ""id"": ""44ff1166-be16-4936-9283-3160e43d1289"",
+                    ""id"": ""afb80eb4-8623-46cd-b7fa-d06ec7308ba3"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Combo Down"",
+                    ""type"": ""Button"",
+                    ""id"": ""abff6e18-7dc3-40b6-9c87-112fa495d1bd"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Combo Left"",
+                    ""type"": ""Button"",
+                    ""id"": ""967f0926-d239-4362-a437-09bd3aadf628"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Combo Right"",
+                    ""type"": ""Button"",
+                    ""id"": ""8e8997e0-d791-4649-8350-fb2eeb77a029"",
                     ""expectedControlType"": """",
                     ""processors"": """",
                     ""interactions"": """",
@@ -440,18 +467,7 @@ public partial class @PlayerInputAction: IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""ComboKey"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""ebd391d2-0327-4ca6-9712-33cad628e81e"",
-                    ""path"": ""<Keyboard>/a"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""ComboKey"",
+                    ""action"": ""Combo Up"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -462,7 +478,18 @@ public partial class @PlayerInputAction: IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""ComboKey"",
+                    ""action"": ""Combo Down"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""ebd391d2-0327-4ca6-9712-33cad628e81e"",
+                    ""path"": ""<Keyboard>/a"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Combo Left"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -473,7 +500,7 @@ public partial class @PlayerInputAction: IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""ComboKey"",
+                    ""action"": ""Combo Right"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -1066,7 +1093,10 @@ public partial class @PlayerInputAction: IInputActionCollection2, IDisposable
         m_Player_RangeAttack = m_Player.FindAction("RangeAttack", throwIfNotFound: true);
         m_Player_Interact = m_Player.FindAction("Interact", throwIfNotFound: true);
         m_Player_Pause = m_Player.FindAction("Pause", throwIfNotFound: true);
-        m_Player_ComboKey = m_Player.FindAction("ComboKey", throwIfNotFound: true);
+        m_Player_ComboUp = m_Player.FindAction("Combo Up", throwIfNotFound: true);
+        m_Player_ComboDown = m_Player.FindAction("Combo Down", throwIfNotFound: true);
+        m_Player_ComboLeft = m_Player.FindAction("Combo Left", throwIfNotFound: true);
+        m_Player_ComboRight = m_Player.FindAction("Combo Right", throwIfNotFound: true);
         // UI
         m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
         m_UI_Navigate = m_UI.FindAction("Navigate", throwIfNotFound: true);
@@ -1165,7 +1195,10 @@ public partial class @PlayerInputAction: IInputActionCollection2, IDisposable
     private readonly InputAction m_Player_RangeAttack;
     private readonly InputAction m_Player_Interact;
     private readonly InputAction m_Player_Pause;
-    private readonly InputAction m_Player_ComboKey;
+    private readonly InputAction m_Player_ComboUp;
+    private readonly InputAction m_Player_ComboDown;
+    private readonly InputAction m_Player_ComboLeft;
+    private readonly InputAction m_Player_ComboRight;
     /// <summary>
     /// Provides access to input actions defined in input action map "Player".
     /// </summary>
@@ -1198,9 +1231,21 @@ public partial class @PlayerInputAction: IInputActionCollection2, IDisposable
         /// </summary>
         public InputAction @Pause => m_Wrapper.m_Player_Pause;
         /// <summary>
-        /// Provides access to the underlying input action "Player/ComboKey".
+        /// Provides access to the underlying input action "Player/ComboUp".
         /// </summary>
-        public InputAction @ComboKey => m_Wrapper.m_Player_ComboKey;
+        public InputAction @ComboUp => m_Wrapper.m_Player_ComboUp;
+        /// <summary>
+        /// Provides access to the underlying input action "Player/ComboDown".
+        /// </summary>
+        public InputAction @ComboDown => m_Wrapper.m_Player_ComboDown;
+        /// <summary>
+        /// Provides access to the underlying input action "Player/ComboLeft".
+        /// </summary>
+        public InputAction @ComboLeft => m_Wrapper.m_Player_ComboLeft;
+        /// <summary>
+        /// Provides access to the underlying input action "Player/ComboRight".
+        /// </summary>
+        public InputAction @ComboRight => m_Wrapper.m_Player_ComboRight;
         /// <summary>
         /// Provides access to the underlying input action map instance.
         /// </summary>
@@ -1242,9 +1287,18 @@ public partial class @PlayerInputAction: IInputActionCollection2, IDisposable
             @Pause.started += instance.OnPause;
             @Pause.performed += instance.OnPause;
             @Pause.canceled += instance.OnPause;
-            @ComboKey.started += instance.OnComboKey;
-            @ComboKey.performed += instance.OnComboKey;
-            @ComboKey.canceled += instance.OnComboKey;
+            @ComboUp.started += instance.OnComboUp;
+            @ComboUp.performed += instance.OnComboUp;
+            @ComboUp.canceled += instance.OnComboUp;
+            @ComboDown.started += instance.OnComboDown;
+            @ComboDown.performed += instance.OnComboDown;
+            @ComboDown.canceled += instance.OnComboDown;
+            @ComboLeft.started += instance.OnComboLeft;
+            @ComboLeft.performed += instance.OnComboLeft;
+            @ComboLeft.canceled += instance.OnComboLeft;
+            @ComboRight.started += instance.OnComboRight;
+            @ComboRight.performed += instance.OnComboRight;
+            @ComboRight.canceled += instance.OnComboRight;
         }
 
         /// <summary>
@@ -1271,9 +1325,18 @@ public partial class @PlayerInputAction: IInputActionCollection2, IDisposable
             @Pause.started -= instance.OnPause;
             @Pause.performed -= instance.OnPause;
             @Pause.canceled -= instance.OnPause;
-            @ComboKey.started -= instance.OnComboKey;
-            @ComboKey.performed -= instance.OnComboKey;
-            @ComboKey.canceled -= instance.OnComboKey;
+            @ComboUp.started -= instance.OnComboUp;
+            @ComboUp.performed -= instance.OnComboUp;
+            @ComboUp.canceled -= instance.OnComboUp;
+            @ComboDown.started -= instance.OnComboDown;
+            @ComboDown.performed -= instance.OnComboDown;
+            @ComboDown.canceled -= instance.OnComboDown;
+            @ComboLeft.started -= instance.OnComboLeft;
+            @ComboLeft.performed -= instance.OnComboLeft;
+            @ComboLeft.canceled -= instance.OnComboLeft;
+            @ComboRight.started -= instance.OnComboRight;
+            @ComboRight.performed -= instance.OnComboRight;
+            @ComboRight.canceled -= instance.OnComboRight;
         }
 
         /// <summary>
@@ -1610,12 +1673,33 @@ public partial class @PlayerInputAction: IInputActionCollection2, IDisposable
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
         void OnPause(InputAction.CallbackContext context);
         /// <summary>
-        /// Method invoked when associated input action "ComboKey" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// Method invoked when associated input action "Combo Up" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
         /// </summary>
         /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
-        void OnComboKey(InputAction.CallbackContext context);
+        void OnComboUp(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "Combo Down" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnComboDown(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "Combo Left" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnComboLeft(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "Combo Right" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnComboRight(InputAction.CallbackContext context);
     }
     /// <summary>
     /// Interface to implement callback methods for all input action callbacks associated with input actions defined by "UI" which allows adding and removing callbacks.

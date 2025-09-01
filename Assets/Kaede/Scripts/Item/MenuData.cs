@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Kaede.Scripts.GamePlay;
 using Sirenix.OdinInspector;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -19,7 +20,7 @@ public class MenuData : ScriptableObject
     [Title("Settings")]
     [field: SerializeField] public string MenuName { get; private set; }
     [field: SerializeField] public MenuLevel MenuLevel { get; private set; }
-    [field: SerializeField] public List<Key> ComboKeys { get; private set; } = new List<Key>();
+    [field: SerializeField] public List<ComboKey> ComboKeys { get; private set; } = new List<ComboKey>();
     
     [Title("References")]
     [field: SerializeField] public Sprite MenuIcon { get; private set; }

@@ -51,9 +51,36 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "ComboKey",
+                    "name": "Combo Up",
                     "type": "Button",
-                    "id": "44ff1166-be16-4936-9283-3160e43d1289",
+                    "id": "afb80eb4-8623-46cd-b7fa-d06ec7308ba3",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "Combo Down",
+                    "type": "Button",
+                    "id": "abff6e18-7dc3-40b6-9c87-112fa495d1bd",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "Combo Left",
+                    "type": "Button",
+                    "id": "967f0926-d239-4362-a437-09bd3aadf628",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "Combo Right",
+                    "type": "Button",
+                    "id": "8e8997e0-d791-4649-8350-fb2eeb77a029",
                     "expectedControlType": "",
                     "processors": "",
                     "interactions": "",
@@ -354,18 +381,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "ComboKey",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "ebd391d2-0327-4ca6-9712-33cad628e81e",
-                    "path": "<Keyboard>/a",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "ComboKey",
+                    "action": "Combo Up",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -376,7 +392,18 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "ComboKey",
+                    "action": "Combo Down",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "ebd391d2-0327-4ca6-9712-33cad628e81e",
+                    "path": "<Keyboard>/a",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Combo Left",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -387,7 +414,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "ComboKey",
+                    "action": "Combo Right",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
