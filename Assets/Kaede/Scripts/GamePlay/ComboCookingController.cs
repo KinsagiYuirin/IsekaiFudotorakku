@@ -1,4 +1,6 @@
 using System.Collections.Generic;
+using System.Threading.Tasks;
+using Cysharp.Threading.Tasks;
 using MadDuck.Scripts.Inputs;
 using Sirenix.OdinInspector;
 using UnityCommunity.UnitySingleton;
@@ -41,7 +43,7 @@ namespace Kaede.Scripts.GamePlay
             CheckComboButton();
         }
 
-        private void CheckComboButton()
+        private async UniTask CheckComboButton()
         {
             if (_model.MenuDatas == null || _model.CurrentMenuIndex >= _model.MenuDatas.Count) return;
 
@@ -49,15 +51,18 @@ namespace Kaede.Scripts.GamePlay
             if (_model.CurrentComboIndex >= currentMenu.ComboKeys.Count) return;
 
             var expectedKey = currentMenu.ComboKeys[_model.CurrentComboIndex];
-            if (IsExpectedInputPressed(expectedKey))
+            
+            var pressedKey = GetPressedComboKey();
+            if (pressedKey == ComboKey.None) return; 
+            
+            if (pressedKey == expectedKey)
             {
-                _model.NextCombo();
-                OnKeyPress(expectedKey);
+                OnKeyPress(pressedKey);
 
-                if (_model.CurrentComboIndex >= currentMenu.ComboKeys.Count)
+                if (_model.CurrentComboIndex + 1 >= currentMenu.ComboKeys.Count)
                 {
+                    await UniTask.Delay(200);
                     NextMenu();
-                    OnKeyPress(expectedKey);
 
                     if (_model.CurrentMenuIndex >= _model.MenuDatas.Count)
                     {
@@ -65,35 +70,39 @@ namespace Kaede.Scripts.GamePlay
                         _view.CompleteCombo();
                     }
                 }
+                else
+                {
+                    _model.NextCombo();
+                }
+            }
+            else
+            {
+                OnKeyPress(pressedKey);
             }
         }
         
-        private bool IsExpectedInputPressed(ComboKey expectedKey)
+        private ComboKey GetPressedComboKey()
         {
-            if (_inputHandler == null) return false;
-
-            switch (expectedKey)
+            return true switch
             {
-                case ComboKey.W:
-                    return _inputHandler.ComboUpButton?.Value.isDown == true;
-
-                case ComboKey.S:
-                    return _inputHandler.ComboDownButton?.Value.isDown == true;
-
-                case ComboKey.A:
-                    return _inputHandler.ComboLeftButton?.Value.isDown == true;
-
-                case ComboKey.D:
-                    return _inputHandler.ComboRightButton?.Value.isDown == true;
-
-                default:
-                    return false;
-            }
+                true when _inputHandler.ComboUpButton?.Value.isDown == true => ComboKey.W,
+                true when _inputHandler.ComboDownButton?.Value.isDown == true => ComboKey.S,
+                true when _inputHandler.ComboLeftButton?.Value.isDown == true => ComboKey.A,
+                true when _inputHandler.ComboRightButton?.Value.isDown == true => ComboKey.D,
+                _ => ComboKey.None
+            };
         }
 
+        /// <summary>
+        /// When a key is pressed, check if it matches the expected key in the combo sequence.
+        /// </summary>
+        /// <param name="key"></param>
         private void OnKeyPress(ComboKey key)
         {
-            var currentIcon = _view.ComboPanel.GetChild(_view.CurrentMenuIndex).GetComponent<Image>();
+            int comboIndex = _model.CurrentComboIndex;
+            if (comboIndex < 0 || comboIndex >= _view.ComboPanel.childCount) return;
+
+            var currentIcon = _view.ComboPanel.GetChild(comboIndex).GetComponent<Image>();
             var expectedKey = ComboKey.None;
             foreach (var mapping in _view.KeySprite)
             {
@@ -103,20 +112,23 @@ namespace Kaede.Scripts.GamePlay
                     break;
                 }
             }
-            
-            if (key == expectedKey)
+
+            if (expectedKey != key)
             {
-                _view.PressCorrectKey();
+                Debug.Log("Wrong Key Pressed");
+                _view.PressWrongKey(comboIndex);
             }
             else
             {
-                _view.PressWrongKey();
+                _view.PressCorrectKey(comboIndex);
             }
         }
-        
+
         private void NextMenu()
         {
+            
             _model.NextMenu();
+            _model.ResetCombo();
             ShowCurrentCombo();
         }
         

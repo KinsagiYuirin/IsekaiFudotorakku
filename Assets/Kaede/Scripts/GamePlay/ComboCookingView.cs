@@ -60,18 +60,18 @@ namespace Kaede.Scripts.GamePlay
             }
         }
         
-        public void PressCorrectKey()
+        public void PressCorrectKey(int comboIndex)
         {
-            var currentIcon = ComboPanel.GetChild(CurrentMenuIndex).GetComponent<Image>();
+            if (comboIndex < 0 || comboIndex >= ComboPanel.childCount) return;
+            var currentIcon = ComboPanel.GetChild(comboIndex).GetComponent<Image>();
             currentIcon.color = Color.green;
-            CurrentMenuIndex++;
         }
-        
-        public void PressWrongKey()
+
+        public void PressWrongKey(int comboIndex)
         {
-            var currentIcon = ComboPanel.GetChild(CurrentMenuIndex).GetComponent<Image>();
+            if (comboIndex < 0 || comboIndex >= ComboPanel.childCount) return;
+            var currentIcon = ComboPanel.GetChild(comboIndex).GetComponent<Image>();
             currentIcon.color = Color.red;
-            CurrentMenuIndex = 0;
         }
         
         public void CompleteCombo()
