@@ -12,11 +12,41 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 26ddcd7fcb6ef3949b75ef3a03086fc1, type: 3}
   m_Name: ComboTest2
   m_EditorClassIdentifier: 
-  DisplayName: Pork Chops
+  DisplayName: Chicken Chops
   Phase: 0
   ComboSequence:
   - key: 1
-    type: 1
+    type: 0
+    doubleTapDelay: 0.3
+    pressCount: 2
+    holdTime: 1
+    stackCount: 3
+  - key: 3
+    type: 0
+    doubleTapDelay: 0.3
+    pressCount: 2
+    holdTime: 1
+    stackCount: 3
+  - key: 4
+    type: 0
+    doubleTapDelay: 0.3
+    pressCount: 2
+    holdTime: 1
+    stackCount: 3
+  - key: 1
+    type: 0
+    doubleTapDelay: 0.3
+    pressCount: 2
+    holdTime: 1
+    stackCount: 3
+  - key: 1
+    type: 0
+    doubleTapDelay: 0.3
+    pressCount: 2
+    holdTime: 1
+    stackCount: 3
+  - key: 3
+    type: 0
     doubleTapDelay: 0.3
     pressCount: 2
     holdTime: 1

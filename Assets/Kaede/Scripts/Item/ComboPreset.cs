@@ -59,15 +59,15 @@ namespace Kaede.Scripts.Item
     public class ComboPreset : ScriptableObject
     {
         [Title("Info")]
-        [LabelText("Name")] public string DisplayName;
+        [LabelText("Name")] public string displayName;
 
         [EnumToggleButtons, LabelText("Phase")]
-        public StepPhase Phase; // Preparation / Cooking
+        public StepPhase phase; // Preparation / Cooking
 
         [Title("Sequence")]
         [ListDrawerSettings(
             Expanded = true, DraggableItems = true,
             NumberOfItemsPerPage = 6, ShowPaging = true)]
-        public List<ComboKeySetting> ComboSequence = new();
+        public List<ComboKeySetting> comboSequence = new();
     }
 }

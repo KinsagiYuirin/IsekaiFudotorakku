@@ -10,34 +10,34 @@ namespace Kaede.Scripts.Item
     {
         [HorizontalGroup("Row", 0.6f)]
         [HideLabel, AssetsOnly, Required]
-        public ComboPreset Preset;
+        public ComboPreset preset;
 
         [HorizontalGroup("Row", 0.4f)]
         [HideLabel, LabelText("Override Sequence?")]
-        public bool OverrideSequence;
+        public bool overrideSequence;
 
-        [ShowIf(nameof(OverrideSequence))]
+        [ShowIf(nameof(overrideSequence))]
         [TableList(ShowIndexLabels = true)]
-        public List<ComboKeySetting> CustomSequence = new();
+        public List<ComboKeySetting> customSequence = new();
 
         public List<ComboKeySetting> ResolveSequence()
-            => OverrideSequence && CustomSequence != null && CustomSequence.Count > 0
-                ? CustomSequence
-                : Preset != null ? Preset.ComboSequence : new List<ComboKeySetting>();
+            => overrideSequence && customSequence != null && customSequence.Count > 0
+                ? customSequence
+                : preset != null ? preset.comboSequence : new List<ComboKeySetting>();
     }
 
     [CreateAssetMenu(fileName = "MenuData", menuName = "Kaede/MenuData")]
     public class MenuData : ScriptableObject
     {
         [Title("Settings")]
-        [LabelText("Menu Name")] public string MenuName;
-        public MenuLevel MenuLevel;
+        [LabelText("Menu Name")] public string menuName;
+        public MenuLevel menuLevel;
 
-        [Title("Steps (เลือกพรีเซ็ต)")]
+        [Title("Steps (Select Preset or Override Sequence)")]
         [ListDrawerSettings(Expanded = true, DraggableItems = true)]
-        public List<MenuStepRef> Steps = new();
+        public List<MenuStepRef> steps = new();
 
         [Title("References")]
-        [PreviewField(70)] public Sprite MenuIcon;
+        [PreviewField(70)] public Sprite menuIcon;
     }
 }

@@ -34,8 +34,8 @@ namespace Kaede.Scripts.Item
         
         private void UpdateView()
         {
-            itemIcon.sprite = _menuData.MenuIcon;
-            itemName.text = _menuData.MenuName;
+            itemIcon.sprite = _menuData.menuIcon;
+            itemName.text = _menuData.menuName;
         }
         
         /*private void UpdateCount(MenuData menuData, int previousCount, int newCount)

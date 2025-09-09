@@ -98,34 +98,30 @@ namespace Kaede.Scripts.GamePlay
 
             try
             {
-                var currentMenu = _model.MenuDatas[_model.CurrentMenuIndex];
-                if (currentMenu.Steps == null || _model.CurrentStepIndex >= currentMenu.Steps.Count) return;
+                if (!_model.TryGetCurrentSequenceCount(out var count) || count == 0) return;
+                if (_model.CurrentComboIndex >= count) return;
 
-                var stepRef = currentMenu.Steps[_model.CurrentStepIndex];
-                var sequence = stepRef.ResolveSequence();
-                if (sequence == null || sequence.Count == 0) return;
+                if (!_model.TryGetExpectedCombo(out var expectedCombo)) return;
 
-                if (_model.CurrentComboIndex >= sequence.Count) return;
-
-                var expectedCombo = sequence[_model.CurrentComboIndex];
                 var handler = ComboHandlerFactory.Create(expectedCombo);
-                
-                var result = await handler.CheckInput(_inputHandler, expectedCombo.key, _inputCts.Token);
+                var result  = await handler.CheckInput(_inputHandler, expectedCombo.key, _inputCts.Token);
 
+                if (_isStepComplete) return;
+                
                 switch (result)
                 {
                     case ComboInputResult.Correct:
                         _view.PressCorrectKey(_model.CurrentComboIndex);
-                        NextCombo(sequence, currentMenu);
+                        NextCombo();
                         break;
 
                     case ComboInputResult.Wrong:
-                        _view.PressWrongKey(_model.CurrentComboIndex);
+                        if (!_isStepComplete)
+                            _view.PressWrongKey(_model.CurrentComboIndex);
                         break;
 
                     case ComboInputResult.None:
                     default:
-                        
                         break;
                 }
             }
@@ -133,76 +129,65 @@ namespace Kaede.Scripts.GamePlay
             finally { _checking = false; }
         }
 
-        private void NextCombo(List<ComboKeySetting> sequence, MenuData currentMenu)
+        private void NextCombo()
         {
-            if (_model.CurrentComboIndex + 1 >= sequence.Count)
+            if (!_model.TryGetCurrentSequenceCount(out var count) || count == 0) return;
+            
+            if (_model.CurrentComboIndex + 1 >= count)
             {
-                _model.ResetCombo();
-                if (_model.CurrentStepIndex + 1 < currentMenu.Steps.Count)
-                {
-                    _isStepComplete = true;
-                }
+                _isStepComplete = true;
+                CancelInputLoop(); 
+                return;
             }
-            else
-                _model.NextCombo();
+
+            _model.NextCombo();
         }
         
         private void NextStep()
         {
-            var menu = _model.MenuDatas[_model.CurrentMenuIndex];
-            if (menu?.Steps == null || _model.CurrentStepIndex >= menu.Steps.Count)
+            if (!_isStepComplete) return;
+
+            CancelInputLoop();
+            _isStepComplete = false;
+            
+            if (!_model.HasNextStep())
             {
                 NextMenu();
                 return;
             }
             
-            if (!_isStepComplete) return;
-            CancelInputLoop();
-            _isStepComplete = false;
-
             _model.NextStep();
             _model.ResetCombo();
-            
             ShowCurrentCombo();
+            Debug.Log("Next Step");
         }
+
         
         private void NextMenu()
         {
             CancelInputLoop();
-            Debug.Log("Next Menu"); 
             _isStepComplete = false;
             
+            if (!_model.HasNextMenu())
+            {
+                _model.CompleteMenu();
+                _view.CompleteCombo();
+                return;
+            }
+
             _model.NextMenu();
             _model.ResetStep();
             _model.ResetCombo();
-            
-            if (_model.CurrentMenuIndex < _model.MenuDatas.Count) return;
-            _model.CompleteMenu();
-            _view.CompleteCombo();
 
             ShowCurrentCombo();
+            Debug.Log("Next Menu");
         }
         
         private void ShowCurrentCombo()
         {
-            if (_model.MenuDatas == null || _model.CurrentMenuIndex >= _model.MenuDatas.Count) return;
-
-            var currentMenu = _model.MenuDatas[_model.CurrentMenuIndex];
-            if (currentMenu.Steps == null || _model.CurrentStepIndex >= currentMenu.Steps.Count) return;
-
-            var stepRef = currentMenu.Steps[_model.CurrentStepIndex];
-            var sequence = stepRef.ResolveSequence();
-            if (sequence == null || sequence.Count == 0)
-            {
-                // แล้วแต่ดีไซน์: จะเคลียร์ UI หรือปล่อยว่าง
-                // _view.ClearCombo();
-                return;
-            }
-            
-            var keys = sequence.ConvertAll(c => c.key);
-            _view.ShowCombo(keys);
+            if (_model.TryGetCurrentKeys(out var keys))
+                _view.ShowCombo(keys);
         }
-
         #endregion
 
         private void GetTimeLeft()

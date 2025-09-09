@@ -15,7 +15,7 @@ MonoBehaviour:
   MenuName: 
   MenuLevel: 0
   Steps:
-  - Preset: {fileID: 0}
+  - Preset: {fileID: 11400000, guid: f538f8a8e939dba47a4af57dcb9e00a5, type: 2}
     OverrideSequence: 0
     CustomSequence: []
   MenuIcon: {fileID: 0}
