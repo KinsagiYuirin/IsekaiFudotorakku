@@ -1,35 +1,60 @@
+using System;
 using System.Collections.Generic;
-using System.Threading.Tasks;
+using System.Globalization;
+using System.Linq;
+using System.Threading;
 using Cysharp.Threading.Tasks;
+using Kaede.Scripts.Inputs.ComboHandlers;
+using Kaede.Scripts.Item;
 using MadDuck.Scripts.Inputs;
+using R3;
 using Sirenix.OdinInspector;
 using UnityCommunity.UnitySingleton;
 using UnityEngine;
-using UnityEngine.InputSystem;
 using UnityEngine.UI;
 
 namespace Kaede.Scripts.GamePlay
 {
+    public enum ComboInputResult
+    {
+        None,
+        Correct,
+        Wrong
+    }
+    
     public class ComboCookingController : MonoSingleton<ComboCookingController>
     {
         [Title("Settings")]
-        [SerializeField] private List<MenuData> menuDatasList;
+        [field: SerializeField] public List<MenuData> MenuDatasList { get; private set; }
         [SerializeField] private float maxTimePerCombo = 5f;
-
+        [field: SerializeField] public float TimeBetweenCombos { get; private set; } = 1f;
+        
+        private bool _isStepComplete = false;
+        
         private ComboCookingModel _model;
         private ComboCookingView _view;
         private PlayerInputHandler _inputHandler;
+        private IDisposable _confirmSub;
+        private bool _checking;
+        private CancellationTokenSource _inputCts;
 
-        void Start()
+        #region Awake, Start, Update
+        
+        [Obsolete("Obsolete")]
+        protected override void Awake()
         {
-            _model = new ComboCookingModel(menuDatasList, maxTimePerCombo);
-            _view = GetComponent<ComboCookingView>();
             _inputHandler = FindObjectOfType<PlayerInputHandler>();
+        }
 
+        private void Start()
+        {
+            _model = new ComboCookingModel(MenuDatasList, maxTimePerCombo);
+            _view = GetComponent<ComboCookingView>();
+            
             ShowCurrentCombo();
         }
 
-        void Update()
+        private void Update()
         {
             _model.Tick(Time.deltaTime);
 
@@ -40,95 +65,121 @@ namespace Kaede.Scripts.GamePlay
                 return;
             }
 
-            CheckComboButton();
+            GetTimeLeft();
+            _ = CheckComboButton();
         }
+        #endregion
 
-        private async UniTask CheckComboButton()
+        #region OnEnable, OnDisable
+        private void OnEnable()
         {
-            if (_model.MenuDatas == null || _model.CurrentMenuIndex >= _model.MenuDatas.Count) return;
-
-            var currentMenu = _model.MenuDatas[_model.CurrentMenuIndex];
-            if (_model.CurrentComboIndex >= currentMenu.ComboKeys.Count) return;
-
-            var expectedKey = currentMenu.ComboKeys[_model.CurrentComboIndex];
-            
-            var pressedKey = GetPressedComboKey();
-            if (pressedKey == ComboKey.None) return; 
-            
-            if (pressedKey == expectedKey)
+            _confirmSub = _inputHandler.ConfirmButton.Subscribe(button =>
             {
-                OnKeyPress(pressedKey);
-
-                if (_model.CurrentComboIndex + 1 >= currentMenu.ComboKeys.Count)
+                if (button.isDown)
                 {
-                    await UniTask.Delay(200);
-                    NextMenu();
-
-                    if (_model.CurrentMenuIndex >= _model.MenuDatas.Count)
-                    {
-                        _model.CompleteMenu();
-                        _view.CompleteCombo();
-                    }
+                    NextStep();
                 }
-                else
-                {
-                    _model.NextCombo();
-                }
-            }
-            else
-            {
-                OnKeyPress(pressedKey);
-            }
+            });
         }
         
-        private ComboKey GetPressedComboKey()
+        private void OnDisable()
         {
-            return true switch
-            {
-                true when _inputHandler.ComboUpButton?.Value.isDown == true => ComboKey.W,
-                true when _inputHandler.ComboDownButton?.Value.isDown == true => ComboKey.S,
-                true when _inputHandler.ComboLeftButton?.Value.isDown == true => ComboKey.A,
-                true when _inputHandler.ComboRightButton?.Value.isDown == true => ComboKey.D,
-                _ => ComboKey.None
-            };
+            _confirmSub?.Dispose();
         }
+        #endregion
 
-        /// <summary>
-        /// When a key is pressed, check if it matches the expected key in the combo sequence.
-        /// </summary>
-        /// <param name="key"></param>
-        private void OnKeyPress(ComboKey key)
+        #region Combo Logic
+        
+        private async UniTask CheckComboButton()
         {
-            int comboIndex = _model.CurrentComboIndex;
-            if (comboIndex < 0 || comboIndex >= _view.ComboPanel.childCount) return;
+            if (_checking) return;
+            _checking = true;
+            _inputCts ??= new CancellationTokenSource();
 
-            var currentIcon = _view.ComboPanel.GetChild(comboIndex).GetComponent<Image>();
-            var expectedKey = ComboKey.None;
-            foreach (var mapping in _view.KeySprite)
+            try
             {
-                if (mapping.sprite == currentIcon.sprite)
+                var currentMenu = _model.MenuDatas[_model.CurrentMenuIndex];
+                if (currentMenu.Steps == null || _model.CurrentStepIndex >= currentMenu.Steps.Count) return;
+
+                var stepRef = currentMenu.Steps[_model.CurrentStepIndex];
+                var sequence = stepRef.ResolveSequence();
+                if (sequence == null || sequence.Count == 0) return;
+
+                if (_model.CurrentComboIndex >= sequence.Count) return;
+
+                var expectedCombo = sequence[_model.CurrentComboIndex];
+                var handler = ComboHandlerFactory.Create(expectedCombo);
+                
+                var result = await handler.CheckInput(_inputHandler, expectedCombo.key, _inputCts.Token);
+
+                switch (result)
                 {
-                    expectedKey = mapping.key;
-                    break;
+                    case ComboInputResult.Correct:
+                        _view.PressCorrectKey(_model.CurrentComboIndex);
+                        NextCombo(sequence, currentMenu);
+                        break;
+
+                    case ComboInputResult.Wrong:
+                        _view.PressWrongKey(_model.CurrentComboIndex);
+                        break;
+
+                    case ComboInputResult.None:
+                    default:
+                        
+                        break;
                 }
             }
-
-            if (expectedKey != key)
-            {
-                Debug.Log("Wrong Key Pressed");
-                _view.PressWrongKey(comboIndex);
-            }
-            else
-            {
-                _view.PressCorrectKey(comboIndex);
-            }
+            catch (OperationCanceledException) { }
+            finally { _checking = false; }
         }
 
+        private void NextCombo(List<ComboKeySetting> sequence, MenuData currentMenu)
+        {
+            if (_model.CurrentComboIndex + 1 >= sequence.Count)
+            {
+                _model.ResetCombo();
+                if (_model.CurrentStepIndex + 1 < currentMenu.Steps.Count)
+                {
+                    _isStepComplete = true;
+                }
+            }
+            else
+                _model.NextCombo();
+        }
+        
+        private void NextStep()
+        {
+            var menu = _model.MenuDatas[_model.CurrentMenuIndex];
+            if (menu?.Steps == null || _model.CurrentStepIndex >= menu.Steps.Count)
+            {
+                NextMenu();
+                return;
+            }
+            
+            if (!_isStepComplete) return;
+            CancelInputLoop();
+            _isStepComplete = false;
+
+            _model.NextStep();
+            _model.ResetCombo();
+            
+            ShowCurrentCombo();
+        }
+        
         private void NextMenu()
         {
+            CancelInputLoop();
+            Debug.Log("Next Menu"); 
+            _isStepComplete = false;
             
             _model.NextMenu();
+            _model.ResetStep();
             _model.ResetCombo();
+            
+            if (_model.CurrentMenuIndex < _model.MenuDatas.Count) return;
+            _model.CompleteMenu();
+            _view.CompleteCombo();
+
             ShowCurrentCombo();
         }
         
@@ -137,8 +188,33 @@ namespace Kaede.Scripts.GamePlay
             if (_model.MenuDatas == null || _model.CurrentMenuIndex >= _model.MenuDatas.Count) return;
 
             var currentMenu = _model.MenuDatas[_model.CurrentMenuIndex];
-            var keys = currentMenu.ComboKeys;
+            if (currentMenu.Steps == null || _model.CurrentStepIndex >= currentMenu.Steps.Count) return;
+
+            var stepRef = currentMenu.Steps[_model.CurrentStepIndex];
+            var sequence = stepRef.ResolveSequence();
+            if (sequence == null || sequence.Count == 0)
+            {
+                // แล้วแต่ดีไซน์: จะเคลียร์ UI หรือปล่อยว่าง
+                // _view.ClearCombo();
+                return;
+            }
+            
+            var keys = sequence.ConvertAll(c => c.key);
             _view.ShowCombo(keys);
+        }
+
+        #endregion
+
+        private void GetTimeLeft()
+        {
+            _view.TimerText.text = _model.CurrentTimer.ToString("N0");
+        }
+        
+        private void CancelInputLoop()
+        {
+            _inputCts?.Cancel();
+            _inputCts?.Dispose();
+            _inputCts = new CancellationTokenSource();
         }
     }
 }

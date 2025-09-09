@@ -66,7 +66,7 @@ namespace Yuirin.Script.Item
     }
     #endregion
     
-    [CreateAssetMenu(fileName = "ItemSO", menuName = "Scriptable Objects/ItemData")]
+    [CreateAssetMenu(fileName = "ItemSO", menuName = "Kaede/ItemData")]
     public class ItemData : ScriptableObject
     {
         [field: SerializeField] public string ItemName { get; private set; }

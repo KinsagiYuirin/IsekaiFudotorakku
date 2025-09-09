@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Kaede.Scripts.Item;
 using MadDuck.Scripts.Inputs;
 using Sirenix.OdinInspector;
 using UnityEngine;
@@ -11,6 +12,7 @@ namespace Kaede.Scripts.GamePlay
     {
         public List<MenuData> MenuDatas { get; private set; }
         public int CurrentMenuIndex { get; private set; } = 0;
+        public int CurrentStepIndex { get; private set; } = 0;
         public int CurrentComboIndex { get; private set; } = 0;
 
         public float MaxTimePerCombo { get; private set; }
@@ -28,6 +30,7 @@ namespace Kaede.Scripts.GamePlay
             CurrentTimer -= deltaTime;
         }
 
+        #region Combo Methods
         public void ResetCombo()
         {
             CurrentComboIndex = 0;
@@ -39,15 +42,34 @@ namespace Kaede.Scripts.GamePlay
             CurrentComboIndex++;
             CurrentTimer = MaxTimePerCombo;
         }
-
+        #endregion
+        
+        #region Step Methods
+        public void ResetStep()
+        {
+            CurrentStepIndex = 0;
+        }
+        
+        public void NextStep()
+        {
+            CurrentStepIndex++;
+        }
+        #endregion
+        
+        #region Menu Methods
         public void NextMenu()
         {
             CurrentMenuIndex++;
             CurrentComboIndex = 0;
             CurrentTimer = MaxTimePerCombo;
         }
-        
         public void CompleteMenu()
+        {
+            
+        }
+        #endregion
+        
+        public void GameOver()
         {
             
         }

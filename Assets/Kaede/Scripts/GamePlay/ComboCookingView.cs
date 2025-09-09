@@ -1,6 +1,9 @@
+using System;
 using System.Collections.Generic;
+using Kaede.Scripts.Item;
 using PrimeTween;
 using Sirenix.OdinInspector;
+using TMPro;
 using UnityCommunity.UnitySingleton;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -8,16 +11,7 @@ using UnityEngine.UI;
 
 namespace Kaede.Scripts.GamePlay
 {
-    public enum ComboKey
-    {
-        None,
-        W,
-        A,
-        S,
-        D
-    }
-    
-    [System.Serializable]
+    [Serializable]
     public class KeySpriteMapping
     {
         public ComboKey key;
@@ -26,6 +20,9 @@ namespace Kaede.Scripts.GamePlay
     
     public class ComboCookingView : MonoSingleton<ComboCookingView>
     {
+        [Title("Settings")]
+        [field: SerializeField] public TMP_Text TimerText { get; private set; }
+        
         [Title("References")]
         [field: SerializeField] public Transform ComboPanel { get; private set; }
         [SerializeField] private GameObject keyIconPrefab;
@@ -60,16 +57,20 @@ namespace Kaede.Scripts.GamePlay
             }
         }
         
+        public void NoneKeyPressed(int comboIndex)
+        {
+            var currentIcon = ComboPanel.GetChild(comboIndex).GetComponent<Image>();
+            currentIcon.color = Color.white;
+        }
+        
         public void PressCorrectKey(int comboIndex)
         {
-            if (comboIndex < 0 || comboIndex >= ComboPanel.childCount) return;
             var currentIcon = ComboPanel.GetChild(comboIndex).GetComponent<Image>();
             currentIcon.color = Color.green;
         }
 
         public void PressWrongKey(int comboIndex)
         {
-            if (comboIndex < 0 || comboIndex >= ComboPanel.childCount) return;
             var currentIcon = ComboPanel.GetChild(comboIndex).GetComponent<Image>();
             currentIcon.color = Color.red;
         }

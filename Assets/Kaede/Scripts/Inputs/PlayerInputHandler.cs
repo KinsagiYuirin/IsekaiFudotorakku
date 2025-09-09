@@ -1,5 +1,6 @@
 using System;
 using Cysharp.Threading.Tasks;
+using Kaede.Scripts.Item;
 using R3;
 using Sirenix.OdinInspector;
 using UnityEngine;
@@ -75,6 +76,8 @@ namespace MadDuck.Scripts.Inputs
         [field: SerializeField, ReadOnly]
         public SerializableReactiveProperty<InputButton> ComboRightButton { get; private set; }
         
+        [field: SerializeField, ReadOnly]
+        public SerializableReactiveProperty<InputButton> ConfirmButton { get; private set; }
         #endregion
         
         #endregion
@@ -102,6 +105,11 @@ namespace MadDuck.Scripts.Inputs
             LeftMouseClick.Value = new InputButton(_playerInputAction.Player.MeleeAttack);
             RightMouseClick.Value = new InputButton(_playerInputAction.Player.RangeAttack);
             PauseGameButton.Value = new InputButton(_playerInputAction.Player.Pause);
+            ComboUpButton.Value = new InputButton(_playerInputAction.Player.ComboUp);
+            ComboDownButton.Value = new InputButton(_playerInputAction.Player.ComboDown);
+            ComboLeftButton.Value = new InputButton(_playerInputAction.Player.ComboLeft);
+            ComboRightButton.Value = new InputButton(_playerInputAction.Player.ComboRight);
+            ConfirmButton.Value = new InputButton(_playerInputAction.Player.ConfirmButton);
             
             /*JerkBaitButton.Value = new InputButton(_playerInputAction.Player.JerkBait);
             ReelingButton.Value = new InputButton(_playerInputAction.Player.Reeling);
@@ -197,6 +205,11 @@ namespace MadDuck.Scripts.Inputs
             BindPressButton(ComboRightButton, context);
         }
 
+        public void OnConfirmButton(InputAction.CallbackContext context)
+        {
+            BindPressButton(ConfirmButton, context);
+        }
+
         #endregion
 
         #region Button
@@ -264,6 +277,51 @@ namespace MadDuck.Scripts.Inputs
         {
             BoatInput = input;
         }
+        #endregion
+        
+        #region Helper(by Yuirin)
+        
+        public bool IsKeyDown(ComboKey key) => key switch
+        {
+            ComboKey.W => ComboUpButton?.Value.isDown == true,
+            ComboKey.S => ComboDownButton?.Value.isDown == true,
+            ComboKey.A => ComboLeftButton?.Value.isDown == true,
+            ComboKey.D => ComboRightButton?.Value.isDown == true,
+            _ => false
+        };
+
+        public bool IsKeyHeld(ComboKey key) => key switch
+        {
+            ComboKey.W => ComboUpButton?.Value.isHeld == true,
+            ComboKey.S => ComboDownButton?.Value.isHeld == true,
+            ComboKey.A => ComboLeftButton?.Value.isHeld == true,
+            ComboKey.D => ComboRightButton?.Value.isHeld == true,
+            _ => false
+        };
+
+        public bool IsKeyUp(ComboKey key) => key switch
+        {
+            ComboKey.W => ComboUpButton?.Value.isUp == true,
+            ComboKey.S => ComboDownButton?.Value.isUp == true,
+            ComboKey.A => ComboLeftButton?.Value.isUp == true,
+            ComboKey.D => ComboRightButton?.Value.isUp == true,
+            _ => false
+        };
+
+        public bool AnyOtherKeyDown(ComboKey expectedKey)
+        {
+            foreach (ComboKey key in Enum.GetValues(typeof(ComboKey)))
+            {
+                if (key == ComboKey.None || key == expectedKey)
+                    continue;
+
+                if (IsKeyDown(key))
+                    return true;
+            }
+
+            return false;
+        }
+        
         #endregion
     }
 }

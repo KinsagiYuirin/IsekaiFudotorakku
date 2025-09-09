@@ -171,6 +171,15 @@ public partial class @PlayerInputAction: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Confirm Button"",
+                    ""type"": ""Button"",
+                    ""id"": ""6b76238e-db5a-4fbc-9e0c-049608c06f14"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -501,6 +510,17 @@ public partial class @PlayerInputAction: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""groups"": """",
                     ""action"": ""Combo Right"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""16311731-5edc-4374-ab9c-e119efef32a5"",
+                    ""path"": ""<Keyboard>/space"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Confirm Button"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -1097,6 +1117,7 @@ public partial class @PlayerInputAction: IInputActionCollection2, IDisposable
         m_Player_ComboDown = m_Player.FindAction("Combo Down", throwIfNotFound: true);
         m_Player_ComboLeft = m_Player.FindAction("Combo Left", throwIfNotFound: true);
         m_Player_ComboRight = m_Player.FindAction("Combo Right", throwIfNotFound: true);
+        m_Player_ConfirmButton = m_Player.FindAction("Confirm Button", throwIfNotFound: true);
         // UI
         m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
         m_UI_Navigate = m_UI.FindAction("Navigate", throwIfNotFound: true);
@@ -1199,6 +1220,7 @@ public partial class @PlayerInputAction: IInputActionCollection2, IDisposable
     private readonly InputAction m_Player_ComboDown;
     private readonly InputAction m_Player_ComboLeft;
     private readonly InputAction m_Player_ComboRight;
+    private readonly InputAction m_Player_ConfirmButton;
     /// <summary>
     /// Provides access to input actions defined in input action map "Player".
     /// </summary>
@@ -1246,6 +1268,10 @@ public partial class @PlayerInputAction: IInputActionCollection2, IDisposable
         /// Provides access to the underlying input action "Player/ComboRight".
         /// </summary>
         public InputAction @ComboRight => m_Wrapper.m_Player_ComboRight;
+        /// <summary>
+        /// Provides access to the underlying input action "Player/ConfirmButton".
+        /// </summary>
+        public InputAction @ConfirmButton => m_Wrapper.m_Player_ConfirmButton;
         /// <summary>
         /// Provides access to the underlying input action map instance.
         /// </summary>
@@ -1299,6 +1325,9 @@ public partial class @PlayerInputAction: IInputActionCollection2, IDisposable
             @ComboRight.started += instance.OnComboRight;
             @ComboRight.performed += instance.OnComboRight;
             @ComboRight.canceled += instance.OnComboRight;
+            @ConfirmButton.started += instance.OnConfirmButton;
+            @ConfirmButton.performed += instance.OnConfirmButton;
+            @ConfirmButton.canceled += instance.OnConfirmButton;
         }
 
         /// <summary>
@@ -1337,6 +1366,9 @@ public partial class @PlayerInputAction: IInputActionCollection2, IDisposable
             @ComboRight.started -= instance.OnComboRight;
             @ComboRight.performed -= instance.OnComboRight;
             @ComboRight.canceled -= instance.OnComboRight;
+            @ConfirmButton.started -= instance.OnConfirmButton;
+            @ConfirmButton.performed -= instance.OnConfirmButton;
+            @ConfirmButton.canceled -= instance.OnConfirmButton;
         }
 
         /// <summary>
@@ -1700,6 +1732,13 @@ public partial class @PlayerInputAction: IInputActionCollection2, IDisposable
         /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
         void OnComboRight(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "Confirm Button" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnConfirmButton(InputAction.CallbackContext context);
     }
     /// <summary>
     /// Interface to implement callback methods for all input action callbacks associated with input actions defined by "UI" which allows adding and removing callbacks.

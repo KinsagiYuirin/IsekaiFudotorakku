@@ -1,28 +1,43 @@
 using System;
 using System.Collections.Generic;
-using Kaede.Scripts.GamePlay;
 using Sirenix.OdinInspector;
 using UnityEngine;
-using UnityEngine.InputSystem;
 
-[Serializable]
-public enum MenuLevel
+namespace Kaede.Scripts.Item
 {
-    None = 0,
-    Easy = 1 << 0,
-    Normal = 1 << 1,
-    Hard = 1 << 2
-}
+    [System.Serializable]
+    public class MenuStepRef
+    {
+        [HorizontalGroup("Row", 0.6f)]
+        [HideLabel, AssetsOnly, Required]
+        public ComboPreset Preset;
 
-[CreateAssetMenu(fileName = "MenuData", menuName = "Scriptable Objects/MenuData")]
-public class MenuData : ScriptableObject
-{
-    [Title("Settings")]
-    [field: SerializeField] public string MenuName { get; private set; }
-    [field: SerializeField] public MenuLevel MenuLevel { get; private set; }
-    [field: SerializeField] public List<ComboKey> ComboKeys { get; private set; } = new List<ComboKey>();
-    
-    [Title("References")]
-    [field: SerializeField] public Sprite MenuIcon { get; private set; }
-    
+        [HorizontalGroup("Row", 0.4f)]
+        [HideLabel, LabelText("Override Sequence?")]
+        public bool OverrideSequence;
+
+        [ShowIf(nameof(OverrideSequence))]
+        [TableList(ShowIndexLabels = true)]
+        public List<ComboKeySetting> CustomSequence = new();
+
+        public List<ComboKeySetting> ResolveSequence()
+            => OverrideSequence && CustomSequence != null && CustomSequence.Count > 0
+                ? CustomSequence
+                : Preset != null ? Preset.ComboSequence : new List<ComboKeySetting>();
+    }
+
+    [CreateAssetMenu(fileName = "MenuData", menuName = "Kaede/MenuData")]
+    public class MenuData : ScriptableObject
+    {
+        [Title("Settings")]
+        [LabelText("Menu Name")] public string MenuName;
+        public MenuLevel MenuLevel;
+
+        [Title("Steps (เลือกพรีเซ็ต)")]
+        [ListDrawerSettings(Expanded = true, DraggableItems = true)]
+        public List<MenuStepRef> Steps = new();
+
+        [Title("References")]
+        [PreviewField(70)] public Sprite MenuIcon;
+    }
 }
