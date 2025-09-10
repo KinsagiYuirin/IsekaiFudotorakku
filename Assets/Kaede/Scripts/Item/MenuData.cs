@@ -8,16 +8,13 @@ namespace Kaede.Scripts.Item
     [System.Serializable]
     public class MenuStepRef
     {
-        [HorizontalGroup("Row", 0.6f)]
-        [HideLabel, AssetsOnly, Required]
+        [HorizontalGroup("Row", 0.6f)] [HideLabel, AssetsOnly, Required]
         public ComboPreset preset;
 
-        [HorizontalGroup("Row", 0.4f)]
-        [HideLabel, LabelText("Override Sequence?")]
+        [HorizontalGroup("Row", 0.4f)] [HideLabel, LabelText("Override Sequence?")]
         public bool overrideSequence;
 
-        [ShowIf(nameof(overrideSequence))]
-        [TableList(ShowIndexLabels = true)]
+        [ShowIf(nameof(overrideSequence))] [TableList(ShowIndexLabels = true)]
         public List<ComboKeySetting> customSequence = new();
 
         public List<ComboKeySetting> ResolveSequence()
@@ -39,5 +36,8 @@ namespace Kaede.Scripts.Item
 
         [Title("References")]
         [PreviewField(70)] public Sprite menuIcon;
+        
+        private float _totalTime;
+        private float _totalScore;
     }
 }

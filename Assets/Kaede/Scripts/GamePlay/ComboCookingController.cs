@@ -30,15 +30,15 @@ namespace Kaede.Scripts.GamePlay
         [field: SerializeField] public float TimeBetweenCombos { get; private set; } = 1f;
         
         private bool _isStepComplete = false;
+        private bool _checking;
         
         private ComboCookingModel _model;
-        private ComboCookingView _view;
+        private ComboCookingView  _view;
+        private ComboKeySetting _currentComboSetting;
         private PlayerInputHandler _inputHandler;
         private IDisposable _confirmSub;
-        private bool _checking;
-        private CancellationTokenSource _inputCts;
         private IComboHandler _currentHandler;
-        private ComboKeySetting _currentComboSetting;
+        private CancellationTokenSource _inputCts;
 
         #region Awake, Start, Update
         

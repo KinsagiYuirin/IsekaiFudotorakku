@@ -20,7 +20,7 @@ namespace Kaede.Scripts.GamePlay
             CurrentTimer    = maxTimePerCombo;
         }
 
-        public void Tick(float deltaTime) => CurrentTimer -= deltaTime;
+        public void Tick(float deltaTime) => CurrentTimer += deltaTime;
 
         #region Combo Methods
         public void ResetCombo()
