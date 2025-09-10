@@ -12,16 +12,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6f108eedc8f2fc34a9a05d04b5878ca2, type: 3}
   m_Name: MenuTest1
   m_EditorClassIdentifier: 
-  MenuName: "\u0E01\u0E23\u0E30\u0E40\u0E1E\u0E23\u0E32"
-  MenuLevel: 1
-  Steps:
-  - Preset: {fileID: 11400000, guid: 2471bbdc1e5453048b42144a3b3ec81d, type: 2}
-    OverrideSequence: 0
-    CustomSequence: []
-  - Preset: {fileID: 11400000, guid: f538f8a8e939dba47a4af57dcb9e00a5, type: 2}
-    OverrideSequence: 0
-    CustomSequence: []
-  - Preset: {fileID: 11400000, guid: 2471bbdc1e5453048b42144a3b3ec81d, type: 2}
-    OverrideSequence: 0
-    CustomSequence: []
-  MenuIcon: {fileID: 0}
+  menuName: "\u0E01\u0E23\u0E30\u0E40\u0E1E\u0E23\u0E32"
+  menuLevel: 1
+  steps:
+  - preset: {fileID: 11400000, guid: 2471bbdc1e5453048b42144a3b3ec81d, type: 2}
+    overrideSequence: 0
+    customSequence: []
+  - preset: {fileID: 11400000, guid: f538f8a8e939dba47a4af57dcb9e00a5, type: 2}
+    overrideSequence: 0
+    customSequence: []
+  - preset: {fileID: 11400000, guid: 2471bbdc1e5453048b42144a3b3ec81d, type: 2}
+    overrideSequence: 0
+    customSequence: []
+  menuIcon: {fileID: 3425164275509785543, guid: 1ce6dc9d1ccd89647a211f934ca4efc9, type: 3}

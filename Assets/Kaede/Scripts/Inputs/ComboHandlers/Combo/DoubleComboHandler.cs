@@ -10,28 +10,44 @@ namespace Kaede.Scripts.Inputs.ComboHandlers.Combo
     public class DoubleComboHandler : IComboHandler
     {
         private float _lastPressTime = -1f;
-        private int _pressCount = 0;
+        private int _currentPressCount;
+        private readonly int _requiredPressCount;
         private readonly float _maxDelay;
 
         public DoubleComboHandler(float maxDelay = 0.3f, int requiredPressCount = 2)
         {
             _maxDelay = maxDelay;
-            _pressCount = requiredPressCount;
+            _requiredPressCount = requiredPressCount;
         }
 
         public async UniTask<ComboInputResult> CheckInput(PlayerInputHandler input, ComboKey expectedKey, CancellationToken ct)
         {
             if (input.IsKeyDown(expectedKey))
             {
-                if (Time.time - _lastPressTime <= _maxDelay)
+                var time = Time.time;
+
+                if (_currentPressCount == 0 || time - _lastPressTime <= _maxDelay)
                 {
-                    _lastPressTime = -1f;
-                    return ComboInputResult.Correct;
+                    _currentPressCount++;
+                    _lastPressTime = time;
+
+                    if (_currentPressCount >= _requiredPressCount)
+                    {
+                        _currentPressCount = 0;
+                        _lastPressTime = -1f;
+                        return ComboInputResult.Correct;
+                    }
                 }
-                _lastPressTime = Time.time;
+                else
+                {
+                    _currentPressCount = 1;
+                    _lastPressTime = time;
+                }
             }
             else if (input.AnyOtherKeyDown(expectedKey))
             {
+                _currentPressCount = 0;
+                _lastPressTime = -1f;
                 return ComboInputResult.Wrong;
             }
 
@@ -39,4 +55,3 @@ namespace Kaede.Scripts.Inputs.ComboHandlers.Combo
         }
     }
 }
-

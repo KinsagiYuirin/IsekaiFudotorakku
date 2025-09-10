@@ -30,7 +30,7 @@ namespace Kaede.Scripts.Managers
             for (int i = 0; i < InventoryModule.InventoryDataList.Count; i++)
             {
                 var inventoryData = InventoryModule.InventoryDataList[i];
-                var menuSlot = menuSlots[i];
+                var menuSlot      = menuSlots[i];
                 menuSlot.Initialize(inventoryData);
             }
         }

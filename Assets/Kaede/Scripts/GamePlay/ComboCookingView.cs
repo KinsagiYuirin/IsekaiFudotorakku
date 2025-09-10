@@ -59,19 +59,19 @@ namespace Kaede.Scripts.GamePlay
         
         public void NoneKeyPressed(int comboIndex)
         {
-            var currentIcon = ComboPanel.GetChild(comboIndex).GetComponent<Image>();
+            var currentIcon   = ComboPanel.GetChild(comboIndex).GetComponent<Image>();
             currentIcon.color = Color.white;
         }
         
         public void PressCorrectKey(int comboIndex)
         {
-            var currentIcon = ComboPanel.GetChild(comboIndex).GetComponent<Image>();
+            var currentIcon   = ComboPanel.GetChild(comboIndex).GetComponent<Image>();
             currentIcon.color = Color.green;
         }
 
         public void PressWrongKey(int comboIndex)
         {
-            var currentIcon = ComboPanel.GetChild(comboIndex).GetComponent<Image>();
+            var currentIcon   = ComboPanel.GetChild(comboIndex).GetComponent<Image>();
             currentIcon.color = Color.red;
         }
         
@@ -79,7 +79,7 @@ namespace Kaede.Scripts.GamePlay
         {
             foreach (Transform child in ComboPanel)
             {
-                var img = child.GetComponent<Image>();
+                var img   = child.GetComponent<Image>();
                 img.color = Color.yellow;
             }
         }
@@ -98,7 +98,7 @@ namespace Kaede.Scripts.GamePlay
             CurrentMenuIndex = 0;
             foreach (Transform child in ComboPanel)
             {
-                var img = child.GetComponent<Image>();
+                var img   = child.GetComponent<Image>();
                 img.color = Color.white;
             }
         }

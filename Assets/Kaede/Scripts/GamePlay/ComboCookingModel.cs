@@ -17,7 +17,7 @@ namespace Kaede.Scripts.GamePlay
         {
             MenuDatas = menus ?? new List<MenuData>();
             MaxTimePerCombo = maxTimePerCombo;
-            CurrentTimer = maxTimePerCombo;
+            CurrentTimer    = maxTimePerCombo;
         }
 
         public void Tick(float deltaTime) => CurrentTimer -= deltaTime;
@@ -26,7 +26,7 @@ namespace Kaede.Scripts.GamePlay
         public void ResetCombo()
         {
             CurrentComboIndex = 0;
-            CurrentTimer = MaxTimePerCombo;
+            CurrentTimer      = MaxTimePerCombo;
         }
 
         public void NextCombo()
@@ -46,7 +46,7 @@ namespace Kaede.Scripts.GamePlay
         {
             CurrentMenuIndex++;
             CurrentComboIndex = 0;
-            CurrentTimer = MaxTimePerCombo;
+            CurrentTimer      = MaxTimePerCombo;
             ResetStep();
         }
 

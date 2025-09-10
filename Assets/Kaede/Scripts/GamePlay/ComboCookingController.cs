@@ -37,6 +37,8 @@ namespace Kaede.Scripts.GamePlay
         private IDisposable _confirmSub;
         private bool _checking;
         private CancellationTokenSource _inputCts;
+        private IComboHandler _currentHandler;
+        private ComboKeySetting _currentComboSetting;
 
         #region Awake, Start, Update
         
@@ -49,7 +51,7 @@ namespace Kaede.Scripts.GamePlay
         private void Start()
         {
             _model = new ComboCookingModel(MenuDatasList, maxTimePerCombo);
-            _view = GetComponent<ComboCookingView>();
+            _view  = GetComponent<ComboCookingView>();
             
             ShowCurrentCombo();
         }
@@ -93,7 +95,7 @@ namespace Kaede.Scripts.GamePlay
         private async UniTask CheckComboButton()
         {
             if (_checking) return;
-            _checking = true;
+            _checking   = true;
             _inputCts ??= new CancellationTokenSource();
 
             try
@@ -103,8 +105,14 @@ namespace Kaede.Scripts.GamePlay
 
                 if (!_model.TryGetExpectedCombo(out var expectedCombo)) return;
 
-                var handler = ComboHandlerFactory.Create(expectedCombo);
-                var result  = await handler.CheckInput(_inputHandler, expectedCombo.key, _inputCts.Token);
+                if (_currentHandler == null || _currentComboSetting != expectedCombo)
+                {
+                    _currentHandler      = ComboHandlerFactory.Create(expectedCombo);
+                    _currentComboSetting = expectedCombo;
+                }
+
+                var result = await _currentHandler.CheckInput(_inputHandler, expectedCombo.key, _inputCts.Token);
+
 
                 if (_isStepComplete) return;
                 
@@ -135,11 +143,15 @@ namespace Kaede.Scripts.GamePlay
             
             if (_model.CurrentComboIndex + 1 >= count)
             {
-                _isStepComplete = true;
-                CancelInputLoop(); 
+                _isStepComplete       = true;
+                _currentHandler       = null;
+                _currentComboSetting  = null;
+                CancelInputLoop();
                 return;
             }
 
+            _currentHandler      = null;
+            _currentComboSetting = null;
             _model.NextCombo();
         }
         
@@ -148,7 +160,9 @@ namespace Kaede.Scripts.GamePlay
             if (!_isStepComplete) return;
 
             CancelInputLoop();
-            _isStepComplete = false;
+            _isStepComplete      = false;
+            _currentHandler      = null;
+            _currentComboSetting = null;
             
             if (!_model.HasNextStep())
             {
@@ -166,7 +180,10 @@ namespace Kaede.Scripts.GamePlay
         private void NextMenu()
         {
             CancelInputLoop();
-            _isStepComplete = false;
+            _isStepComplete      = false;
+            
+            _currentHandler      = null;
+            _currentComboSetting = null;
             
             if (!_model.HasNextMenu())
             {
