@@ -6,6 +6,7 @@ using System.Threading;
 using Cysharp.Threading.Tasks;
 using Kaede.Scripts.Inputs.ComboHandlers;
 using Kaede.Scripts.Item;
+using Kaede.Scripts.Managers;
 using MadDuck.Scripts.Inputs;
 using R3;
 using Sirenix.OdinInspector;
@@ -35,6 +36,8 @@ namespace Kaede.Scripts.GamePlay
         private bool _isStepComplete = false;
         private bool _checking;
         
+        private InventoryController _inventoryController;
+        
         private ComboCookingModel _model;
         private ComboCookingView  _view;
         private ComboKeySetting _currentComboSetting;
@@ -55,6 +58,7 @@ namespace Kaede.Scripts.GamePlay
         {
             _model = new ComboCookingModel(MenuDatasList, maxTimePerCombo);
             _view  = GetComponent<ComboCookingView>();
+            _inventoryController = GetComponent<InventoryController>();
             
             ShowCurrentCombo();
         }
@@ -198,8 +202,9 @@ namespace Kaede.Scripts.GamePlay
             _model.NextMenu();
             _model.ResetStep();
             _model.ResetCombo();
-
             ShowCurrentCombo();
+            
+            _inventoryController.CompleteMenu();
             Debug.Log("Next Menu");
         }
         
