@@ -7,7 +7,7 @@ using Yuirin.Script.Item;
 
 namespace Kaede.Scripts.Inventorys
 {
-    public class InventoryModule
+    public class InventoryModel
     {
         [SerializeField] public static List<MenuData> InventoryDataList => ComboCookingController.Instance.MenuDatasList;
         

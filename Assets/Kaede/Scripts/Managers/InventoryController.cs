@@ -10,16 +10,23 @@ namespace Kaede.Scripts.Managers
     {
         [SerializeField] private MenuSlot menuSlotPrefab;
         [SerializeField] private List<MenuData> allMenus;
-        [SerializeField] private List<MenuSlot> menuSlots;
+        [SerializeField] private List<Transform> slotPositions;
         [SerializeField] private int maxDisplayCount = 5;
-        [SerializeReference] private InventoryModule inventoryModule = new();
+        [SerializeReference] private InventoryModel inventoryModel = new();
         
+        private readonly List<MenuSlot> _menuSlots = new();
         private readonly Queue<MenuData> _displayQueue = new();
         private int _nextIndex;
         
         private void Start()
         {
-            allMenus = InventoryModule.InventoryDataList;
+            foreach (var pos in slotPositions)
+            {
+                var slot = Instantiate(menuSlotPrefab, pos);
+                _menuSlots.Add(slot);
+            }
+            
+            allMenus = InventoryModel.InventoryDataList;
             int initialCount = Mathf.Min(maxDisplayCount, allMenus.Count);
             for (int i = 0; i < initialCount; i++)
             {
@@ -47,16 +54,16 @@ namespace Kaede.Scripts.Managers
         private void RenderMenus()
         {
             var menus = _displayQueue.ToArray();
-            for (int i = 0; i < menuSlots.Count; i++)
+            for (int i = 0; i < _menuSlots.Count; i++)
             {
                 if (i < menus.Length)
                 {
-                    menuSlots[i].gameObject.SetActive(true);
-                    menuSlots[i].Initialize(menus[i]);
+                    _menuSlots[i].gameObject.SetActive(true);
+                    _menuSlots[i].Initialize(menus[i]);
                 }
                 else
                 {
-                    menuSlots[i].gameObject.SetActive(false);
+                    _menuSlots[i].gameObject.SetActive(false);
                 }
             }
         }
