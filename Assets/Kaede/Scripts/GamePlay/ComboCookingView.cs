@@ -39,6 +39,7 @@ namespace Kaede.Scripts.GamePlay
                 if (!_spriteLookup.ContainsKey(mapping.key))
                     _spriteLookup.Add(mapping.key, mapping.sprite);
             }
+            base.Awake();
         }
         
         public void ShowCombo(List<ComboKey> keys)

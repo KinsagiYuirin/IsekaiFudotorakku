@@ -15,7 +15,6 @@ namespace Kaede.Scripts.Managers
         private void Start()
         {
             CheckSlotCount();
-            //inventoryEvent.InitializeInventory();
         }
 
         private void CheckSlotCount()

@@ -11,6 +11,6 @@ namespace Kaede.Scripts.Inputs.ComboHandlers
         /// <summary>
         /// ตรวจสอบว่า input ปัจจุบันผ่านเงื่อนไขของ combo type หรือไม่
         /// </summary>
-        UniTask<ComboInputResult> CheckInput(PlayerInputHandler input, ComboKey expectedKey, CancellationToken ct);
+        ComboInputResult CheckInput(PlayerInputHandler input, ComboKey expectedKey, CancellationToken ct);
     }
 }

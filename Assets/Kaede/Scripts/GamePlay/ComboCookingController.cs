@@ -29,6 +29,9 @@ namespace Kaede.Scripts.GamePlay
         [SerializeField] private float maxTimePerCombo = 5f;
         [field: SerializeField] public float TimeBetweenCombos { get; private set; } = 1f;
         
+        [Title("Debug")]
+        [SerializeField, ReadOnly] private List<MenuData> completedMenus = new List<MenuData>();
+        
         private bool _isStepComplete = false;
         private bool _checking;
         
@@ -42,10 +45,10 @@ namespace Kaede.Scripts.GamePlay
 
         #region Awake, Start, Update
         
-        [Obsolete("Obsolete")]
         protected override void Awake()
         {
             _inputHandler = FindObjectOfType<PlayerInputHandler>();
+            base.Awake();
         }
 
         private void Start()
@@ -68,7 +71,7 @@ namespace Kaede.Scripts.GamePlay
             }
 
             GetTimeLeft();
-            _ = CheckComboButton();
+            CheckComboButton();
         }
         #endregion
 
@@ -92,7 +95,7 @@ namespace Kaede.Scripts.GamePlay
 
         #region Combo Logic
         
-        private async UniTask CheckComboButton()
+        private void CheckComboButton()
         {
             if (_checking) return;
             _checking   = true;
@@ -111,7 +114,7 @@ namespace Kaede.Scripts.GamePlay
                     _currentComboSetting = expectedCombo;
                 }
 
-                var result = await _currentHandler.CheckInput(_inputHandler, expectedCombo.key, _inputCts.Token);
+                var result = _currentHandler.CheckInput(_inputHandler, expectedCombo.key, _inputCts.Token);
 
 
                 if (_isStepComplete) return;

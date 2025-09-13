@@ -16,7 +16,7 @@ namespace Kaede.Scripts.Inputs.ComboHandlers.Combo
             _requiredCount = requiredCount;
         }
 
-        public async UniTask<ComboInputResult> CheckInput(PlayerInputHandler input, ComboKey expectedKey, CancellationToken ct)
+        public ComboInputResult CheckInput(PlayerInputHandler input, ComboKey expectedKey, CancellationToken ct)
         {
             if (input.IsKeyDown(expectedKey))
             {

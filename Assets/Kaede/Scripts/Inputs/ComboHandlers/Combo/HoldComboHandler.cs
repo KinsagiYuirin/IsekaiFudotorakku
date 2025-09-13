@@ -17,7 +17,7 @@ namespace Kaede.Scripts.Inputs.ComboHandlers.Combo
             _requiredTime = requiredTime;
         }
 
-        public async UniTask<ComboInputResult> CheckInput(PlayerInputHandler input, ComboKey expectedKey, CancellationToken ct)
+        public ComboInputResult CheckInput(PlayerInputHandler input, ComboKey expectedKey, CancellationToken ct)
         {
             if (input.IsKeyHeld(expectedKey))
             {

@@ -9,7 +9,7 @@ namespace Kaede.Scripts.Inputs.ComboHandlers.Combo
 {
     public class SingleComboHandler : IComboHandler
     {
-        public async UniTask<ComboInputResult> CheckInput(PlayerInputHandler input, ComboKey expectedKey, CancellationToken ct)
+        public ComboInputResult CheckInput(PlayerInputHandler input, ComboKey expectedKey, CancellationToken ct)
         {
             if (input.IsKeyDown(expectedKey))
                 return ComboInputResult.Correct;
