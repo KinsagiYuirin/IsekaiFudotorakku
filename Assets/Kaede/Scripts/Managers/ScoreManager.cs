@@ -1,14 +1,19 @@
 using System.Collections.Generic;
 using System.Linq;
+using Kaede.Scripts.GamePlay;
+using Sirenix.OdinInspector;
+using UnityCommunity.UnitySingleton;
+using UnityEngine;
 
 namespace Kaede.Scripts.Managers
 {
     public class ScoreManager
     {
+        
         public List<List<float>> StepScoresPerMenu { get; } = new();
         public List<float> MenuScores { get; } = new();
         public float GrandTotalScore { get; private set; }
-
+        
         private readonly List<float> _currentStepScores = new();
         private float _pendingStepScore;
 
@@ -20,6 +25,16 @@ namespace Kaede.Scripts.Managers
         public void CommitPendingStepScore()
         {
             _currentStepScores.Add(_pendingStepScore);
+            _pendingStepScore = 0f;
+        }
+
+        public void AddPendingStepScore(float score)
+        {
+            _pendingStepScore += score;
+        }
+
+        public void ResetPendingStepScore()
+        {
             _pendingStepScore = 0f;
         }
 
