@@ -12,6 +12,7 @@ namespace Kaede.Scripts.Inputs.ComboHandlers.Combo
         private float _elapsed;
         private readonly float _requiredTime;
         private readonly Vector2 _requiredTimeRange;
+
         
         public HoldComboHandler(float requiredTime)
         {
@@ -24,10 +25,22 @@ namespace Kaede.Scripts.Inputs.ComboHandlers.Combo
             if (input.IsKeyHeld(expectedKey))
             {
                 _elapsed += Time.deltaTime;
-                if (input.IsKeyUp(expectedKey) && _elapsed >= _requiredTimeRange.x && _elapsed <= _requiredTimeRange.y)
+                if (input.IsKeyUp(expectedKey))
                 {
-                    _elapsed = 0f;
-                    return ComboInputResult.Correct;
+                    switch (_elapsed)
+                    {
+                        case var t when t >= _requiredTimeRange.x && t <= _requiredTimeRange.y:
+                            _elapsed = 0f;
+                            return ComboInputResult.Correct;
+                        
+                        case var t when t < _requiredTimeRange.x:
+                            _elapsed = 0f;
+                            return ComboInputResult.Wrong;
+                        
+                        case var t when t > _requiredTimeRange.y:
+                            _elapsed = 0f;
+                            return ComboInputResult.Wrong;
+                    }
                 }
             }
             else if (input.AnyOtherKeyDown(expectedKey))
@@ -39,7 +52,6 @@ namespace Kaede.Scripts.Inputs.ComboHandlers.Combo
             {
                 _elapsed = 0f;
             }
-
             return ComboInputResult.None;
         }
     }

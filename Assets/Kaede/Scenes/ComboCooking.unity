@@ -662,6 +662,13 @@ MonoBehaviour:
       isHeld: 0
       isUpAfterHeld: 0
       heldLastTime: 0
+  <CancelButton>k__BackingField:
+    value:
+      isDown: 0
+      isUp: 0
+      isHeld: 0
+      isUpAfterHeld: 0
+      heldLastTime: 0
 --- !u!4 &1049526166
 Transform:
   m_ObjectHideFlags: 0
@@ -1035,6 +1042,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 11276fc2667b40a4bb13605ce2a34386, type: 2}
   maxTimePerCombo: 20
   <TimeBetweenCombos>k__BackingField: 3
+  scorePerButton: 10
   completedMenus: []
 --- !u!4 &1835431552
 Transform:
@@ -1115,13 +1123,12 @@ MonoBehaviour:
   - {fileID: 61189964}
   maxDisplayCount: 5
   inventoryModel:
-    rid: 8126357700586766425
+    rid: -2
   references:
     version: 2
     RefIds:
-    - rid: 8126357700586766425
-      type: {class: InventoryModel, ns: Kaede.Scripts.Inventorys, asm: Assembly-CSharp}
-      data: 
+    - rid: -2
+      type: {class: , ns: , asm: }
 --- !u!1 &1863883253
 GameObject:
   m_ObjectHideFlags: 0

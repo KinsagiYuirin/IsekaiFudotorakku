@@ -16,7 +16,7 @@ MonoBehaviour:
   phase: 0
   comboSequence:
   - key: 1
-    type: 3
+    type: 0
     doubleTapDelay: 1
     pressCount: 2
     holdTime: 1
