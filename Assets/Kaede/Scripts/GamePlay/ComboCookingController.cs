@@ -29,6 +29,7 @@ namespace Kaede.Scripts.GamePlay
         [field: SerializeField] public List<MenuData> MenuDatasList { get; private set; }
         [SerializeField] private float maxTimePerCombo = 5f;
         [field: SerializeField] public float TimeBetweenCombos { get; private set; } = 1f;
+        [SerializeField] private float _pendingStepScore;
         
         [Title("Debug")]
         [SerializeField, ReadOnly] private List<MenuData> completedMenus = new List<MenuData>();
@@ -86,7 +87,7 @@ namespace Kaede.Scripts.GamePlay
             {
                 if (button.isDown)
                 {
-                    NextStep();
+                    NextStep(_pendingStepScore);
                 }
             });
         }
@@ -164,7 +165,7 @@ namespace Kaede.Scripts.GamePlay
             _model.NextCombo();
         }
         
-        private void NextStep()
+        private void NextStep(float stepScore)
         {
             if (!_isStepComplete) return;
 
@@ -173,18 +174,19 @@ namespace Kaede.Scripts.GamePlay
             _currentHandler      = null;
             _currentComboSetting = null;
             
-            if (!_model.HasNextStep())
+            var hasNext = _model.NextStep(stepScore);
+            _pendingStepScore    = 0f;
+            if (!hasNext)
             {
                 NextMenu();
                 return;
             }
             
-            _model.NextStep();
+            _model.NextStep(_pendingStepScore);
             _model.ResetCombo();
             ShowCurrentCombo();
             Debug.Log("Next Step");
         }
-
         
         private void NextMenu()
         {
@@ -198,6 +200,7 @@ namespace Kaede.Scripts.GamePlay
             {
                 _model.CompleteMenu();
                 _view.CompleteCombo();
+                Debug.Log($"Grand Total Score: {_model.GrandTotalScore}");
                 return;
             }
 
@@ -206,8 +209,16 @@ namespace Kaede.Scripts.GamePlay
             _model.ResetCombo();
             ShowCurrentCombo();
             
+            var latestMenuScore = _model.MenuScores[_model.MenuScores.Count - 1];
+            Debug.Log($"Menu {_model.MenuScores.Count} Score: {latestMenuScore}");
+            
             _inventoryController.CompleteMenu();
             Debug.Log("Next Menu");
+        }
+        
+        public void SetStepScore(float score)
+        {
+            _pendingStepScore = score;
         }
         
         private void ShowCurrentCombo()

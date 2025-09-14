@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using Kaede.Scripts.Item;
 
 namespace Kaede.Scripts.GamePlay
@@ -14,6 +15,12 @@ namespace Kaede.Scripts.GamePlay
         public float CurrentTimer { get; set; }
 
         public float StartTime { get; private set; } = 0;
+        
+        // ---------- Score Tracking ----------
+        public List<List<float>> StepScoresPerMenu { get; } = new();
+        public List<float> MenuScores { get; } = new();
+        public float GrandTotalScore { get; private set; } = 0f;
+        private List<float> _currentStepScores = new();
 
         public ComboCookingModel(List<MenuData> menus, float maxTimePerCombo = 5f)
         {
@@ -38,12 +45,28 @@ namespace Kaede.Scripts.GamePlay
 
         #region Step Methods
         public void ResetStep() => CurrentStepIndex = 0;
-        public void NextStep() => CurrentStepIndex++;
+        /// <summary>
+        /// Record score for the current step and advance to the next one if available.
+        /// Returns true when there is another step to continue, false otherwise.
+        /// </summary>
+        public bool NextStep(float stepScore)
+        {
+            _currentStepScores.Add(stepScore);
+            if (HasNextStep())
+            {
+                CurrentStepIndex++;
+                return true;
+            }
+
+            return false;
+        }
         #endregion
 
         #region Menu Methods
         public void NextMenu()
         {
+            FinalizeCurrentMenuScore();
+            
             CurrentMenuIndex++;
             CurrentComboIndex = 0;
             CurrentTimer      = MaxTimePerCombo;
@@ -52,7 +75,8 @@ namespace Kaede.Scripts.GamePlay
 
         public void CompleteMenu()
         {
-            
+            FinalizeCurrentMenuScore();
+            GrandTotalScore = MenuScores.Sum();
         }
         #endregion
 
@@ -116,6 +140,14 @@ namespace Kaede.Scripts.GamePlay
             // StepRef ต้องมี ResolveSequence() คืน List<ComboKeySetting>
             var stepRef = menu.steps[CurrentStepIndex];
             return stepRef?.ResolveSequence() ?? new List<ComboKeySetting>();
+        }
+        
+        private void FinalizeCurrentMenuScore()
+        {
+            var menuScore = _currentStepScores.Sum();
+            MenuScores.Add(menuScore);
+            StepScoresPerMenu.Add(new List<float>(_currentStepScores));
+            _currentStepScores.Clear();
         }
 
     }
