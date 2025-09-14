@@ -11,7 +11,9 @@ namespace Kaede.Scripts.GamePlay
         public int CurrentComboIndex { get; private set; } = 0;
 
         public float MaxTimePerCombo { get; private set; }
-        public float CurrentTimer { get; private set; }
+        public float CurrentTimer { get; set; }
+
+        public float StartTime { get; private set; } = 0;
 
         public ComboCookingModel(List<MenuData> menus, float maxTimePerCombo = 5f)
         {
@@ -19,8 +21,7 @@ namespace Kaede.Scripts.GamePlay
             MaxTimePerCombo = maxTimePerCombo;
             CurrentTimer    = maxTimePerCombo;
         }
-
-        public void Tick(float deltaTime) => CurrentTimer += deltaTime;
+        
 
         #region Combo Methods
         public void ResetCombo()
@@ -32,7 +33,6 @@ namespace Kaede.Scripts.GamePlay
         public void NextCombo()
         {
             CurrentComboIndex++;
-            CurrentTimer = MaxTimePerCombo;
         }
         #endregion
 

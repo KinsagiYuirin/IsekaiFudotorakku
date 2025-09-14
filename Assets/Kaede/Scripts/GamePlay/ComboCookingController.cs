@@ -64,8 +64,8 @@ namespace Kaede.Scripts.GamePlay
         }
 
         private void Update()
-        {
-            _model.Tick(Time.deltaTime);
+        { 
+            Tick(Time.deltaTime);
 
             if (_model.CurrentTimer <= 0f)
             {
@@ -140,8 +140,10 @@ namespace Kaede.Scripts.GamePlay
                         break;
                 }
             }
-            catch (OperationCanceledException) { }
-            finally { _checking = false; }
+            finally
+            {
+                _checking = false;
+            }
         }
 
         private void NextCombo()
@@ -215,10 +217,17 @@ namespace Kaede.Scripts.GamePlay
         }
         #endregion
 
+        #region Timer
         private void GetTimeLeft()
         {
             _view.TimerText.text = _model.CurrentTimer.ToString("N0");
         }
+
+        private void Tick(float deltaTime)
+        {
+            _model.CurrentTimer -= deltaTime;
+        }
+        #endregion
         
         private void CancelInputLoop()
         {
