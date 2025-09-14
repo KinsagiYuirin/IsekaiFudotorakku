@@ -51,7 +51,6 @@ namespace Kaede.Scripts.GamePlay
                 CurrentStepIndex++;
                 return true;
             }
-
             return false;
         }
         #endregion

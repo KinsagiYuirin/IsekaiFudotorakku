@@ -11,10 +11,12 @@ namespace Kaede.Scripts.Inputs.ComboHandlers.Combo
     {
         private float _elapsed;
         private readonly float _requiredTime;
-
+        private readonly Vector2 _requiredTimeRange;
+        
         public HoldComboHandler(float requiredTime)
         {
             _requiredTime = requiredTime;
+            _requiredTimeRange = new Vector2(requiredTime - 0.5f, requiredTime + 0.5f);
         }
 
         public ComboInputResult CheckInput(PlayerInputHandler input, ComboKey expectedKey, CancellationToken ct)
@@ -22,7 +24,7 @@ namespace Kaede.Scripts.Inputs.ComboHandlers.Combo
             if (input.IsKeyHeld(expectedKey))
             {
                 _elapsed += Time.deltaTime;
-                if (_elapsed >= _requiredTime)
+                if (input.IsKeyUp(expectedKey) && _elapsed >= _requiredTimeRange.x && _elapsed <= _requiredTimeRange.y)
                 {
                     _elapsed = 0f;
                     return ComboInputResult.Correct;

@@ -235,7 +235,6 @@ namespace Kaede.Scripts.GamePlay
 
         private void RetryStep()
         {
-            if (_model.CurrentStepIndex == 0) return;
             CancelInputLoop();
             _isStepComplete      = false;
             _currentHandler      = null;
