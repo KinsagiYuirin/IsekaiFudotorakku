@@ -224,7 +224,7 @@ MonoBehaviour:
     materialColor: 0
   - folderName: Item
     folderColor: {r: 0, g: 0.9770379, b: 1, a: 1}
-    fullPath: Assets/Kaede/Prefabs/Item
+    fullPath: Assets/Kaede/Scripts/Item
     icon: {fileID: 0}
     applyToAllFolders: 0
     applyColorToSubfolders: 0
@@ -249,6 +249,14 @@ MonoBehaviour:
   - folderName: Utils
     folderColor: {r: 0.85547847, g: 1, b: 0.57169807, a: 1}
     fullPath: Assets/Kaede/Scripts/Utils
+    icon: {fileID: 0}
+    applyToAllFolders: 0
+    applyColorToSubfolders: 0
+    applyIconToSubfolders: 0
+    materialColor: 0
+  - folderName: Model
+    folderColor: {r: 1, g: 0.3754716, b: 0.3754716, a: 1}
+    fullPath: Assets/Kaede/Scripts/Model
     icon: {fileID: 0}
     applyToAllFolders: 0
     applyColorToSubfolders: 0

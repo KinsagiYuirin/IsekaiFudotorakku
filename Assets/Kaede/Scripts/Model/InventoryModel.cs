@@ -1,11 +1,9 @@
-using System;
 using System.Collections.Generic;
 using Kaede.Scripts.GamePlay;
 using Kaede.Scripts.Item;
 using UnityEngine;
-using Yuirin.Script.Item;
 
-namespace Kaede.Scripts.Inventorys
+namespace Kaede.Scripts.Model
 {
     public class InventoryModel
     {

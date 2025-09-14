@@ -1,0 +1,35 @@
+using System.Collections.Generic;
+using System.Linq;
+
+namespace Kaede.Scripts.Managers
+{
+    public class ScoreManager
+    {
+        public List<List<float>> StepScoresPerMenu { get; } = new();
+        public List<float> MenuScores { get; } = new();
+        public float GrandTotalScore { get; private set; }
+
+        private readonly List<float> _currentStepScores = new();
+        private float _pendingStepScore;
+
+        public void SetPendingStepScore(float score)
+        {
+            _pendingStepScore = score;
+        }
+
+        public void CommitPendingStepScore()
+        {
+            _currentStepScores.Add(_pendingStepScore);
+            _pendingStepScore = 0f;
+        }
+
+        public void FinalizeCurrentMenuScore()
+        {
+            var menuScore = _currentStepScores.Sum();
+            MenuScores.Add(menuScore);
+            StepScoresPerMenu.Add(new List<float>(_currentStepScores));
+            _currentStepScores.Clear();
+            GrandTotalScore = MenuScores.Sum();
+        }
+    }
+}

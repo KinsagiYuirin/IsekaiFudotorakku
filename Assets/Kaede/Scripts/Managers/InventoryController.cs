@@ -1,6 +1,6 @@
 using System.Collections.Generic;
-using Kaede.Scripts.Inventorys;
 using Kaede.Scripts.Item;
+using Kaede.Scripts.Model;
 using UnityEngine;
 using Yuirin.Script.Item;
 

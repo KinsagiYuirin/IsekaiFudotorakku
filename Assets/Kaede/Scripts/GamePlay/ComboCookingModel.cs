@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Kaede.Scripts.Item;
+using Kaede.Scripts.Managers;
 
 namespace Kaede.Scripts.GamePlay
 {
@@ -16,17 +17,14 @@ namespace Kaede.Scripts.GamePlay
 
         public float StartTime { get; private set; } = 0;
         
-        // ---------- Score Tracking ----------
-        public List<List<float>> StepScoresPerMenu { get; } = new();
-        public List<float> MenuScores { get; } = new();
-        public float GrandTotalScore { get; private set; } = 0f;
-        private List<float> _currentStepScores = new();
-
-        public ComboCookingModel(List<MenuData> menus, float maxTimePerCombo = 5f)
+        public ScoreManager ScoreManager { get; }
+        
+        public ComboCookingModel(List<MenuData> menus, float maxTimePerCombo = 5f, ScoreManager scoreManager = null)
         {
-            MenuDatas = menus ?? new List<MenuData>();
+            MenuDatas       = menus ?? new List<MenuData>();
             MaxTimePerCombo = maxTimePerCombo;
             CurrentTimer    = maxTimePerCombo;
+            ScoreManager    = scoreManager ?? new ScoreManager();
         }
         
 
@@ -45,13 +43,9 @@ namespace Kaede.Scripts.GamePlay
 
         #region Step Methods
         public void ResetStep() => CurrentStepIndex = 0;
-        /// <summary>
-        /// Record score for the current step and advance to the next one if available.
-        /// Returns true when there is another step to continue, false otherwise.
-        /// </summary>
-        public bool NextStep(float stepScore)
+
+        public bool NextStep()
         {
-            _currentStepScores.Add(stepScore);
             if (HasNextStep())
             {
                 CurrentStepIndex++;
@@ -65,7 +59,7 @@ namespace Kaede.Scripts.GamePlay
         #region Menu Methods
         public void NextMenu()
         {
-            FinalizeCurrentMenuScore();
+            ScoreManager.FinalizeCurrentMenuScore();
             
             CurrentMenuIndex++;
             CurrentComboIndex = 0;
@@ -75,8 +69,7 @@ namespace Kaede.Scripts.GamePlay
 
         public void CompleteMenu()
         {
-            FinalizeCurrentMenuScore();
-            GrandTotalScore = MenuScores.Sum();
+            ScoreManager.FinalizeCurrentMenuScore();
         }
         #endregion
 
@@ -141,15 +134,6 @@ namespace Kaede.Scripts.GamePlay
             var stepRef = menu.steps[CurrentStepIndex];
             return stepRef?.ResolveSequence() ?? new List<ComboKeySetting>();
         }
-        
-        private void FinalizeCurrentMenuScore()
-        {
-            var menuScore = _currentStepScores.Sum();
-            MenuScores.Add(menuScore);
-            StepScoresPerMenu.Add(new List<float>(_currentStepScores));
-            _currentStepScores.Clear();
-        }
-
     }
 }
 
