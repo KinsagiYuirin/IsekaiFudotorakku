@@ -25,34 +25,27 @@ namespace Kaede.Scripts.Inputs.ComboHandlers.Combo
             if (input.IsKeyHeld(expectedKey))
             {
                 _elapsed += Time.deltaTime;
-                if (input.IsKeyUp(expectedKey))
+                if (_elapsed > _requiredTimeRange.y)
                 {
-                    switch (_elapsed)
-                    {
-                        case var t when t >= _requiredTimeRange.x && t <= _requiredTimeRange.y:
-                            _elapsed = 0f;
-                            return ComboInputResult.Correct;
-                        
-                        case var t when t < _requiredTimeRange.x:
-                            _elapsed = 0f;
-                            return ComboInputResult.Wrong;
-                        
-                        case var t when t > _requiredTimeRange.y:
-                            _elapsed = 0f;
-                            return ComboInputResult.Wrong;
-                    }
+                    _elapsed = 0f;
+                    return ComboInputResult.Wrong;
                 }
             }
-            else if (input.AnyOtherKeyDown(expectedKey))
+            if (input.IsKeyUp(expectedKey))
             {
+                var t = _elapsed;
                 _elapsed = 0f;
+
+                if (t >= _requiredTimeRange.x && t <= _requiredTimeRange.y)
+                {
+                    return ComboInputResult.Correct;
+                }
                 return ComboInputResult.Wrong;
             }
-            else
-            {
-                _elapsed = 0f;
-            }
-            return ComboInputResult.None;
+
+            if (!input.AnyOtherKeyDown(expectedKey)) return ComboInputResult.None;
+            _elapsed = 0f;
+            return ComboInputResult.Wrong;
         }
     }
 }

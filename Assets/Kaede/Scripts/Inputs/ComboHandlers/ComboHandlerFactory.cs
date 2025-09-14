@@ -10,7 +10,7 @@ namespace Kaede.Scripts.Inputs.ComboHandlers
             return setting.type switch
             {
                 ComboType.Single => new SingleComboHandler(),
-                ComboType.Double => new DoubleComboHandler(setting.doubleTapDelay, setting.pressCount),
+                ComboType.StackTimer => new StackTimerComboHandler(setting.doubleTapDelay, setting.pressCount),
                 ComboType.Hold   => new HoldComboHandler(setting.holdTime),
                 ComboType.Stack  => new StackComboHandler(setting.stackCount),
                 _                => new SingleComboHandler(),

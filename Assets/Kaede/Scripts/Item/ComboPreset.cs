@@ -17,7 +17,7 @@ namespace Kaede.Scripts.Item
     public enum ComboType
     {
         Single,
-        Double,
+        StackTimer,
         Hold,
         Stack
     }
@@ -43,9 +43,9 @@ namespace Kaede.Scripts.Item
         public ComboKey key;
         public ComboType type;
     
-        [ShowIf("type", ComboType.Double)] 
+        [ShowIf("type", ComboType.StackTimer)] 
         public float doubleTapDelay = 0.3f;
-        [ShowIf("type", ComboType.Double)]
+        [ShowIf("type", ComboType.StackTimer)]
         public int pressCount = 2;
     
         [ShowIf("type", ComboType.Hold)] 

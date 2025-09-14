@@ -7,14 +7,14 @@ using UnityEngine;
 
 namespace Kaede.Scripts.Inputs.ComboHandlers.Combo
 {
-    public class DoubleComboHandler : IComboHandler
+    public class StackTimerComboHandler : IComboHandler
     {
         private float _lastPressTime = -1f;
         private int _currentPressCount;
         private readonly int _requiredPressCount;
         private readonly float _maxDelay;
 
-        public DoubleComboHandler(float maxDelay = 0.3f, int requiredPressCount = 2)
+        public StackTimerComboHandler(float maxDelay = 0.3f, int requiredPressCount = 2)
         {
             _maxDelay = maxDelay;
             _requiredPressCount = requiredPressCount;
