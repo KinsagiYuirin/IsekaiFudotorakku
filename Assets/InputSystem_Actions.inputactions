@@ -94,6 +94,15 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
+                },
+                {
+                    "name": "Cancel Button",
+                    "type": "Button",
+                    "id": "ed5b677f-ce35-4f9e-91b8-97816fa4a130",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -435,6 +444,17 @@
                     "processors": "",
                     "groups": "",
                     "action": "Confirm Button",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "325367f1-dfd8-4789-bdf1-ea3a89829805",
+                    "path": "<Keyboard>/leftShift",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Cancel Button",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

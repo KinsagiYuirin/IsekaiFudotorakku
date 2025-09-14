@@ -45,7 +45,7 @@ namespace Kaede.Scripts.GamePlay
         private ComboCookingView  _view;
         private ComboKeySetting _currentComboSetting;
         private PlayerInputHandler _inputHandler;
-        private IDisposable _confirmSub;
+        private IDisposable _disposable;
         private IComboHandler _currentHandler;
         private CancellationTokenSource _inputCts;
 
@@ -62,7 +62,7 @@ namespace Kaede.Scripts.GamePlay
             _model = new ComboCookingModel(MenuDatasList, maxTimePerCombo);
             _view  = GetComponent<ComboCookingView>();
             _inventoryController = GetComponent<InventoryController>();
-            _model.ScoreManager.SetPendingStepScore(scorePerButton);
+            _model.ScoreManager.SetPendingStepScore(0);
             
             ShowCurrentCombo();
         }
@@ -75,7 +75,7 @@ namespace Kaede.Scripts.GamePlay
             {
                 _model.ResetCombo();
                 _view.ResetCombo();
-                ResetStepScore();
+                _model.ScoreManager.ResetPendingStepScore();
                 return;
             }
 
@@ -87,18 +87,26 @@ namespace Kaede.Scripts.GamePlay
         #region OnEnable, OnDisable
         private void OnEnable()
         {
-            _confirmSub = _inputHandler.ConfirmButton.Subscribe(button =>
+            _disposable = _inputHandler.ConfirmButton.Subscribe(button =>
             {
                 if (button.isDown)
                 {
                     NextStep();
                 }
             });
+            
+            _disposable = _inputHandler.CancelButton.Subscribe(button =>
+            {
+                if (button.isDown)
+                {
+                    RetryStep();
+                }
+            });
         }
         
         private void OnDisable()
         {
-            _confirmSub?.Dispose();
+            _disposable?.Dispose();
         }
         #endregion
 
@@ -132,7 +140,7 @@ namespace Kaede.Scripts.GamePlay
                 {
                     case ComboInputResult.Correct:
                         _view.PressCorrectKey(_model.CurrentComboIndex);
-                        AddStepScore(scorePerButton);
+                        _model.ScoreManager.AddPendingStepScore(scorePerButton);
                         NextCombo();
                         break;
 
@@ -151,7 +159,9 @@ namespace Kaede.Scripts.GamePlay
                 _checking = false;
             }
         }
+        #endregion
 
+        #region Combo Features
         private void NextCombo()
         {
             if (!_model.TryGetCurrentSequenceCount(out var count) || count == 0) return;
@@ -189,7 +199,7 @@ namespace Kaede.Scripts.GamePlay
             
             _model.ResetCombo();
             ShowCurrentCombo();
-            Debug.Log($"Step Score: {_model.ScoreManager.MenuScores[^1]}");
+            Debug.Log($"Step Score: {_model.ScoreManager.CurrentStepScores[^1]}");
             Debug.Log("Next Step");
         }
         
@@ -222,24 +232,24 @@ namespace Kaede.Scripts.GamePlay
             _inventoryController.CompleteMenu();
             Debug.Log("Next Menu");
         }
-        
+
+        private void RetryStep()
+        {
+            if (_model.CurrentStepIndex == 0) return;
+            CancelInputLoop();
+            _isStepComplete      = false;
+            _currentHandler      = null;
+            _currentComboSetting = null;
+            
+            _model.ResetCombo();
+            ShowCurrentCombo();
+            Debug.Log("Undo Step");
+        }
         
         private void ShowCurrentCombo()
         {
             if (_model.TryGetCurrentKeys(out var keys))
                 _view.ShowCombo(keys);
-        }
-        #endregion
-
-        #region Score
-        private void AddStepScore(float score)
-        {
-            _model.ScoreManager.AddPendingStepScore(score);
-        }
-
-        private void ResetStepScore()
-        {
-            _model.ScoreManager.ResetPendingStepScore();
         }
         #endregion
 
@@ -254,12 +264,14 @@ namespace Kaede.Scripts.GamePlay
             _model.CurrentTimer -= deltaTime;
         }
         #endregion
-        
+
+        #region Until
         private void CancelInputLoop()
         {
             _inputCts?.Cancel();
             _inputCts?.Dispose();
             _inputCts = new CancellationTokenSource();
         }
+        #endregion
     }
 }

@@ -15,6 +15,7 @@ namespace Kaede.Scripts.Managers
         public float GrandTotalScore { get; private set; }
         
         private readonly List<float> _currentStepScores = new();
+        public List<float> CurrentStepScores => new List<float>(_currentStepScores);
         private float _pendingStepScore;
 
         public void SetPendingStepScore(float score)
@@ -38,6 +39,8 @@ namespace Kaede.Scripts.Managers
             _pendingStepScore = 0f;
         }
 
+        
+        
         public void FinalizeCurrentMenuScore()
         {
             var menuScore = _currentStepScores.Sum();

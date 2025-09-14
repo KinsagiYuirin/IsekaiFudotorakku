@@ -78,6 +78,9 @@ namespace MadDuck.Scripts.Inputs
         
         [field: SerializeField, ReadOnly]
         public SerializableReactiveProperty<InputButton> ConfirmButton { get; private set; }
+        [field: SerializeField, ReadOnly]
+        public SerializableReactiveProperty<InputButton> CancelButton { get; private set; }
+        
         #endregion
         
         #endregion
@@ -208,6 +211,11 @@ namespace MadDuck.Scripts.Inputs
         public void OnConfirmButton(InputAction.CallbackContext context)
         {
             BindPressButton(ConfirmButton, context);
+        }
+
+        public void OnCancelButton(InputAction.CallbackContext context)
+        {
+            BindPressButton(CancelButton, context);
         }
 
         #endregion
