@@ -5,6 +5,14 @@ using UnityEngine;
 
 namespace Kaede.Scripts.Item
 {
+    public enum FoodType
+    {
+        None,
+        Appetizer,
+        MainCourse,
+        Dessert
+    }
+    
     [System.Serializable]
     public class MenuStepRef
     {
@@ -28,6 +36,7 @@ namespace Kaede.Scripts.Item
     {
         [Title("Settings")]
         [LabelText("Menu Name")] public string menuName;
+        public FoodType foodType;
         public MenuLevel menuLevel;
 
         [Title("Steps (Select Preset or Override Sequence)")]

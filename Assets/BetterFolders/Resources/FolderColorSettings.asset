@@ -262,3 +262,11 @@ MonoBehaviour:
     applyColorToSubfolders: 0
     applyIconToSubfolders: 0
     materialColor: 0
+  - folderName: GamePlay
+    folderColor: {r: 0.92251664, g: 0.47358483, b: 1, a: 1}
+    fullPath: Assets/Kaede/Scripts/GamePlay
+    icon: {fileID: 0}
+    applyToAllFolders: 0
+    applyColorToSubfolders: 0
+    applyIconToSubfolders: 0
+    materialColor: 0

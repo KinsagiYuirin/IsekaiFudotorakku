@@ -16,10 +16,10 @@ MonoBehaviour:
   phase: 0
   comboSequence:
   - key: 1
-    type: 0
+    type: 2
     doubleTapDelay: 1
     pressCount: 2
-    holdTime: 1
+    holdTime: 3
     stackCount: 3
   - key: 2
     type: 0

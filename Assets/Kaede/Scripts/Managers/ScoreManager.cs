@@ -38,8 +38,6 @@ namespace Kaede.Scripts.Managers
         {
             _pendingStepScore = 0f;
         }
-
-        
         
         public void FinalizeCurrentMenuScore()
         {
