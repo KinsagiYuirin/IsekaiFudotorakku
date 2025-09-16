@@ -47,5 +47,14 @@ namespace Kaede.Scripts.Managers
             _currentStepScores.Clear();
             GrandTotalScore = MenuScores.Sum();
         }
+        
+        public void ResetAllScores()
+        {
+            StepScoresPerMenu.Clear();
+            MenuScores.Clear();
+            GrandTotalScore = 0f;
+            _currentStepScores.Clear();
+            ResetPendingStepScore();
+        }
     }
 }

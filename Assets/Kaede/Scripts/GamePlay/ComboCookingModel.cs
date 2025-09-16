@@ -70,6 +70,7 @@ namespace Kaede.Scripts.GamePlay
         {
             ScoreManager.FinalizeCurrentMenuScore();
         }
+
         #endregion
 
         public void GameOver()

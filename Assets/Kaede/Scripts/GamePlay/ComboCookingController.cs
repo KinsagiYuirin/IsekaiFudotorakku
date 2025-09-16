@@ -45,14 +45,10 @@ namespace Kaede.Scripts.GamePlay
         private ComboCookingView  _view;
         private ComboKeySetting _currentComboSetting;
         private PlayerInputHandler _inputHandler;
-        private IDisposable _disposable;
+        private IDisposable _confirmSubscription;
+        private IDisposable _cancelSubscription;
         private IComboHandler _currentHandler;
         private CancellationTokenSource _inputCts;
-
-        public void OverrideMenuDatas(List<MenuData> menus)
-        {
-            MenuDatasList = menus.Where(menu => menu != null).ToList();
-        }
         
         #region Awake, Start, Update
         
@@ -92,7 +88,7 @@ namespace Kaede.Scripts.GamePlay
         #region OnEnable, OnDisable
         private void OnEnable()
         {
-            _disposable = _inputHandler.ConfirmButton.Subscribe(button =>
+            _confirmSubscription = _inputHandler.ConfirmButton.Subscribe(button =>
             {
                 if (button.isDown)
                 {
@@ -100,7 +96,7 @@ namespace Kaede.Scripts.GamePlay
                 }
             });
             
-            _disposable = _inputHandler.CancelButton.Subscribe(button =>
+            _cancelSubscription = _inputHandler.CancelButton.Subscribe(button =>
             {
                 if (button.isDown)
                 {
@@ -111,7 +107,9 @@ namespace Kaede.Scripts.GamePlay
         
         private void OnDisable()
         {
-            _disposable?.Dispose();
+            _confirmSubscription?.Dispose();
+            _cancelSubscription?.Dispose();
+            CancelInputLoop();
         }
         #endregion
 
