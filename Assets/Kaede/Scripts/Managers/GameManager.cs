@@ -2,25 +2,29 @@ using System.Collections.Generic;
 using Kaede.Scripts.GamePlay;
 using Kaede.Scripts.Item;
 using Sirenix.OdinInspector;
+using UnityCommunity.UnitySingleton;
 using UnityEngine;
 
 namespace Kaede.Scripts.Managers
 {
-    [DefaultExecutionOrder(-100)] // ให้ GameManager รันก่อน Controller
-    public class GameManager : MonoBehaviour
+    
+    public class GameManager : MonoSingleton<GameManager>
     {
         [Title("Level Settings")]
         [field: SerializeField] public List<MenuData> MenuInLevel { get; private set; }
         [SerializeField] private int numberOfMenus = 3;
 
         private Dictionary<FoodType, List<MenuData>> _menuLookup;
+        private ComboCookingController _comboCookingController;
 
-        private void Awake()
+        protected override void Awake()
         {
+            _comboCookingController = GetComponent<ComboCookingController>();
             _menuLookup = new Dictionary<FoodType, List<MenuData>>();
             ListMenuInLevel();
 
             SetRandomMenus();
+            base.Awake();
         }
 
         private void ListMenuInLevel()
@@ -76,11 +80,10 @@ namespace Kaede.Scripts.Managers
                 }
             }
             
-            var gameMenus = ComboCookingController.Instance?.MenuDatasList;
-            if (gameMenus == null) return;
+            var controller = _comboCookingController;
+            if (controller == null) return;
 
-            gameMenus.Clear();
-            gameMenus.AddRange(result);
+            controller.OverrideMenuDatas(result);
         }
     }
 

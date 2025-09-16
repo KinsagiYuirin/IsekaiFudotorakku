@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: MenuTest2
   m_EditorClassIdentifier: 
   menuName: DamnMenu
+  foodType: 1
   menuLevel: 1
   steps:
   - preset: {fileID: 11400000, guid: f538f8a8e939dba47a4af57dcb9e00a5, type: 2}

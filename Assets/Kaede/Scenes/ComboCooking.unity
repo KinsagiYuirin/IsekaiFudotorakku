@@ -1010,6 +1010,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1835431552}
+  - component: {fileID: 1835431556}
   - component: {fileID: 1835431551}
   - component: {fileID: 1835431553}
   - component: {fileID: 1835431555}
@@ -1033,13 +1034,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3dc6319e2f4f1f441a96bccc07906f2b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  <MenuDatasList>k__BackingField:
-  - {fileID: 11400000, guid: 11276fc2667b40a4bb13605ce2a34386, type: 2}
-  - {fileID: 11400000, guid: ab292bc6c23448944b9d1779a6694c71, type: 2}
-  - {fileID: 11400000, guid: 11276fc2667b40a4bb13605ce2a34386, type: 2}
-  - {fileID: 11400000, guid: 11276fc2667b40a4bb13605ce2a34386, type: 2}
-  - {fileID: 11400000, guid: ab292bc6c23448944b9d1779a6694c71, type: 2}
-  - {fileID: 11400000, guid: 11276fc2667b40a4bb13605ce2a34386, type: 2}
+  <MenuDatasList>k__BackingField: []
   maxTimePerCombo: 20
   <TimeBetweenCombos>k__BackingField: 3
   scorePerButton: 10
@@ -1129,6 +1124,22 @@ MonoBehaviour:
     RefIds:
     - rid: -2
       type: {class: , ns: , asm: }
+--- !u!114 &1835431556
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1835431550}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 91ce008d129a0eb49b651f813e851601, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  <MenuInLevel>k__BackingField:
+  - {fileID: 11400000, guid: 11276fc2667b40a4bb13605ce2a34386, type: 2}
+  - {fileID: 11400000, guid: ab292bc6c23448944b9d1779a6694c71, type: 2}
+  numberOfMenus: 3
 --- !u!1 &1863883253
 GameObject:
   m_ObjectHideFlags: 0

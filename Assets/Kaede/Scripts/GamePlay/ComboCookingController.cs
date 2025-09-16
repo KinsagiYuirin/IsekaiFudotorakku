@@ -49,6 +49,11 @@ namespace Kaede.Scripts.GamePlay
         private IComboHandler _currentHandler;
         private CancellationTokenSource _inputCts;
 
+        public void OverrideMenuDatas(List<MenuData> menus)
+        {
+            MenuDatasList = menus.Where(menu => menu != null).ToList();
+        }
+        
         #region Awake, Start, Update
         
         protected override void Awake()
