@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!114 &-8903017342796778227
+--- !u!114 &-6122691981695260999
 MonoBehaviour:
   m_ObjectHideFlags: 11
   m_CorrespondingSourceObject: {fileID: 0}
@@ -20,8 +20,8 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: FireMat
-  m_Shader: {fileID: -6465566751694194690, guid: 557e7d85175be7f43baed4cccf1d1340, type: 3}
+  m_Name: AdditiveFireMaterial
+  m_Shader: {fileID: -6465566751694194690, guid: 0c7354d06c88df84ca7f493c3e60e378, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords: []
@@ -55,11 +55,11 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
-    - _DistortionStr: 0.05
+    - _DistortionStr: 0.15
     - _QueueControl: 0
     - _QueueOffset: 0
-    - _ScrollSpeed: 0.3
-    - _TwirlStr: 8
+    - _ScrollSpeed: 0.5
+    - _TwirlStr: 5
     m_Colors: []
   m_BuildTextureStacks: []
   m_AllowLocking: 1
