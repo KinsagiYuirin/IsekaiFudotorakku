@@ -40,6 +40,7 @@ namespace Kaede.Scripts.GamePlay
         private bool _checking;
         
         private InventoryController _inventoryController;
+        private GameManager _gameManager;
         
         private ComboCookingModel _model;
         private ComboCookingView  _view;
@@ -55,11 +56,16 @@ namespace Kaede.Scripts.GamePlay
         protected override void Awake()
         {
             _inputHandler = FindObjectOfType<PlayerInputHandler>();
+            _gameManager = FindObjectOfType<GameManager>();
+            ApplyRandomMenusFromGameManager(true);
+            
             base.Awake();
         }
 
         private void Start()
         {
+            ApplyRandomMenusFromGameManager(false);
+            
             _model = new ComboCookingModel(MenuDatasList, maxTimePerCombo);
             _view  = GetComponent<ComboCookingView>();
             _inventoryController = GetComponent<InventoryController>();
@@ -113,6 +119,28 @@ namespace Kaede.Scripts.GamePlay
         }
         #endregion
 
+        #region Menu Setup
+        public void SetMenuDatas(IEnumerable<MenuData> menus)
+        {
+            MenuDatasList = menus?.Where(menu => menu != null).ToList() ?? new List<MenuData>();
+        }
+
+        private void ApplyRandomMenusFromGameManager(bool forceRegenerate)
+        {
+            if (_gameManager == null)
+            {
+                _gameManager = FindObjectOfType<GameManager>();
+            }
+
+            if (_gameManager == null) return;
+
+            var menus = _gameManager.GetMenuSetForCombo(forceRegenerate);
+            if (menus == null || menus.Count == 0) return;
+
+            SetMenuDatas(menus);
+        }
+        #endregion
+        
         #region Combo Logic
         
         private void CheckComboButton()

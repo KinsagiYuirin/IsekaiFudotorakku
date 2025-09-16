@@ -7,7 +7,6 @@ namespace Kaede.Scripts.Item
 {
     public enum FoodType
     {
-        None,
         Appetizer,
         MainCourse,
         Dessert

@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6f108eedc8f2fc34a9a05d04b5878ca2, type: 3}
   m_Name: MenuTest3
   m_EditorClassIdentifier: 
-  menuName: DamnMenu
+  menuName: DessertMenu
   foodType: 3
   menuLevel: 1
   steps:
