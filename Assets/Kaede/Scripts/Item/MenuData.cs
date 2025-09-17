@@ -20,6 +20,7 @@ namespace Kaede.Scripts.Item
 
         [HorizontalGroup("Row", 0.4f)] [HideLabel, LabelText("Override Sequence?")]
         public bool overrideSequence;
+        
 
         [ShowIf(nameof(overrideSequence))] [TableList(ShowIndexLabels = true)]
         public List<ComboKeySetting> customSequence = new();

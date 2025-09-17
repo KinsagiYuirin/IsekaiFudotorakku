@@ -40,7 +40,7 @@ namespace Kaede.Scripts.GamePlay
         private bool _checking;
         
         private InventoryController _inventoryController;
-        private GameManager _gameManager;
+        private RandomSystem _randomSystem;
         
         private ComboCookingModel _model;
         private ComboCookingView  _view;
@@ -56,7 +56,7 @@ namespace Kaede.Scripts.GamePlay
         protected override void Awake()
         {
             _inputHandler = FindObjectOfType<PlayerInputHandler>();
-            _gameManager = FindObjectOfType<GameManager>();
+            _randomSystem = FindObjectOfType<RandomSystem>();
             ApplyRandomMenusFromGameManager(true);
             
             base.Awake();
@@ -127,14 +127,14 @@ namespace Kaede.Scripts.GamePlay
 
         private void ApplyRandomMenusFromGameManager(bool forceRegenerate)
         {
-            if (_gameManager == null)
+            if (_randomSystem == null)
             {
-                _gameManager = FindObjectOfType<GameManager>();
+                _randomSystem = FindObjectOfType<RandomSystem>();
             }
 
-            if (_gameManager == null) return;
+            if (_randomSystem == null) return;
 
-            var menus = _gameManager.GetMenuSetForCombo(forceRegenerate);
+            var menus = _randomSystem.GetMenuSetForCombo(forceRegenerate);
             if (menus == null || menus.Count == 0) return;
 
             SetMenuDatas(menus);
