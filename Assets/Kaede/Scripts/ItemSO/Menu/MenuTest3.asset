@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: MenuTest3
   m_EditorClassIdentifier: 
   menuName: DessertMenu
-  foodType: 3
+  foodType: 2
   menuLevel: 1
   steps:
   - preset: {fileID: 11400000, guid: f538f8a8e939dba47a4af57dcb9e00a5, type: 2}

@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: MenuTest1
   m_EditorClassIdentifier: 
   menuName: "\u0E01\u0E23\u0E30\u0E40\u0E1E\u0E23\u0E32"
-  foodType: 2
+  foodType: 1
   menuLevel: 1
   steps:
   - preset: {fileID: 11400000, guid: 2471bbdc1e5453048b42144a3b3ec81d, type: 2}

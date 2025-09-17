@@ -748,8 +748,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 91ce008d129a0eb49b651f813e851601, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  allMenuInLevel: []
-  randomMenu: []
+  allMenuInLevel:
+  - {fileID: 11400000, guid: 11276fc2667b40a4bb13605ce2a34386, type: 2}
+  - {fileID: 11400000, guid: ab292bc6c23448944b9d1779a6694c71, type: 2}
+  - {fileID: 11400000, guid: ee6db550d060cdb4394c200a36665dad, type: 2}
+  randomMenuCountPerFoodType: 2
+  appetizerRandomMenu:
+  - {fileID: 11400000, guid: ab292bc6c23448944b9d1779a6694c71, type: 2}
+  - {fileID: 11400000, guid: ab292bc6c23448944b9d1779a6694c71, type: 2}
+  mainCourseRandomMenu:
+  - {fileID: 11400000, guid: 11276fc2667b40a4bb13605ce2a34386, type: 2}
+  - {fileID: 11400000, guid: 11276fc2667b40a4bb13605ce2a34386, type: 2}
+  dessertRandomMenu:
+  - {fileID: 11400000, guid: ee6db550d060cdb4394c200a36665dad, type: 2}
+  - {fileID: 11400000, guid: ee6db550d060cdb4394c200a36665dad, type: 2}
 --- !u!4 &1192518860
 Transform:
   m_ObjectHideFlags: 0
