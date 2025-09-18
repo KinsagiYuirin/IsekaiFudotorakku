@@ -719,65 +719,6 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!1 &1192518858
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1192518860}
-  - component: {fileID: 1192518859}
-  m_Layer: 0
-  m_Name: GameObject
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &1192518859
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1192518858}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 91ce008d129a0eb49b651f813e851601, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  allMenuInLevel:
-  - {fileID: 11400000, guid: 11276fc2667b40a4bb13605ce2a34386, type: 2}
-  - {fileID: 11400000, guid: ab292bc6c23448944b9d1779a6694c71, type: 2}
-  - {fileID: 11400000, guid: ee6db550d060cdb4394c200a36665dad, type: 2}
-  - {fileID: 11400000, guid: 4426f3f51cb423548b8c91e94f35b471, type: 2}
-  appetizerRandomMenuCount: 1
-  mainCourseRandomMenuCount: 2
-  dessertRandomMenuCount: 1
-  appetizerRandomMenu:
-  - {fileID: 11400000, guid: ab292bc6c23448944b9d1779a6694c71, type: 2}
-  mainCourseRandomMenu:
-  - {fileID: 11400000, guid: 11276fc2667b40a4bb13605ce2a34386, type: 2}
-  - {fileID: 11400000, guid: 11276fc2667b40a4bb13605ce2a34386, type: 2}
-  dessertRandomMenu:
-  - {fileID: 11400000, guid: ee6db550d060cdb4394c200a36665dad, type: 2}
---- !u!4 &1192518860
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1192518858}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 809.9665, y: 614.03156, z: -6.061072}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1559710612
 GameObject:
   m_ObjectHideFlags: 0
@@ -1069,6 +1010,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1835431552}
+  - component: {fileID: 1835431556}
   - component: {fileID: 1835431551}
   - component: {fileID: 1835431553}
   - component: {fileID: 1835431555}
@@ -1182,6 +1124,33 @@ MonoBehaviour:
     RefIds:
     - rid: -2
       type: {class: , ns: , asm: }
+--- !u!114 &1835431556
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1835431550}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 91ce008d129a0eb49b651f813e851601, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  allMenuInLevel:
+  - {fileID: 11400000, guid: 11276fc2667b40a4bb13605ce2a34386, type: 2}
+  - {fileID: 11400000, guid: ab292bc6c23448944b9d1779a6694c71, type: 2}
+  - {fileID: 11400000, guid: ee6db550d060cdb4394c200a36665dad, type: 2}
+  - {fileID: 11400000, guid: 4426f3f51cb423548b8c91e94f35b471, type: 2}
+  appetizerRandomMenuCount: 1
+  mainCourseRandomMenuCount: 2
+  dessertRandomMenuCount: 1
+  appetizerRandomMenu:
+  - {fileID: 11400000, guid: ab292bc6c23448944b9d1779a6694c71, type: 2}
+  mainCourseRandomMenu:
+  - {fileID: 11400000, guid: 11276fc2667b40a4bb13605ce2a34386, type: 2}
+  - {fileID: 11400000, guid: 11276fc2667b40a4bb13605ce2a34386, type: 2}
+  dessertRandomMenu:
+  - {fileID: 11400000, guid: 4426f3f51cb423548b8c91e94f35b471, type: 2}
 --- !u!1 &1863883253
 GameObject:
   m_ObjectHideFlags: 0
@@ -1363,7 +1332,6 @@ SceneRoots:
   m_ObjectHideFlags: 0
   m_Roots:
   - {fileID: 593271828}
-  - {fileID: 1192518860}
   - {fileID: 1835431552}
   - {fileID: 1049526166}
   - {fileID: 382246677}
