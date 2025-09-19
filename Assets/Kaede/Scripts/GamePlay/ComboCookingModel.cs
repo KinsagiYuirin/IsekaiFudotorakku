@@ -5,6 +5,13 @@ using Kaede.Scripts.Managers;
 
 namespace Kaede.Scripts.GamePlay
 {
+    public enum CookingState
+    {
+        Cooking,
+        Resting,
+        Finished
+    }
+    
     public class ComboCookingModel
     {
         public List<MenuData> MenuDatas { get; private set; }
@@ -18,6 +25,7 @@ namespace Kaede.Scripts.GamePlay
         public float StartTime { get; private set; } = 0;
         
         public ScoreManager ScoreManager { get; }
+        public CookingState GameState { get; set; } = CookingState.Cooking;
         
         public ComboCookingModel(List<MenuData> menus, float maxTimePerCombo = 5f, ScoreManager scoreManager = null)
         {
@@ -33,6 +41,7 @@ namespace Kaede.Scripts.GamePlay
         {
             CurrentComboIndex = 0;
             CurrentTimer      = MaxTimePerCombo;
+            GameState         = CookingState.Cooking;
         }
 
         public void NextCombo()
@@ -73,6 +82,18 @@ namespace Kaede.Scripts.GamePlay
 
         #endregion
 
+        public void Resting(float duration)
+        {
+            GameState = CookingState.Resting;
+
+            if (duration < 0f)
+            {
+                CurrentTimer = 0f;
+            }
+            else
+                CurrentTimer = duration;
+        }
+        
         public void GameOver()
         {
             

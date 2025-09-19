@@ -35,7 +35,22 @@ namespace Kaede.Scripts.Managers
             _nextIndex = initialCount;
             RenderMenus();
         }
+        
+        public void ReloadMenus()
+        {
+            allMenus = InventoryModel.InventoryDataList;
+            _displayQueue.Clear();
+            _nextIndex = 0;
 
+            int initialCount = Mathf.Min(maxDisplayCount, allMenus.Count);
+            for (int i = 0; i < initialCount; i++)
+            {
+                _displayQueue.Enqueue(allMenus[i]);
+            }
+            _nextIndex = initialCount;
+            RenderMenus();
+        }
+        
         public void CompleteMenu()
         {
             if (_displayQueue.Count == 0) return;

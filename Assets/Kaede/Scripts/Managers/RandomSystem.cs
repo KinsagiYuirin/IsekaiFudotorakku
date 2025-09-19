@@ -6,6 +6,7 @@ using Kaede.Scripts.Item;
 using Sirenix.OdinInspector;
 using UnityCommunity.UnitySingleton;
 using UnityEngine;
+using Debug = System.Diagnostics.Debug;
 
 namespace Kaede.Scripts.Managers
 {
@@ -19,6 +20,9 @@ namespace Kaede.Scripts.Managers
         [SerializeField, ReadOnly] private List<MenuData> mainCourseRandomMenu = new();
         [SerializeField, ReadOnly] private List<MenuData> dessertRandomMenu = new();
 
+        private readonly Queue<FoodType> _pendingFoodTypes = new();
+        private FoodType? _currentServingFoodType;
+        
         private Dictionary<FoodType, IReadOnlyList<MenuData>> _randomMenusByTypeView;
 
         public IReadOnlyDictionary<FoodType, IReadOnlyList<MenuData>> RandomMenusByType
@@ -61,8 +65,33 @@ namespace Kaede.Scripts.Managers
 
             EnsureRandomMenuLists();
 
-            return RandomMenusByType
-                .SelectMany(pair => pair.Value ?? Array.Empty<MenuData>())
+            if (!TryEnsureCurrentServingFoodType())
+            {
+                return new List<MenuData>();
+            }
+
+            Debug.Assert(_currentServingFoodType != null, nameof(_currentServingFoodType) + " != null");
+            return GetRandomMenuList(_currentServingFoodType.Value)
+                .Where(menu => menu != null)
+                .ToList();
+        }
+        
+        public List<MenuData> MoveToNextMenuSetForCombo()
+        {
+            EnsureRandomMenuLists();
+
+            if (_currentServingFoodType.HasValue)
+            {
+                _currentServingFoodType = null;
+            }
+
+            if (!TryEnsureCurrentServingFoodType())
+            {
+                return new List<MenuData>();
+            }
+
+            Debug.Assert(_currentServingFoodType != null, nameof(_currentServingFoodType) + " != null");
+            return GetRandomMenuList(_currentServingFoodType.Value)
                 .Where(menu => menu != null)
                 .ToList();
         }
@@ -102,6 +131,8 @@ namespace Kaede.Scripts.Managers
                     targetList.Add(menusOfType[randomIndex]);
                 }
             }
+            
+            RebuildFoodTypeQueue();
         }
         
         private void EnsureRandomMenuLists()
@@ -141,6 +172,48 @@ namespace Kaede.Scripts.Managers
                    || (dessertRandomMenu != null && dessertRandomMenu.Count > 0);
         }
 
+        private bool TryEnsureCurrentServingFoodType()
+        {
+            if (_currentServingFoodType.HasValue)
+            {
+                var list = GetRandomMenuList(_currentServingFoodType.Value);
+                if (list != null && list.Count > 0)
+                {
+                    return true;
+                }
+
+                _currentServingFoodType = null;
+            }
+
+            while (_pendingFoodTypes.Count > 0)
+            {
+                var nextType = _pendingFoodTypes.Dequeue();
+                var list = GetRandomMenuList(nextType);
+                if (list == null || list.Count == 0) continue;
+
+                _currentServingFoodType = nextType;
+                return true;
+            }
+
+            return false;
+        }
+
+        private void RebuildFoodTypeQueue()
+        {
+            _pendingFoodTypes.Clear();
+
+            foreach (FoodType foodType in Enum.GetValues(typeof(FoodType)))
+            {
+                var list = GetRandomMenuList(foodType);
+                if (list != null && list.Count > 0)
+                {
+                    _pendingFoodTypes.Enqueue(foodType);
+                }
+            }
+
+            _currentServingFoodType = null;
+        }
+        
         private List<MenuData> GetRandomMenuList(FoodType foodType)
         {
             EnsureRandomMenuLists();

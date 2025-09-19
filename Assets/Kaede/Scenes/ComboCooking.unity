@@ -1142,15 +1142,14 @@ MonoBehaviour:
   - {fileID: 11400000, guid: ee6db550d060cdb4394c200a36665dad, type: 2}
   - {fileID: 11400000, guid: 4426f3f51cb423548b8c91e94f35b471, type: 2}
   appetizerRandomMenuCount: 1
-  mainCourseRandomMenuCount: 2
+  mainCourseRandomMenuCount: 1
   dessertRandomMenuCount: 1
   appetizerRandomMenu:
   - {fileID: 11400000, guid: ab292bc6c23448944b9d1779a6694c71, type: 2}
   mainCourseRandomMenu:
   - {fileID: 11400000, guid: 11276fc2667b40a4bb13605ce2a34386, type: 2}
-  - {fileID: 11400000, guid: 11276fc2667b40a4bb13605ce2a34386, type: 2}
   dessertRandomMenu:
-  - {fileID: 11400000, guid: 4426f3f51cb423548b8c91e94f35b471, type: 2}
+  - {fileID: 11400000, guid: ee6db550d060cdb4394c200a36665dad, type: 2}
 --- !u!1 &1863883253
 GameObject:
   m_ObjectHideFlags: 0

@@ -57,14 +57,14 @@ namespace Kaede.Scripts.GamePlay
         {
             _inputHandler = FindObjectOfType<PlayerInputHandler>();
             _randomSystem = FindObjectOfType<RandomSystem>();
-            ApplyRandomMenusFromGameManager(true);
+            ApplyRandomMenus(true);
             
             base.Awake();
         }
 
         private void Start()
         {
-            ApplyRandomMenusFromGameManager(false);
+            ApplyRandomMenus(false);
             
             _model = new ComboCookingModel(MenuDatasList, maxTimePerCombo);
             _view  = GetComponent<ComboCookingView>();
@@ -120,24 +120,60 @@ namespace Kaede.Scripts.GamePlay
         #endregion
 
         #region Menu Setup
-        public void SetMenuDatas(IEnumerable<MenuData> menus)
+        private void SetMenuDatas(IEnumerable<MenuData> menus)
         {
             MenuDatasList = menus?.Where(menu => menu != null).ToList() ?? new List<MenuData>();
         }
 
-        private void ApplyRandomMenusFromGameManager(bool forceRegenerate)
+        private bool ApplyRandomMenus(bool forceRegenerate, bool advanceToNextType = false)
         {
             if (_randomSystem == null)
             {
                 _randomSystem = FindObjectOfType<RandomSystem>();
             }
 
-            if (_randomSystem == null) return;
+            if (_randomSystem == null) return false;
 
-            var menus = _randomSystem.GetMenuSetForCombo(forceRegenerate);
-            if (menus == null || menus.Count == 0) return;
+            List<MenuData> menus;
+
+            if (advanceToNextType)
+            {
+                menus = _randomSystem.MoveToNextMenuSetForCombo();
+            }
+            else
+            {
+                menus = _randomSystem.GetMenuSetForCombo(forceRegenerate);
+            }
+
+            if (menus == null || menus.Count == 0) return false;
 
             SetMenuDatas(menus);
+            return true;
+        }
+        
+        private bool TryAdvanceMenuType()
+        {
+            if (!ApplyRandomMenus(false, true))
+            {
+                return false;
+            }
+
+            var scoreManager = _model != null ? _model.ScoreManager : new ScoreManager();
+            _model = new ComboCookingModel(MenuDatasList, maxTimePerCombo, scoreManager);
+            _model.ScoreManager.SetPendingStepScore(0);
+            _model.ResetCombo();
+            _model.ResetStep();
+            _view.ResetCombo();
+            ShowCurrentCombo();
+
+            _inventoryController?.ReloadMenus();
+
+            _isStepComplete = false;
+            _currentHandler = null;
+            _currentComboSetting = null;
+            CancelInputLoop();
+
+            return true;
         }
         #endregion
         
@@ -247,6 +283,12 @@ namespace Kaede.Scripts.GamePlay
                 _model.CompleteMenu();
                 _view.CompleteCombo();
                 Debug.Log($"Grand Total Score: {_model.ScoreManager.GrandTotalScore}");
+                
+                if (TryAdvanceMenuType())
+                {
+                    Debug.Log("Next Menu Type");
+                    return;
+                }
                 return;
             }
 
@@ -256,7 +298,7 @@ namespace Kaede.Scripts.GamePlay
             ShowCurrentCombo();
             
             var latestMenuScore = _model.ScoreManager.MenuScores[^1];
-            var allScore =  _model.ScoreManager.GrandTotalScore;
+            var allScore        =  _model.ScoreManager.GrandTotalScore;
             Debug.Log($"Menu {_model.ScoreManager.MenuScores.Count} Score: {latestMenuScore} \n" +
                       $"All Score: {allScore}");
                         
