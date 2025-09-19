@@ -106,7 +106,7 @@ namespace Kaede.Scripts.GamePlay
             {
                 if (button.isDown)
                 {
-                    RetryStep();
+                    RedoStep();
                 }
             });
         }
@@ -199,8 +199,6 @@ namespace Kaede.Scripts.GamePlay
                 }
 
                 var result = _currentHandler.CheckInput(_inputHandler, expectedCombo.key, _inputCts.Token);
-
-
                 if (_isStepComplete) return;
                 
                 switch (result)
@@ -214,6 +212,7 @@ namespace Kaede.Scripts.GamePlay
                     case ComboInputResult.Wrong:
                         if (!_isStepComplete)
                             _view.PressWrongKey(_model.CurrentComboIndex);
+                        NextCombo();
                         break;
 
                     case ComboInputResult.None:
@@ -306,7 +305,7 @@ namespace Kaede.Scripts.GamePlay
             Debug.Log("Next Menu");
         }
 
-        private void RetryStep()
+        private void RedoStep()
         {
             CancelInputLoop();
             _isStepComplete      = false;
@@ -315,6 +314,7 @@ namespace Kaede.Scripts.GamePlay
             
             _model.ResetCombo();
             ShowCurrentCombo();
+            _model.ScoreManager.AddRedoCount();
             Debug.Log("Undo Step");
         }
         

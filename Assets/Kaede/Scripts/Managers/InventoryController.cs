@@ -18,68 +18,113 @@ namespace Kaede.Scripts.Managers
         private readonly Queue<MenuData> _displayQueue = new();
         private int _nextIndex;
         
+        private void Awake()
+        {
+            InitializeSlots();
+        }
+        
         private void Start()
         {
-            foreach (var pos in slotPositions)
-            {
-                var slot = Instantiate(menuSlotPrefab, pos);
-                _menuSlots.Add(slot);
-            }
-            
-            allMenus = InventoryModel.InventoryDataList;
-            int initialCount = Mathf.Min(maxDisplayCount, allMenus.Count);
-            for (int i = 0; i < initialCount; i++)
-            {
-                _displayQueue.Enqueue(allMenus[i]);
-            }
-            _nextIndex = initialCount;
+            LoadInitialMenus();
+        }
+        
+        private void LoadInitialMenus()
+        {
+            RefreshMenuSource();
+            ResetDisplayQueue();
             RenderMenus();
         }
         
         public void ReloadMenus()
         {
-            allMenus = InventoryModel.InventoryDataList;
-            _displayQueue.Clear();
-            _nextIndex = 0;
-
-            int initialCount = Mathf.Min(maxDisplayCount, allMenus.Count);
-            for (int i = 0; i < initialCount; i++)
-            {
-                _displayQueue.Enqueue(allMenus[i]);
-            }
-            _nextIndex = initialCount;
-            RenderMenus();
+            LoadInitialMenus();
         }
         
         public void CompleteMenu()
         {
-            if (_displayQueue.Count == 0) return;
-
-            _displayQueue.Dequeue();
-
-            if (_nextIndex < allMenus.Count)
+            if (_displayQueue.Count == 0)
             {
-                _displayQueue.Enqueue(allMenus[_nextIndex]);
-                _nextIndex++;
+                RenderMenus();
+                return;
             }
-
+            
+            _displayQueue.Dequeue();
+            TryEnqueueNextMenu();
             RenderMenus();
         }
 
+        private void InitializeSlots()
+        {
+            _menuSlots.Clear();
+
+            if (menuSlotPrefab == null)
+            {
+                Debug.LogWarning($"{nameof(InventoryController)} requires a menu slot prefab.");
+                return;
+            }
+
+            if (slotPositions == null || slotPositions.Count == 0)
+            {
+                Debug.LogWarning($"{nameof(InventoryController)} has no slot positions configured.");
+                return;
+            }
+
+            foreach (var position in slotPositions)
+            {
+                if (position == null) continue;
+
+                var slot = Instantiate(menuSlotPrefab, position);
+                _menuSlots.Add(slot);
+            }
+        }
+        
+        private void RefreshMenuSource()
+        {
+            allMenus = InventoryModel.InventoryDataList ?? new List<MenuData>();
+        }
+        
+        private void ResetDisplayQueue()
+        {
+            _displayQueue.Clear();
+            _nextIndex = 0;
+            
+            if (allMenus == null || allMenus.Count == 0) return;
+
+            var initialCount = Mathf.Min(maxDisplayCount, allMenus.Count);
+            for (var i = 0; i < initialCount; i++)
+            {
+                _displayQueue.Enqueue(allMenus[i]);
+            }
+
+            _nextIndex = initialCount;
+        }
+        
+        private void TryEnqueueNextMenu()
+        {
+            if (allMenus == null || _nextIndex >= allMenus.Count) return;
+
+            _displayQueue.Enqueue(allMenus[_nextIndex]);
+            _nextIndex++;
+        }
+        
         private void RenderMenus()
         {
-            var menus = _displayQueue.ToArray();
-            for (int i = 0; i < _menuSlots.Count; i++)
+            if (_menuSlots.Count == 0) return;
+            
+            var index = 0;
+            foreach (var menu in _displayQueue)
             {
-                if (i < menus.Length)
-                {
-                    _menuSlots[i].gameObject.SetActive(true);
-                    _menuSlots[i].Initialize(menus[i]);
-                }
-                else
-                {
-                    _menuSlots[i].gameObject.SetActive(false);
-                }
+                if (index >= _menuSlots.Count) break;
+            
+                var slot = _menuSlots[index];
+                slot.gameObject.SetActive(true);
+                slot.Initialize(menu);
+                index++;
+            }
+
+            for (; index < _menuSlots.Count; index++)
+            {
+                _menuSlots[index].gameObject.SetActive(false);
             }
         }
     }

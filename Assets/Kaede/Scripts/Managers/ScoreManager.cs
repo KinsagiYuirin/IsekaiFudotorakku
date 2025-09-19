@@ -14,10 +14,13 @@ namespace Kaede.Scripts.Managers
         public List<float> MenuScores { get; } = new();
         public float GrandTotalScore { get; private set; }
         
+        public int TotalRedoSteps { get; set; }
+        
         private readonly List<float> _currentStepScores = new();
         public List<float> CurrentStepScores => new List<float>(_currentStepScores);
         private float _pendingStepScore;
 
+        #region Score Methods
         public void SetPendingStepScore(float score)
         {
             _pendingStepScore = score;
@@ -33,7 +36,7 @@ namespace Kaede.Scripts.Managers
         {
             _pendingStepScore += score;
         }
-
+        
         public void ResetPendingStepScore()
         {
             _pendingStepScore = 0f;
@@ -56,5 +59,18 @@ namespace Kaede.Scripts.Managers
             _currentStepScores.Clear();
             ResetPendingStepScore();
         }
+        #endregion
+
+        #region Redo Methods
+        public void ResetRedoCount()
+        {
+            TotalRedoSteps = 0;
+        }
+        
+        public void AddRedoCount()
+        {
+            TotalRedoSteps++;
+        }
+        #endregion
     }
 }
