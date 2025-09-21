@@ -25,6 +25,7 @@ namespace Kaede.Scripts.GamePlay
         
         [Title("References")]
         [field: SerializeField] public Transform ComboPanel { get; private set; }
+        [field: SerializeField] public Sprite CookingImage { get; private set; }
         [SerializeField] private GameObject keyIconPrefab;
         [SerializeField] private Sprite defaultSprite;
         [field: SerializeField] public List<KeySpriteMapping> KeySprite {get; private set;}
@@ -85,6 +86,12 @@ namespace Kaede.Scripts.GamePlay
             }
         }
 
+        public void SetCookingImage(Sprite sprite)
+        {
+            if (sprite != null)
+                CookingImage = sprite;
+        }
+        
         public void ClearCombo()
         {
             foreach (Transform child in ComboPanel)

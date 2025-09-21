@@ -63,6 +63,9 @@ namespace Kaede.Scripts.Item
 
         [EnumToggleButtons, LabelText("Phase")]
         public StepPhase phase; // Preparation / Cooking
+        
+        [LabelText("Image")]
+        public Sprite cookingSprite;
 
         [Title("Sequence")]
         [ListDrawerSettings(

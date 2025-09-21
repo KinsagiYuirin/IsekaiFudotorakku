@@ -181,7 +181,6 @@ namespace Kaede.Scripts.GamePlay
         #endregion
         
         #region Combo Logic
-        
         private void CheckComboButton()
         {
             if (_checking) return;
