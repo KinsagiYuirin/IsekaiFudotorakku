@@ -25,11 +25,14 @@ namespace Kaede.Scripts.GamePlay
     
     public class ComboCookingController : MonoSingleton<ComboCookingController>
     {
+        [Title("Game Settings")]
+        [SerializeField] private float restingTime = 3f;
+        
         [Title("Combo Settings")]
         [field: SerializeField] public List<MenuData> MenuDatasList { get; private set; }
         [SerializeField] private float maxTimePerCombo = 5f;
         [field: SerializeField] public float TimeBetweenCombos { get; private set; } = 1f;
-
+        
         [Title("Score Setting")] 
         [SerializeField] private float scorePerButton;
         
@@ -285,6 +288,7 @@ namespace Kaede.Scripts.GamePlay
                 
                 if (TryAdvanceMenuType())
                 {
+                    _model.Resting(restingTime);
                     Debug.Log("Next Menu Type");
                     return;
                 }
