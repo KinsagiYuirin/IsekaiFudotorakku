@@ -139,7 +139,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   targetLayer:
     serializedVersion: 2
-    m_Bits: 512
+    m_Bits: 0
   passThroughLayer:
     serializedVersion: 2
     m_Bits: 0

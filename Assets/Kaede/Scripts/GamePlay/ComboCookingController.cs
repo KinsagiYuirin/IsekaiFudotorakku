@@ -203,6 +203,8 @@ namespace Kaede.Scripts.GamePlay
                 var result = _currentHandler.CheckInput(_inputHandler, expectedCombo.key, _inputCts.Token);
                 if (_isStepComplete) return;
                 
+                _view.CurrentKeyPressed(_model.CurrentComboIndex);
+                
                 switch (result)
                 {
                     case ComboInputResult.Correct:
@@ -318,13 +320,24 @@ namespace Kaede.Scripts.GamePlay
             _model.ResetCombo();
             ShowCurrentCombo();
             _model.ScoreManager.AddRedoCount();
-            Debug.Log("Undo Step");
+            Debug.Log("Redo Step");
         }
         
         private void ShowCurrentCombo()
         {
             if (_model.TryGetCurrentKeys(out var keys))
+            {
                 _view.ShowCombo(keys);
+
+                var menu = _model.MenuDatas[_model.CurrentMenuIndex];
+                if (menu?.steps != null && _model.CurrentMenuIndex < menu.steps.Count)
+                {
+                    var step = menu.steps[_model.CurrentStepIndex];
+                    var sprite = step?.preset != null ? step.preset.cookingSprite : null;
+                    _view.SetCookingImage(sprite);
+                }
+            }
+            
         }
         #endregion
 

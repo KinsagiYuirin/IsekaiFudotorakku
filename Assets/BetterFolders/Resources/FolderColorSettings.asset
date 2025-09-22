@@ -270,3 +270,11 @@ MonoBehaviour:
     applyColorToSubfolders: 0
     applyIconToSubfolders: 0
     materialColor: 0
+  - folderName: Inventory
+    folderColor: {r: 0, g: 0, b: 0, a: 1}
+    fullPath: Assets/Kaede/Scripts/ItemSO/Inventory
+    icon: {fileID: 0}
+    applyToAllFolders: 0
+    applyColorToSubfolders: 0
+    applyIconToSubfolders: 0
+    materialColor: 0

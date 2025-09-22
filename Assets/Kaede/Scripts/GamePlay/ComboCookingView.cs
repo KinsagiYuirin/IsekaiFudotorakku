@@ -11,6 +11,11 @@ using UnityEngine.UI;
 
 namespace Kaede.Scripts.GamePlay
 {
+    public enum CookingAction
+    {
+        
+    }
+    
     [Serializable]
     public class KeySpriteMapping
     {
@@ -22,12 +27,17 @@ namespace Kaede.Scripts.GamePlay
     {
         [Title("Settings")]
         [field: SerializeField] public TMP_Text TimerText { get; private set; }
+        [SerializeField] private GameObject keyIconPrefab;
         
         [Title("References")]
         [field: SerializeField] public Transform ComboPanel { get; private set; }
-        [field: SerializeField] public Sprite CookingImage { get; private set; }
-        [SerializeField] private GameObject keyIconPrefab;
+        [field: SerializeField] public Image CookingImage { get; private set; }
         [SerializeField] private Sprite defaultSprite;
+        [SerializeField] private Sprite currentButtonSprite;
+        
+        [Title("Sprite Container")]
+        [SerializeField] private Sprite panSprite;
+        
         [field: SerializeField] public List<KeySpriteMapping> KeySprite {get; private set;}
         [field: SerializeField, DisplayAsString] public int CurrentMenuIndex { get; private set; }
         private Dictionary<ComboKey, Sprite> _spriteLookup;
@@ -54,9 +64,24 @@ namespace Kaede.Scripts.GamePlay
             {
                 var icon = Instantiate(keyIconPrefab, ComboPanel);
                 var img = icon.GetComponent<Image>();
+                var text = icon.GetComponentInChildren<TMP_Text>();
 
                 img.sprite = _spriteLookup.GetValueOrDefault(key, defaultSprite);
+                if (Gamepad.current != null)
+                {
+                    ConvertToJoyStick(text, key);
+                }
+                else
+                {
+                    text.text = key.ToString();
+                }
             }
+        }
+        
+        public void CurrentKeyPressed(int comboIndex)
+        {
+            var currentIcon   = ComboPanel.GetChild(comboIndex).GetComponent<Image>();
+            currentIcon.sprite = currentButtonSprite;
         }
         
         public void NoneKeyPressed(int comboIndex)
@@ -89,7 +114,7 @@ namespace Kaede.Scripts.GamePlay
         public void SetCookingImage(Sprite sprite)
         {
             if (sprite != null)
-                CookingImage = sprite;
+                CookingImage.sprite = sprite;
         }
         
         public void ClearCombo()
@@ -109,6 +134,18 @@ namespace Kaede.Scripts.GamePlay
                 var img   = child.GetComponent<Image>();
                 img.color = Color.white;
             }
+        }
+
+        private void ConvertToJoyStick(TMP_Text text,ComboKey key)
+        {
+            text.text = key switch
+            {
+                ComboKey.W => "Y",
+                ComboKey.A => "X",
+                ComboKey.S => "A",
+                ComboKey.D => "B",
+                _ => text.text
+            };
         }
     }
 }
