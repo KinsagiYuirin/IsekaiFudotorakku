@@ -103,10 +103,10 @@ TextureImporter:
       name: 10 Pan_0
       rect:
         serializedVersion: 2
-        x: 0
-        y: 0
-        width: 572
-        height: 702
+        x: 137
+        y: 98
+        width: 574
+        height: 704
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
