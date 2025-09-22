@@ -136,6 +136,19 @@ namespace Kaede.Scripts.GamePlay
             }
         }
 
+        public void SetRestingMode(bool isResting)
+        {
+            if (ComboPanel != null)
+            {
+                ComboPanel.gameObject.SetActive(!isResting);
+            }
+
+            if (CookingImage != null)
+            {
+                CookingImage.gameObject.SetActive(!isResting);
+            }
+        }
+        
         private void ConvertToJoyStick(TMP_Text text,ComboKey key)
         {
             text.text = key switch

@@ -79,13 +79,25 @@ namespace Kaede.Scripts.GamePlay
 
         private void Update()
         { 
+            if (_model == null) return;
             Tick(Time.deltaTime);
+            if (_model.GameState == CookingState.Resting)
+            {
+                if (_model.CurrentTimer <= 0f)
+                {
+                    EndRestingPhase();
+                }
+                else
+                {
+                    GetTimeLeft();
+                }
 
+                return;
+            }
+            
             if (_model.CurrentTimer <= 0f)
             {
-                _model.ResetCombo();
-                _view.ResetCombo();
-                _model.ScoreManager.ResetPendingStepScore();
+                HandleComboTimeout();
                 return;
             }
 
@@ -183,6 +195,7 @@ namespace Kaede.Scripts.GamePlay
         #region Combo Logic
         private void CheckComboButton()
         {
+            if (_model != null && _model.GameState == CookingState.Resting) return;
             if (_checking) return;
             _checking   = true;
             _inputCts ??= new CancellationTokenSource();
@@ -252,6 +265,7 @@ namespace Kaede.Scripts.GamePlay
         
         private void NextStep()
         {
+            if (_model != null && _model.GameState == CookingState.Resting) return;
             if (!_isStepComplete) return;
 
             CancelInputLoop();
@@ -290,6 +304,7 @@ namespace Kaede.Scripts.GamePlay
                 if (TryAdvanceMenuType())
                 {
                     _model.Resting(restingTime);
+                    BeginRestingPhase();
                     Debug.Log("Next Menu Type");
                     return;
                 }
@@ -312,6 +327,8 @@ namespace Kaede.Scripts.GamePlay
 
         private void RedoStep()
         {
+            if (_model != null && _model.GameState == CookingState.Resting) return;
+            
             CancelInputLoop();
             _isStepComplete      = false;
             _currentHandler      = null;
@@ -344,6 +361,7 @@ namespace Kaede.Scripts.GamePlay
         #region Timer
         private void GetTimeLeft()
         {
+            if (_model == null) return;
             _view.TimerText.text = _model.CurrentTimer.ToString("N0");
         }
 
@@ -353,7 +371,36 @@ namespace Kaede.Scripts.GamePlay
         }
         #endregion
 
-        #region Until
+        #region Utill
+        private void HandleComboTimeout()
+        {
+            _model.ResetCombo();
+            _view.ResetCombo();
+            _model.ScoreManager.ResetPendingStepScore();
+        }
+
+        private void BeginRestingPhase()
+        {
+            CancelInputLoop();
+            _checking = false;
+            _currentHandler      = null;
+            _currentComboSetting = null;
+            _view.SetRestingMode(true);
+            GetTimeLeft();
+        }
+        
+        private void EndRestingPhase()
+        {
+            _model.ResetCombo();
+            _view.ResetCombo();
+            _view.SetRestingMode(false);
+            CancelInputLoop();
+            _currentHandler      = null;
+            _currentComboSetting = null;
+            ShowCurrentCombo();
+            GetTimeLeft();
+        }
+        
         private void CancelInputLoop()
         {
             _inputCts?.Cancel();
