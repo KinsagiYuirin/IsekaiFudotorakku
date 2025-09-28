@@ -2142,7 +2142,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1559710613
 RectTransform:
   m_ObjectHideFlags: 0
@@ -2824,7 +2824,7 @@ MonoBehaviour:
   restingTime: 3
   <MenuDatasList>k__BackingField: []
   maxTimePerCombo: 20
-  <TimeBetweenCombos>k__BackingField: 3
+  <TimeBetweenCombos>k__BackingField: 1
   scorePerButton: 10
   completedMenus: []
 --- !u!4 &1835431552
@@ -2859,7 +2859,9 @@ MonoBehaviour:
   <CookingImage>k__BackingField: {fileID: 37314923}
   keyIconPrefab: {fileID: 7757588948095281374, guid: ecf29bbb002d8054db5de0d6051235d9, type: 3}
   defaultSprite: {fileID: 1176796594314619274, guid: 9ed185cd6eff41c4f8477b8d9d01fed5, type: 3}
-  currentButtonSprite: {fileID: 0}
+  currentButtonSprite: {fileID: 441309215, guid: 0582d416a9bb1014bbd3bdd45f2889f9, type: 3}
+  prepareButtonSprite: {fileID: -1647389661138907197, guid: fd2651fc5c492bd4399e61e08f24e487, type: 3}
+  idealButtonSprite: {fileID: -862634859290749712, guid: bdd189561c958ef4c80b57c7c573094e, type: 3}
   <KeySprite>k__BackingField:
   - key: 1
     sprite: {fileID: 791279314227853069, guid: d5b772d1e8f7460459578b0da05a71a8, type: 3}
@@ -2899,19 +2901,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   menuSlotPrefab: {fileID: 8713201990277120889, guid: ddaff2e3db329cb45865a84a89c9d565, type: 3}
-  allMenus: []
+  menuSlotContainer: {fileID: 896250905}
+  inventoryCanvasGroup: {fileID: 305841596}
   slotPositions:
   - {fileID: 574267957}
   - {fileID: 1265959051}
   - {fileID: 447529014}
   maxDisplayCount: 3
-  inventoryModel:
-    rid: -2
-  references:
-    version: 2
-    RefIds:
-    - rid: -2
-      type: {class: , ns: , asm: }
+  allMenus: []
 --- !u!114 &1835431556
 MonoBehaviour:
   m_ObjectHideFlags: 0
