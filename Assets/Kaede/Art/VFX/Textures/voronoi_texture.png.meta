@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: a4282f1b75a795e4583eefee8d697dfd
+guid: 5a03c349c5b3ba84f9cd327ce4ab0fcf
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: -908620281539100440
-    second: 10 Pan_0
+      213: 2318094094526301305
+    second: voronoi_texture_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -100,13 +100,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: 10 Pan_0
+      name: voronoi_texture_0
       rect:
         serializedVersion: 2
-        x: 137
-        y: 98
-        width: 574
-        height: 704
+        x: 0
+        y: 0
+        width: 512
+        height: 512
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -115,8 +115,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 8e085230baee363f0800000000000000
-      internalID: -908620281539100440
+      spriteID: 974cb241c468b2020800000000000000
+      internalID: 2318094094526301305
       vertices: []
       indices: 
       edges: []
@@ -135,7 +135,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      10 Pan_0: -908620281539100440
+      voronoi_texture_0: 2318094094526301305
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

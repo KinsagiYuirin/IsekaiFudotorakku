@@ -14,10 +14,10 @@ TagManager:
   - 
   - 
   - Foreground
-  - 
+  - NPC
   - Character
   - Enemy
-  - 
+  - Player
   - 
   - 
   - 
@@ -29,9 +29,6 @@ TagManager:
   - 
   - 
   - Background
-  - 
-  - 
-  - 
   - 
   - 
   - 
