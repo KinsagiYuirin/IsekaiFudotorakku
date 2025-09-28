@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Kaede.Scripts.Item;
 using Sirenix.OdinInspector;
 using TMPro;
+using Unity.VisualScripting;
 using UnityCommunity.UnitySingleton;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -22,7 +23,8 @@ namespace Kaede.Scripts.GamePlay
         [Title("UI References")]
         [field: SerializeField] public TMP_Text TimerText { get; private set; }
         [field: SerializeField] public Transform ComboPanel { get; private set; }
-        [field: SerializeField] public Image CookingImage { get; private set; }
+        [field: SerializeField] public Sprite CookingImage { get; private set; }
+        [field: SerializeField] public GameObject CookingImageObject { get; private set; }
         
         [Title("Prefabs")]
         [SerializeField] private GameObject keyIconPrefab;
@@ -84,10 +86,8 @@ namespace Kaede.Scripts.GamePlay
 
         public void SetCookingImage(Sprite sprite)
         {
-            if (sprite != null && CookingImage != null)
-            {
-                CookingImage.sprite = sprite;
-            }
+            if (sprite == null || CookingImage == null) return;
+            CookingImage = sprite;
         }
         
         public void ClearCombo()
@@ -105,7 +105,7 @@ namespace Kaede.Scripts.GamePlay
         public void SetRestingMode(bool isResting)
         {
             SetUIElementActive(ComboPanel?.gameObject, !isResting);
-            SetUIElementActive(CookingImage?.gameObject, !isResting);
+            SetUIElementActive(CookingImageObject?.gameObject, !isResting);
         }
         #endregion
 
