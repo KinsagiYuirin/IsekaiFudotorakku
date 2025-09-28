@@ -13,9 +13,9 @@ namespace Kaede.Scripts.Managers
     public class RandomSystem : MonoSingleton<RandomSystem>
     {
         [SerializeField] private List<MenuData> allMenuInLevel;
-        [SerializeField, Min(0)] private int appetizerRandomMenuCount = 1;
-        [SerializeField, Min(0)] private int mainCourseRandomMenuCount = 1;
-        [SerializeField, Min(0)] private int dessertRandomMenuCount = 1;
+        [SerializeField, Min(0)] private int appetizerRandomMenuCount;
+        [SerializeField, Min(0)] private int mainCourseRandomMenuCount;
+        [SerializeField, Min(0)] private int dessertRandomMenuCount;
         [SerializeField, ReadOnly] private List<MenuData> appetizerRandomMenu = new();
         [SerializeField, ReadOnly] private List<MenuData> mainCourseRandomMenu = new();
         [SerializeField, ReadOnly] private List<MenuData> dessertRandomMenu = new();

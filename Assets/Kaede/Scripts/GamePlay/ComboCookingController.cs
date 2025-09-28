@@ -41,6 +41,7 @@ namespace Kaede.Scripts.GamePlay
         
         private bool _isStepComplete = false;
         private bool _checking;
+        private float _currentTimer;
         
         private InventoryController _inventoryController;
         private RandomSystem _randomSystem;
@@ -83,7 +84,7 @@ namespace Kaede.Scripts.GamePlay
             Tick(Time.deltaTime);
             if (_model.GameState == CookingState.Resting)
             {
-                if (_model.CurrentTimer <= 0f)
+                if (_currentTimer <= 0f)
                 {
                     EndRestingPhase();
                 }
@@ -95,7 +96,7 @@ namespace Kaede.Scripts.GamePlay
                 return;
             }
             
-            if (_model.CurrentTimer <= 0f)
+            if (_currentTimer <= 0f)
             {
                 HandleComboTimeout();
                 return;
@@ -178,6 +179,7 @@ namespace Kaede.Scripts.GamePlay
             _model.ScoreManager.SetPendingStepScore(0);
             _model.ResetCombo();
             _model.ResetStep();
+            ResetTimer();
             _view.ResetCombo();
             ShowCurrentCombo();
 
@@ -280,7 +282,8 @@ namespace Kaede.Scripts.GamePlay
                 NextMenu();
                 return;
             }
-            
+
+            AddTimeNextCombo();
             _model.ResetCombo();
             ShowCurrentCombo();
             Debug.Log($"Step Score: {_model.ScoreManager.CurrentStepScores[^1]}");
@@ -314,6 +317,7 @@ namespace Kaede.Scripts.GamePlay
             _model.NextMenu();
             _model.ResetStep();
             _model.ResetCombo();
+            ResetTimer();
             ShowCurrentCombo();
             
             var latestMenuScore = _model.ScoreManager.MenuScores[^1];
@@ -362,12 +366,22 @@ namespace Kaede.Scripts.GamePlay
         private void GetTimeLeft()
         {
             if (_model == null) return;
-            _view.TimerText.text = _model.CurrentTimer.ToString("N0");
+            _view.TimerText.text = _currentTimer.ToString("N0");
         }
 
         private void Tick(float deltaTime)
         {
-            _model.CurrentTimer -= deltaTime;
+            _currentTimer -= deltaTime;
+        }
+        
+        private void ResetTimer()
+        {
+            _currentTimer = maxTimePerCombo;
+        }
+        
+        private void AddTimeNextCombo()
+        {
+            _currentTimer += maxTimePerCombo;
         }
         #endregion
 
@@ -375,6 +389,7 @@ namespace Kaede.Scripts.GamePlay
         private void HandleComboTimeout()
         {
             _model.ResetCombo();
+            ResetTimer();
             _view.ResetCombo();
             _model.ScoreManager.ResetPendingStepScore();
         }
@@ -386,12 +401,15 @@ namespace Kaede.Scripts.GamePlay
             _currentHandler      = null;
             _currentComboSetting = null;
             _view.SetRestingMode(true);
+            _currentTimer = restingTime;
             GetTimeLeft();
         }
         
         private void EndRestingPhase()
         {
+            _inventoryController?.SetVisible(true);
             _model.ResetCombo();
+            ResetTimer();
             _view.ResetCombo();
             _view.SetRestingMode(false);
             CancelInputLoop();

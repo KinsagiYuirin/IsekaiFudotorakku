@@ -18,10 +18,7 @@ namespace Kaede.Scripts.GamePlay
         public int CurrentMenuIndex { get; private set; } = 0;
         public int CurrentStepIndex { get; private set; } = 0;
         public int CurrentComboIndex { get; private set; } = 0;
-
-        public float MaxTimePerCombo { get; private set; }
-        public float CurrentTimer { get; set; }
-
+        
         public float StartTime { get; private set; } = 0;
         
         public ScoreManager ScoreManager { get; }
@@ -30,8 +27,6 @@ namespace Kaede.Scripts.GamePlay
         public ComboCookingModel(List<MenuData> menus, float maxTimePerCombo = 5f, ScoreManager scoreManager = null)
         {
             MenuDatas       = menus ?? new List<MenuData>();
-            MaxTimePerCombo = maxTimePerCombo;
-            CurrentTimer    = maxTimePerCombo;
             ScoreManager    = scoreManager ?? new ScoreManager();
         }
         
@@ -40,7 +35,6 @@ namespace Kaede.Scripts.GamePlay
         public void ResetCombo()
         {
             CurrentComboIndex = 0;
-            CurrentTimer      = MaxTimePerCombo;
             GameState         = CookingState.Cooking;
         }
 
@@ -71,7 +65,6 @@ namespace Kaede.Scripts.GamePlay
             
             CurrentMenuIndex++;
             CurrentComboIndex = 0;
-            CurrentTimer      = MaxTimePerCombo;
             ResetStep();
         }
 
@@ -85,13 +78,6 @@ namespace Kaede.Scripts.GamePlay
         public void Resting(float duration)
         {
             GameState = CookingState.Resting;
-
-            if (duration < 0f)
-            {
-                CurrentTimer = 0f;
-            }
-            else
-                CurrentTimer = duration;
         }
         
         public void GameOver()

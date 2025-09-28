@@ -12,17 +12,7 @@ namespace Kaede.Scripts.Item
         [SerializeField] private TMP_Text itemName;
         
         private MenuData _menuData;
-        
-        private void OnEnable()
-        {
-            //InventoryEvent.OnItemCountChanged += UpdateCount;
-        }
-        
-        private void OnDisable()
-        {
-            //InventoryEvent.OnItemCountChanged -= UpdateCount;
-        }
-        
+
         public void Initialize(MenuData menuData)
         {
             _menuData = menuData;
@@ -37,11 +27,5 @@ namespace Kaede.Scripts.Item
             itemIcon.sprite = _menuData.menuIcon;
             itemName.text = _menuData.menuName;
         }
-        
-        /*private void UpdateCount(MenuData menuData, int previousCount, int newCount)
-        {
-            if (menuData != _menuData) return;
-            itemCount.text = newCount.ToString();
-        }*/
     }
 }

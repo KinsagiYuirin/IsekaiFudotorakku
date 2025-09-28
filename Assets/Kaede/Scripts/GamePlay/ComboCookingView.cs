@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using Kaede.Scripts.Item;
-using PrimeTween;
 using Sirenix.OdinInspector;
 using TMPro;
 using UnityCommunity.UnitySingleton;
@@ -11,11 +10,6 @@ using UnityEngine.UI;
 
 namespace Kaede.Scripts.GamePlay
 {
-    public enum CookingAction
-    {
-        
-    }
-    
     [Serializable]
     public class KeySpriteMapping
     {
@@ -25,140 +19,209 @@ namespace Kaede.Scripts.GamePlay
     
     public class ComboCookingView : MonoSingleton<ComboCookingView>
     {
-        [Title("Settings")]
+        [Title("UI References")]
         [field: SerializeField] public TMP_Text TimerText { get; private set; }
-        [SerializeField] private GameObject keyIconPrefab;
-        
-        [Title("References")]
         [field: SerializeField] public Transform ComboPanel { get; private set; }
         [field: SerializeField] public Image CookingImage { get; private set; }
+        
+        [Title("Prefabs")]
+        [SerializeField] private GameObject keyIconPrefab;
+        
+        [Title("Button Sprites")]
         [SerializeField] private Sprite defaultSprite;
         [SerializeField] private Sprite currentButtonSprite;
+        [SerializeField] private Sprite prepareButtonSprite;
+        [SerializeField] private Sprite idealButtonSprite;
         
-        [Title("Sprite Container")]
-        [SerializeField] private Sprite panSprite;
+        [Title("Key Mappings")]
+        [field: SerializeField] public List<KeySpriteMapping> KeySprite { get; private set; }
         
-        [field: SerializeField] public List<KeySpriteMapping> KeySprite {get; private set;}
+        [Title("Debug")]
         [field: SerializeField, DisplayAsString] public int CurrentMenuIndex { get; private set; }
+        
         private Dictionary<ComboKey, Sprite> _spriteLookup;
 
+        #region Unity Lifecycle
         protected override void Awake()
         {
-            _spriteLookup = new Dictionary<ComboKey, Sprite>();
-            foreach (var mapping in KeySprite)
-            {
-                if (!_spriteLookup.ContainsKey(mapping.key))
-                    _spriteLookup.Add(mapping.key, mapping.sprite);
-            }
+            InitializeSpriteLookup();
             base.Awake();
         }
-        
+        #endregion
+
+        #region Public Methods
         public void ShowCombo(List<ComboKey> keys)
         {
-            foreach (Transform child in ComboPanel)
-            {
-                Destroy(child.gameObject);
-            }
-            
-            foreach (var key in keys)
-            {
-                var icon = Instantiate(keyIconPrefab, ComboPanel);
-                var img = icon.GetComponent<Image>();
-                var text = icon.GetComponentInChildren<TMP_Text>();
-
-                img.sprite = _spriteLookup.GetValueOrDefault(key, defaultSprite);
-                if (Gamepad.current != null)
-                {
-                    ConvertToJoyStick(text, key);
-                }
-                else
-                {
-                    text.text = key.ToString();
-                }
-            }
+            ClearComboPanel();
+            CreateKeyIcons(keys);
         }
         
         public void CurrentKeyPressed(int comboIndex)
         {
-            var currentIcon   = ComboPanel.GetChild(comboIndex).GetComponent<Image>();
-            currentIcon.sprite = currentButtonSprite;
+            SetKeySprite(comboIndex, currentButtonSprite);
+            PrepareNextButton(comboIndex);
         }
-        
+
         public void NoneKeyPressed(int comboIndex)
         {
-            var currentIcon   = ComboPanel.GetChild(comboIndex).GetComponent<Image>();
-            currentIcon.color = Color.white;
+            SetKeyColor(comboIndex, Color.white);
         }
         
         public void PressCorrectKey(int comboIndex)
         {
-            var currentIcon   = ComboPanel.GetChild(comboIndex).GetComponent<Image>();
-            currentIcon.color = Color.green;
+            SetKeyColor(comboIndex, Color.green);
         }
 
         public void PressWrongKey(int comboIndex)
         {
-            var currentIcon   = ComboPanel.GetChild(comboIndex).GetComponent<Image>();
-            currentIcon.color = Color.red;
+            SetKeyColor(comboIndex, Color.red);
         }
         
         public void CompleteCombo()
         {
-            foreach (Transform child in ComboPanel)
-            {
-                var img   = child.GetComponent<Image>();
-                img.color = Color.yellow;
-            }
+            SetAllKeysColor(Color.yellow);
         }
 
         public void SetCookingImage(Sprite sprite)
         {
-            if (sprite != null)
+            if (sprite != null && CookingImage != null)
+            {
                 CookingImage.sprite = sprite;
+            }
         }
         
         public void ClearCombo()
         {
-            foreach (Transform child in ComboPanel)
-            {
-                Destroy(child.gameObject);
-            }
+            ClearComboPanel();
             CurrentMenuIndex = 0;
         }
         
         public void ResetCombo()
         {
             CurrentMenuIndex = 0;
-            foreach (Transform child in ComboPanel)
-            {
-                var img   = child.GetComponent<Image>();
-                img.color = Color.white;
-            }
+            SetAllKeysColor(Color.white);
         }
 
         public void SetRestingMode(bool isResting)
         {
-            if (ComboPanel != null)
+            SetUIElementActive(ComboPanel?.gameObject, !isResting);
+            SetUIElementActive(CookingImage?.gameObject, !isResting);
+        }
+        #endregion
+
+        #region Private Methods
+        private void InitializeSpriteLookup()
+        {
+            _spriteLookup = new Dictionary<ComboKey, Sprite>();
+            
+            if (KeySprite == null) return;
+            
+            foreach (var mapping in KeySprite)
             {
-                ComboPanel.gameObject.SetActive(!isResting);
+                if (!_spriteLookup.ContainsKey(mapping.key))
+                {
+                    _spriteLookup.Add(mapping.key, mapping.sprite);
+                }
+            }
+        }
+
+        private void ClearComboPanel()
+        {
+            if (ComboPanel == null) return;
+            
+            foreach (Transform child in ComboPanel)
+            {
+                Destroy(child.gameObject);
+            }
+        }
+
+        private void CreateKeyIcons(List<ComboKey> keys)
+        {
+            if (keys == null || keyIconPrefab == null) return;
+            
+            foreach (var key in keys)
+            {
+                var icon = Instantiate(keyIconPrefab, ComboPanel);
+                SetupKeyIcon(icon, key);
+            }
+        }
+
+        private void SetupKeyIcon(GameObject icon, ComboKey key)
+        {
+            var img = icon.GetComponent<Image>();
+            var text = icon.GetComponentInChildren<TMP_Text>();
+
+            if (img != null)
+            {
+                img.sprite = idealButtonSprite;
             }
 
-            if (CookingImage != null)
+            if (text != null)
             {
-                CookingImage.gameObject.SetActive(!isResting);
+                text.text = Gamepad.current != null ? ConvertToGamepadKey(key) : key.ToString();
             }
         }
-        
-        private void ConvertToJoyStick(TMP_Text text,ComboKey key)
+
+        private string ConvertToGamepadKey(ComboKey key)
         {
-            text.text = key switch
+            return key switch
             {
                 ComboKey.W => "Y",
-                ComboKey.A => "X",
+                ComboKey.A => "X", 
                 ComboKey.S => "A",
                 ComboKey.D => "B",
-                _ => text.text
+                _ => key.ToString()
             };
         }
+
+        private void PrepareNextButton(int comboIndex)
+        {
+            var nextIndex = comboIndex + 1;
+            if (nextIndex < ComboPanel.childCount)
+            {
+                SetKeySprite(nextIndex, prepareButtonSprite);
+            }
+        }
+
+        private void SetKeySprite(int index, Sprite sprite)
+        {
+            if (index >= 0 && index < ComboPanel.childCount)
+            {
+                var icon = ComboPanel.GetChild(index).GetComponent<Image>();
+                if (icon != null)
+                {
+                    icon.sprite = sprite;
+                }
+            }
+        }
+
+        private void SetKeyColor(int index, Color color)
+        {
+            if (index >= 0 && index < ComboPanel.childCount)
+            {
+                var icon = ComboPanel.GetChild(index).GetComponent<Image>();
+                if (icon != null)
+                {
+                    icon.color = color;
+                }
+            }
+        }
+
+        private void SetAllKeysColor(Color color)
+        {
+            for (int i = 0; i < ComboPanel.childCount; i++)
+            {
+                SetKeyColor(i, color);
+            }
+        }
+
+        private void SetUIElementActive(GameObject element, bool active)
+        {
+            if (element != null)
+            {
+                element.SetActive(active);
+            }
+        }
+        #endregion
     }
 }
