@@ -98,6 +98,19 @@ namespace Kaede.Scripts.GamePlay
                 : seq.ConvertAll(c => c.key);
             return true;
         }
+        
+        public bool TryGetCurrentComboSettings(out List<ComboKeySetting> comboSettings)
+        {
+            comboSettings = null;
+            var seq = GetCurrentSequence();
+            if (seq == null) return false;
+
+            comboSettings = seq.Count == 0
+                ? new List<ComboKeySetting>()
+                : new List<ComboKeySetting>(seq);
+
+            return true;
+        }
 
         public bool TryGetCurrentSequenceCount(out int count)
         {

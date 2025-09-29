@@ -47,9 +47,6 @@ namespace Kaede.Scripts.GamePlay
         [Title("Button Sprites")]
         [SerializeField] private Sprite defaultSprite;
         [SerializeField] private ButtonSprite[] buttonSprites;
-        [SerializeField] private Sprite currentButtonSprite;
-        [SerializeField] private Sprite prepareButtonSprite;
-        [SerializeField] private Sprite idealButtonSprite;
         
         [Title("Key Mappings")]
         [field: SerializeField] public List<KeySpriteMapping> KeySprite { get; private set; }
@@ -58,31 +55,34 @@ namespace Kaede.Scripts.GamePlay
         [field: SerializeField, DisplayAsString] public int CurrentMenuIndex { get; private set; }
         
         private Dictionary<ComboKey, Sprite> _spriteLookup;
-
+        private Dictionary<(ComboType type, KeyState state), Sprite> _buttonSpriteLookup;
+        private readonly List<ComboType> _comboTypes = new();
+        
         #region Unity Lifecycle
         protected override void Awake()
         {
             InitializeSpriteLookup();
+            InitializeButtonSpriteLookup();
             base.Awake();
         }
         #endregion
 
         #region Public Methods
-        public void ShowCombo(List<ComboKey> keys)
+        public void ShowCombo(List<ComboKeySetting> comboSettings)
         {
             ClearComboPanel();
-            CreateKeyIcons(keys);
+            CreateKeyIcons(comboSettings);
         }
         
         public void CurrentKeyPressed(int comboIndex)
         {
-            SetKeySprite(comboIndex, currentButtonSprite);
+            SetKeySprite(comboIndex, KeyState.Current);
             PrepareNextButton(comboIndex);
         }
 
         public void NoneKeyPressed(int comboIndex)
         {
-            SetKeyColor(comboIndex, Color.white);
+            SetKeySprite(comboIndex, KeyState.Ideal);
         }
         
         public void PressCorrectKey(int comboIndex)
@@ -140,6 +140,23 @@ namespace Kaede.Scripts.GamePlay
                 }
             }
         }
+        
+        private void InitializeButtonSpriteLookup()
+        {
+            _buttonSpriteLookup = new Dictionary<(ComboType, KeyState), Sprite>();
+
+            if (buttonSprites == null) return;
+
+            foreach (var buttonSprite in buttonSprites)
+            {
+                var key = (buttonSprite.comboType, buttonSprite.state);
+                if (!_buttonSpriteLookup.ContainsKey(key) && buttonSprite.sprite != null)
+                {
+                    _buttonSpriteLookup.Add(key, buttonSprite.sprite);
+                }
+            }
+        }
+
 
         private void ClearComboPanel()
         {
@@ -149,31 +166,35 @@ namespace Kaede.Scripts.GamePlay
             {
                 Destroy(child.gameObject);
             }
+            _comboTypes.Clear();
         }
 
-        private void CreateKeyIcons(List<ComboKey> keys)
+        private void CreateKeyIcons(List<ComboKeySetting> comboSettings)
         {
-            if (keys == null || keyIconPrefab == null) return;
+            if (comboSettings == null || keyIconPrefab == null) return;
             
-            foreach (var key in keys)
+            foreach (var comboSetting in comboSettings)
             {
                 var icon = Instantiate(keyIconPrefab, ComboPanel);
-                SetupKeyIcon(icon, key);
+                _comboTypes.Add(comboSetting?.type ?? ComboType.Single);
+                SetupKeyIcon(icon, comboSetting);
             }
         }
 
-        private void SetupKeyIcon(GameObject icon, ComboKey key)
+        private void SetupKeyIcon(GameObject icon, ComboKeySetting comboSetting)
         {
             var img = icon.GetComponent<Image>();
             var text = icon.GetComponentInChildren<TMP_Text>();
 
             if (img != null)
             {
-                img.sprite = idealButtonSprite;
+                var comboType = comboSetting?.type ?? ComboType.Single;
+                img.sprite = GetButtonSprite(comboType, KeyState.Ideal);
             }
 
             if (text != null)
             {
+                var key = comboSetting?.key ?? ComboKey.None;
                 text.text = Gamepad.current != null ? ConvertToGamepadKey(key) : key.ToString();
             }
         }
@@ -195,22 +216,45 @@ namespace Kaede.Scripts.GamePlay
             var nextIndex = comboIndex + 1;
             if (nextIndex < ComboPanel.childCount)
             {
-                SetKeySprite(nextIndex, prepareButtonSprite);
+                SetKeySprite(nextIndex, KeyState.Prepare);
             }
         }
 
-        private void SetKeySprite(int index, Sprite sprite)
+        private void SetKeySprite(int index, KeyState state)
         {
             if (index >= 0 && index < ComboPanel.childCount)
             {
                 var icon = ComboPanel.GetChild(index).GetComponent<Image>();
                 if (icon != null)
                 {
-                    icon.sprite = sprite;
+                    var comboType = GetComboType(index);
+                    icon.sprite = GetButtonSprite(comboType, state);
                 }
             }
         }
 
+        private ComboType GetComboType(int index)
+        {
+            if (index >= 0 && index < _comboTypes.Count)
+            {
+                return _comboTypes[index];
+            }
+
+            return ComboType.Single;
+        }
+
+        private Sprite GetButtonSprite(ComboType comboType, KeyState state)
+        {
+            if (_buttonSpriteLookup != null &&
+                _buttonSpriteLookup.TryGetValue((comboType, state), out var sprite) &&
+                sprite != null)
+            {
+                return sprite;
+            }
+
+            return defaultSprite;
+        }
+        
         private void SetKeyColor(int index, Color color)
         {
             if (index >= 0 && index < ComboPanel.childCount)

@@ -335,9 +335,9 @@ namespace Kaede.Scripts.GamePlay
         
         private void ShowCurrentCombo()
         {
-            if (_model.TryGetCurrentKeys(out var keys))
+            if (_model.TryGetCurrentComboSettings(out var combos))
             {
-                _view.ShowCombo(keys);
+                _view.ShowCombo(combos);
 
                 var menu = _model.MenuDatas[_model.CurrentMenuIndex];
                 if (menu?.steps != null && _model.CurrentMenuIndex < menu.steps.Count)
