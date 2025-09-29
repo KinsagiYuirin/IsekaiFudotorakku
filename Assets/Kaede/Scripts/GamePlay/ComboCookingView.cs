@@ -11,6 +11,21 @@ using UnityEngine.UI;
 
 namespace Kaede.Scripts.GamePlay
 {
+    public enum KeyState
+    {
+        Current,
+        Prepare,
+        Ideal
+    }
+    
+    [Serializable]
+    public class ButtonSprite
+    {
+        public ComboType comboType;
+        public KeyState state;
+        public Sprite sprite;
+    }
+    
     [Serializable]
     public class KeySpriteMapping
     {
@@ -31,6 +46,7 @@ namespace Kaede.Scripts.GamePlay
         
         [Title("Button Sprites")]
         [SerializeField] private Sprite defaultSprite;
+        [SerializeField] private ButtonSprite[] buttonSprites;
         [SerializeField] private Sprite currentButtonSprite;
         [SerializeField] private Sprite prepareButtonSprite;
         [SerializeField] private Sprite idealButtonSprite;
