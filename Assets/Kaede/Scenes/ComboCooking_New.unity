@@ -3411,7 +3411,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   timer:
     restingTime: 3
-    maxTimePerCombo: 5
+    maxTimePerCombo: 10
     currentTimer: 0
   <MenuDatasList>k__BackingField: []
   <TimeBetweenCombos>k__BackingField: 1
