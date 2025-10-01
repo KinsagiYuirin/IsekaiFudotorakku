@@ -87,14 +87,15 @@ namespace Kaede.Scripts.GamePlay
 
         // ----------------- Helpers (MVP: Presenter ไม่ต้องรู้อินเทอร์นัล) -----------------
 
+        // การแสดงผลแบบเก่า
         public bool TryGetCurrentKeys(out List<ComboKey> keys)
         {
             keys = null;
             var seq = GetCurrentSequence();
-            if (seq == null) return false;               // ไม่มีเมนู/สเต็ปปัจจุบัน
+            if (seq == null) return false;
 
             keys = seq.Count == 0
-                ? new List<ComboKey>()                   // มีสเต็ปแต่ไม่มีคีย์
+                ? new List<ComboKey>()
                 : seq.ConvertAll(c => c.key);
             return true;
         }

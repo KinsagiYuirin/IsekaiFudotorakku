@@ -23,7 +23,7 @@ namespace Kaede.Scripts.GamePlay
     public class ComboCookingController : MonoSingleton<ComboCookingController>
     {
         [Title("Game Settings")]
-        [SerializeField] private ComboTimerService _timer = new ComboTimerService();
+        [SerializeField] private ComboTimerService timer = new ComboTimerService();
         
         [Title("Combo Settings")]
         [field: SerializeField] public List<MenuData> MenuDatasList { get; private set; }
@@ -65,15 +65,15 @@ namespace Kaede.Scripts.GamePlay
         {
             ApplyRandomMenus(false);
             
-            _model = new ComboCookingModel(MenuDatasList, _timer.MaxTimePerCombo);
+            _model = new ComboCookingModel(MenuDatasList, timer.MaxTimePerCombo);
             _view  = GetComponent<ComboCookingView>();
             _inventoryController = GetComponent<InventoryController>();
             _model.ScoreManager.SetPendingStepScore(0);
             
-            _timer.Initialize(_view);
-            _timer.TimedOut     += HandleComboTimeout;
-            _timer.RestEntered  += HandleRestEntered;
-            _timer.RestFinished += HandleRestFinished;
+            timer.Initialize(_view);
+            timer.TimedOut     += HandleComboTimeout;
+            timer.RestEntered  += HandleRestEntered;
+            timer.RestFinished += HandleRestFinished;
             
             ShowCurrentCombo();
         }
@@ -81,7 +81,7 @@ namespace Kaede.Scripts.GamePlay
         private void Update()
         { 
             if (_model == null) return;
-            _timer.Tick(Time.deltaTime);
+            timer.Tick(Time.deltaTime);
             if (_model.GameState == CookingState.Resting) return;
 
             CheckComboButton();
@@ -117,9 +117,9 @@ namespace Kaede.Scripts.GamePlay
 
         private void OnDestroy()
         {
-            _timer.TimedOut     -= HandleComboTimeout;
-            _timer.RestEntered  -= HandleRestEntered;
-            _timer.RestFinished -= HandleRestFinished;
+            timer.TimedOut     -= HandleComboTimeout;
+            timer.RestEntered  -= HandleRestEntered;
+            timer.RestFinished -= HandleRestFinished;
         }
 
         #endregion
@@ -164,11 +164,11 @@ namespace Kaede.Scripts.GamePlay
             }
 
             var scoreManager = _model != null ? _model.ScoreManager : new ScoreManager();
-            _model = new ComboCookingModel(MenuDatasList, _timer.MaxTimePerCombo, scoreManager);
+            _model = new ComboCookingModel(MenuDatasList, timer.MaxTimePerCombo, scoreManager);
             _model.ScoreManager.SetPendingStepScore(0);
             _model.ResetCombo();
             _model.ResetStep();
-            _timer.ResetTimer();
+            timer.ResetTimer();
             _view.ResetCombo();
             ShowCurrentCombo();
 
@@ -186,7 +186,7 @@ namespace Kaede.Scripts.GamePlay
         #region Combo Logic
         private void CheckComboButton()
         {
-            if (_model != null && _model.GameState == CookingState.Resting) return;
+            if (_model is { GameState: CookingState.Resting }) return;
             if (_checking) return;
             _checking   = true;
             _inputCts ??= new CancellationTokenSource();
@@ -256,7 +256,7 @@ namespace Kaede.Scripts.GamePlay
         
         private void NextStep()
         {
-            if (_model != null && _model.GameState == CookingState.Resting) return;
+            if (_model is { GameState: CookingState.Resting }) return;
             if (!_isStepComplete) return;
 
             CancelInputLoop();
@@ -272,7 +272,7 @@ namespace Kaede.Scripts.GamePlay
                 return;
             }
 
-            _timer.AddTimeNextCombo();
+            timer.AddTimeNextCombo();
             _model.ResetCombo();
             ShowCurrentCombo();
             Debug.Log($"Step Score: {_model.ScoreManager.CurrentStepScores[^1]}");
@@ -292,21 +292,18 @@ namespace Kaede.Scripts.GamePlay
                 _model.CompleteMenu();
                 _view.CompleteCombo();
                 Debug.Log($"Grand Total Score: {_model.ScoreManager.GrandTotalScore}");
-                
-                if (TryAdvanceMenuType())
-                {
-                    _model.Resting(_timer.RestingTime);
-                    _timer.BeginRestingPhase();
-                    Debug.Log("Next Menu Type");
-                    return;
-                }
+
+                if (!TryAdvanceMenuType()) return;
+                _model.Resting(timer.RestingTime);
+                timer.BeginRestingPhase();
+                Debug.Log("Next Menu Type");
                 return;
             }
 
             _model.NextMenu();
             _model.ResetStep();
             _model.ResetCombo();
-            _timer.ResetTimer();
+            timer.ResetTimer();
             ShowCurrentCombo();
             
             var latestMenuScore = _model.ScoreManager.MenuScores[^1];
@@ -320,7 +317,7 @@ namespace Kaede.Scripts.GamePlay
 
         private void RedoStep()
         {
-            if (_model != null && _model.GameState == CookingState.Resting) return;
+            if (_model is { GameState: CookingState.Resting }) return;
             
             CancelInputLoop();
             _isStepComplete      = false;

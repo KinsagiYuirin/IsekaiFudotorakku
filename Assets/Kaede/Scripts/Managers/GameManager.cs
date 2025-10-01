@@ -5,7 +5,6 @@ namespace Kaede.Scripts.Managers
     public class GameManager : MonoBehaviour
     {
         
-        
         private void Start()
         {
        
