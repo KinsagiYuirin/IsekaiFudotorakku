@@ -104,6 +104,11 @@ namespace Kaede.Scripts.GamePlay
 
         public float DividerTimeToMultiply()
         {
+            if (Mathf.Approximately(dividerTime, 0f))
+            {
+                return 1f;
+            }
+            
             var newTime = currentTimer / dividerTime;
             return newTime;
         }

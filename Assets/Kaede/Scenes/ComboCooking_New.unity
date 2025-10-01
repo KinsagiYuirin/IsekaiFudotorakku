@@ -3522,6 +3522,7 @@ MonoBehaviour:
     restingTime: 3
     maxTimePerCombo: 10
     currentTimer: 0
+    dividerTime: 10
   <MenuDatasList>k__BackingField: []
   <TimeBetweenCombos>k__BackingField: 1
   scorePerButton: 10
@@ -3553,6 +3554,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 301cf37ba3194c94e9748457461ad3d6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  correctKeyColor: {r: 1, g: 1, b: 1, a: 0.39215687}
+  wrongKeyColor: {r: 0.3507662, g: 0, b: 0.5849056, a: 0.78431374}
+  completeComboColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
   <TimerText>k__BackingField: {fileID: 1559710614}
   <ComboPanel>k__BackingField: {fileID: 2074813530}
   <CookingImage>k__BackingField: {fileID: 0}

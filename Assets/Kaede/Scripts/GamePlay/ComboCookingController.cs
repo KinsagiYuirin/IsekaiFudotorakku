@@ -204,12 +204,15 @@ namespace Kaede.Scripts.GamePlay
         private void NextMenu()
         {
             _inputProcessor?.ResetState();
+
+            var multiplier = MathF.Round(timer.DividerTimeToMultiply(), 1);
             
             if (!_model.HasNextMenu())
             {
-                _model.CompleteMenu(timer.DividerTimeToMultiply());
+                _model.CompleteMenu(multiplier);
                 _view.CompleteCombo();
                 Debug.Log($"Grand Total Score: {_model.ScoreManager.GrandTotalScore}");
+                Debug.Log($"multiplier: {multiplier}");
 
                 if (!TryAdvanceMenuType()) return;
                 _model.Resting(timer.RestingTime);

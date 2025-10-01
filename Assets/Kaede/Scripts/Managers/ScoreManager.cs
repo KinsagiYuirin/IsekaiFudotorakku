@@ -44,7 +44,7 @@ namespace Kaede.Scripts.Managers
         
         public void FinalizeCurrentMenuScore(float multiplier)
         {
-            var menuScore = _currentStepScores.Sum();
+            var menuScore = _currentStepScores.Sum() * multiplier;
             MenuScores.Add(menuScore);
             StepScoresPerMenu.Add(new List<float>(_currentStepScores));
             _currentStepScores.Clear();
