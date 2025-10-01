@@ -240,6 +240,60 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!1 &278328122
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 278328124}
+  - component: {fileID: 278328123}
+  m_Layer: 0
+  m_Name: VFXController
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &278328123
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 278328122}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa0db059ed82f594d9cf5757705a8009, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  panLights:
+  - {fileID: 1240063569}
+  screenVFXmat: {fileID: 2100000, guid: 043438bcf4cb335498b8c33fb285f8b1, type: 2}
+  screenVFXvoronoiPower: -0.3
+  screenVFXvoronoiSpeed: 10
+  screenVFXviggnetteePower: 10
+  screenVFXvignetteIntensity: 2
+  minIntensity: 0.01
+  maxIntensity: 3
+  flickerSpeed: 0.1
+--- !u!4 &278328124
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 278328122}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0.5100001, y: 0.23999977, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &305841593
 GameObject:
   m_ObjectHideFlags: 0
@@ -2234,6 +2288,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1206623638}
   - component: {fileID: 1206623639}
+  - component: {fileID: 1206623640}
   m_Layer: 12
   m_Name: Player
   m_TagString: Untagged
@@ -2250,7 +2305,7 @@ Transform:
   m_GameObject: {fileID: 1206623637}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 1.6769581, y: -0.64, z: 0}
+  m_LocalPosition: {x: 1.73, y: -1.63, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -2311,6 +2366,28 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!95 &1206623640
+Animator:
+  serializedVersion: 7
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1206623637}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 53445c7001d8cbf44b39bc34758ef8f7, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_AnimatePhysics: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!1 &1240063567
 GameObject:
   m_ObjectHideFlags: 0
@@ -2322,7 +2399,7 @@ GameObject:
   - component: {fileID: 1240063568}
   - component: {fileID: 1240063569}
   m_Layer: 0
-  m_Name: PanLight
+  m_Name: MainPanLight
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4187,6 +4264,7 @@ SceneRoots:
   - {fileID: 1431733539}
   - {fileID: 699680503}
   - {fileID: 1835431552}
+  - {fileID: 278328124}
   - {fileID: 1049526166}
   - {fileID: 382246677}
   - {fileID: 2047785684}

@@ -7,7 +7,7 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Shader Graphs_FullScreenTut
+  m_Name: ScreenVFX
   m_Shader: {fileID: -6465566751694194690, guid: 1b2af7823ceb70a419bb4766642ca394, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
@@ -49,11 +49,12 @@ Material:
     - _Fullscreen_DstColorBlend: 10
     - _Fullscreen_SrcAlphaBlend: 1
     - _Fullscreen_SrcColorBlend: 5
-    - _VignettePower: 5
+    - _VignetteIntensity: 2
+    - _VignettePower: 10
     - _Vignetteintensity: 4
-    - _VoronoiPower: -0.24
-    - _VoronoiSpeed: 15
+    - _VoronoiPower: -0.3
+    - _VoronoiSpeed: 10
     m_Colors:
-    - _Color: {r: 0.9883374, g: 0.18630871, b: 0.0038758325, a: 1}
+    - _Color: {r: 27.532722, g: 6.7852116, b: 0, a: 1}
   m_BuildTextureStacks: []
   m_AllowLocking: 1
