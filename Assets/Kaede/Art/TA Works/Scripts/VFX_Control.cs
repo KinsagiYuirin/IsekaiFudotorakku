@@ -1,39 +1,44 @@
+
 using System;
-using Unity.VisualScripting;
+using PrimeTween;
+using Sirenix.OdinInspector;
 using UnityEngine;
 using UnityEngine.Rendering.Universal;
-using Random = UnityEngine.Random;
-
 public class VFX_Control : MonoBehaviour
 {
+    [Title("Particle/VFX")] 
+    [SerializeField] private Material screenVFXmat;
+    
+    [Title("ScreenVFX Settings")]
+    [SerializeField] private float screenVFXvoronoiPower;
+    [SerializeField] private float screenVFXvoronoiSpeed;
+    [SerializeField] private float screenVFXviggnetteePower;
+    [SerializeField] private float screenVFXvignetteIntensity;
+    
+    [Title("Light")]
+    [SerializeField] private Light2D globlaLight;
+    [SerializeField] private Light2D panLights;
+    [SerializeField] private Light2D truckLights;
+    [SerializeField] private Light2D shopLights;
+    
+    [Title("Pan Flickering Setting")]
+    [SerializeField] private float minIntensity = 0.5f;
+    [SerializeField] private float maxIntensity = 1.5f;
+    [SerializeField] private float flickerDuration = 0.25f;
+    [SerializeField] private float intensityField;
+    
+    [Title("Sprite Setting")]
+    [SerializeField] private SpriteRenderer objectSprite;
+    
+    [Title("Global Light Faild Setting")]
+    [SerializeField] private Color defaultColor;
+    [SerializeField] private Color FailedColor;
+    
+    [Title("Screen Renderer Feature")]
+    [SerializeField] private ScriptableRendererFeature ScreenRandererFeature;
 
-    [Header("Particle/VFX")] 
-    public Material screenVFXmat;
+    private Tween _flashTween;
     
-    [Header("ScreenVFX Settings")]
-    public float screenVFXvoronoiPower;
-    public float screenVFXvoronoiSpeed;
-    public float screenVFXviggnetteePower;
-    public float screenVFXvignetteIntensity;
-    
-    [Header("Light")]
-    public Light2D globlaLight;
-    public Light2D panLights;
-    public Light2D truckLights;
-    public Light2D shopLights;
-    
-    [Header("Pan Light Setting")]
-    public float minIntensity = 0.5f;
-    public float maxIntensity = 1.5f;
-    public float flickerSpeed = 0.1f;
-    
-
-    [Header("Screen Renderer Feature")]
-    public ScriptableRendererFeature ScreenRandererFeature;
-    
-    private float flickerTarget;
-    private float velocity;
-
     void Start()
     {
         WaitingCombo();
@@ -51,12 +56,31 @@ public class VFX_Control : MonoBehaviour
         screenVFXviggnetteePower = screenVFXmat.GetFloat("_VignettePower"); 
         screenVFXvignetteIntensity = screenVFXmat.GetFloat("_VignetteIntensity");
     }
-    
-    void PanLightFlicker()
+
+    public void StartPanFlickering(bool flickering)
     {
-        float sinValue = Mathf.Sin(Time.time * flickerSpeed);
-        float normalizedValue = (sinValue + 1f) / 2f;
-        panLights.intensity = Mathf.Lerp(minIntensity, maxIntensity, normalizedValue);
+        
+        if (flickering == true)
+        {
+            if (!_flashTween.isAlive)
+                _flashTween = Tween.Custom(minIntensity, maxIntensity, flickerDuration, 
+                    onValueChange: intensityField => panLights.intensity = intensityField,cycles: -1, cycleMode: CycleMode.Yoyo);
+        }
+        else
+        {
+            StopPanFlickering();
+        }
+        
+    }
+
+    public void StopPanFlickering()
+    {
+        _flashTween.Stop();
+    }
+    
+    public void SetColor(Color color)
+    { 
+        objectSprite.color = color;
     }
     
     public void OnScreenRendererFeature(bool On)
@@ -64,19 +88,39 @@ public class VFX_Control : MonoBehaviour
         ScreenRandererFeature.SetActive(On);
     }
 
-    void WaitingCombo()
+    public void ChangeBGColor(bool failed)
     {
-        PanLightFlicker();
+        if (failed == true)
+        {
+            globlaLight.color = FailedColor;
+        }
+        else
+        {
+            globlaLight.color = defaultColor;
+        }
+        
+    }
+
+    public void WaitingCombo()
+    {
+        StartPanFlickering(true);
         OnScreenRendererFeature(false);
+        ChangeBGColor(false);
         globlaLight.intensity = 1f;
         truckLights.intensity = 0.2f;
         shopLights.intensity = 0.2f;
     }
 
-    void Comboing()
+    public void Comboing()
     {
-        PanLightFlicker();
+        StartPanFlickering(true);
+        ChangeBGColor(false);
         globlaLight.intensity = 0.75f;
     }
-    
+
+    public void Failing()
+    {
+        ChangeBGColor(true);
+    }
+
 }
