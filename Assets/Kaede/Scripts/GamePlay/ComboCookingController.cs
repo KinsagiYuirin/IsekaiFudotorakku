@@ -67,21 +67,7 @@ namespace Kaede.Scripts.GamePlay
 
         private void Start()
         {
-            if (_menuManager.Initialize(false))
-            {
-                MenuDatasList = new List<MenuData>(_menuManager.CurrentMenus);
-            }
-            _model = new ComboCookingModel(MenuDatasList, timer.MaxTimePerCombo);
-            _view  = GetComponent<ComboCookingView>();
-            _inventoryController = GetComponent<InventoryController>();
-            _model.ScoreManager.SetPendingStepScore(0);
-            
-            timer.Initialize(_view);
-            timer.TimedOut     += HandleComboTimeout;
-            timer.RestEntered  += HandleRestEntered;
-            timer.RestFinished += HandleRestFinished;
-            
-            ShowCurrentCombo();
+            Initialized();
         }
 
         private void Update()
@@ -92,6 +78,38 @@ namespace Kaede.Scripts.GamePlay
 
             _inputProcessor?.Process(_model);
             
+        }
+
+        private void Initialized()
+        {
+            if (_menuManager.Initialize(false))
+            {
+                MenuDatasList = new List<MenuData>(_menuManager.CurrentMenus);
+            }
+            _model = new ComboCookingModel(MenuDatasList, timer.MaxTimePerCombo);
+            _view  = GetComponent<ComboCookingView>();
+            _inventoryController = GetComponent<InventoryController>();
+            _model.ScoreManager.SetPendingStepScore(0);
+            if (_inputHandler == null)
+            {
+                _inputHandler = FindObjectOfType<PlayerInputHandler>();
+            }
+
+            if (_view == null || _inputHandler == null)
+            {
+                Debug.LogError("ComboCookingController is missing dependencies required to initialize input processing.");
+            }
+            else
+            {
+                _inputProcessor = new ComboInputProcessor(_inputHandler, _view, scorePerButton);
+            }
+            
+            timer.Initialize(_view);
+            timer.TimedOut     += HandleComboTimeout;
+            timer.RestEntered  += HandleRestEntered;
+            timer.RestFinished += HandleRestFinished;
+            
+            ShowCurrentCombo();
         }
         #endregion
 
@@ -189,7 +207,7 @@ namespace Kaede.Scripts.GamePlay
             
             if (!_model.HasNextMenu())
             {
-                _model.CompleteMenu();
+                _model.CompleteMenu(timer.DividerTimeToMultiply());
                 _view.CompleteCombo();
                 Debug.Log($"Grand Total Score: {_model.ScoreManager.GrandTotalScore}");
 
@@ -205,7 +223,7 @@ namespace Kaede.Scripts.GamePlay
             _model.ResetCombo();
             timer.ResetTimer();
             ShowCurrentCombo();
-            
+
             var latestMenuScore = _model.ScoreManager.MenuScores[^1];
             var allScore        =  _model.ScoreManager.GrandTotalScore;
             Debug.Log($"Menu {_model.ScoreManager.MenuScores.Count} Score: {latestMenuScore} \n" +

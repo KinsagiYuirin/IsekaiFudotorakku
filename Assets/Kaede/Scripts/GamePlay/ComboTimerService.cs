@@ -11,6 +11,7 @@ namespace Kaede.Scripts.GamePlay
         [SerializeField] private float restingTime = 3f;
         [SerializeField] private float maxTimePerCombo = 5f;
         [SerializeField, DisplayAsString] private float currentTimer;
+        [SerializeField] private float dividerTime;
 
         private ComboCookingView _view;
         private bool _isResting;
@@ -99,6 +100,12 @@ namespace Kaede.Scripts.GamePlay
             _view?.SetRestingMode(false);
             RestFinished?.Invoke();
             _hasTriggered = false;
+        }
+
+        public float DividerTimeToMultiply()
+        {
+            var newTime = currentTimer / dividerTime;
+            return newTime;
         }
 
         private void UpdateTimerText()

@@ -42,7 +42,7 @@ namespace Kaede.Scripts.Managers
             _pendingStepScore = 0f;
         }
         
-        public void FinalizeCurrentMenuScore()
+        public void FinalizeCurrentMenuScore(float multiplier)
         {
             var menuScore = _currentStepScores.Sum();
             MenuScores.Add(menuScore);

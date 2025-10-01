@@ -35,6 +35,11 @@ namespace Kaede.Scripts.GamePlay
     
     public class ComboCookingView : MonoSingleton<ComboCookingView>
     {
+        [Title("Color Settings")]
+        [SerializeField] private Color correctKeyColor = Color.green;
+        [SerializeField] private Color wrongKeyColor = Color.red;
+        [SerializeField] private Color completeComboColor = Color.yellow;
+        
         [Title("UI References")]
         [field: SerializeField] public TMP_Text TimerText { get; private set; }
         [field: SerializeField] public Transform ComboPanel { get; private set; }
@@ -87,17 +92,19 @@ namespace Kaede.Scripts.GamePlay
         
         public void PressCorrectKey(int comboIndex)
         {
-            SetKeyColor(comboIndex, Color.green);
+            SetKeySprite(comboIndex, KeyState.Ideal);
+            SetKeyColor(comboIndex, correctKeyColor);
         }
 
         public void PressWrongKey(int comboIndex)
         {
-            SetKeyColor(comboIndex, Color.red);
+            SetKeySprite(comboIndex, KeyState.Ideal);
+            SetKeyColor(comboIndex, wrongKeyColor);
         }
         
         public void CompleteCombo()
         {
-            SetAllKeysColor(Color.yellow);
+            SetAllKeysColor(completeComboColor);
         }
 
         public void SetCookingImage(Sprite sprite)

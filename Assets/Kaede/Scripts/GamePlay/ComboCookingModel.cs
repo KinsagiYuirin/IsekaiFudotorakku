@@ -61,16 +61,16 @@ namespace Kaede.Scripts.GamePlay
         #region Menu Methods
         public void NextMenu()
         {
-            ScoreManager.FinalizeCurrentMenuScore();
+            ScoreManager.FinalizeCurrentMenuScore(1);
             
             CurrentMenuIndex++;
             CurrentComboIndex = 0;
             ResetStep();
         }
 
-        public void CompleteMenu()
+        public void CompleteMenu(float multiplier)
         {
-            ScoreManager.FinalizeCurrentMenuScore();
+            ScoreManager.FinalizeCurrentMenuScore(multiplier);
         }
 
         #endregion
