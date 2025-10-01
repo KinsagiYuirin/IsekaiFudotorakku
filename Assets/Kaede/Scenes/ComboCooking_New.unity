@@ -3409,7 +3409,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3dc6319e2f4f1f441a96bccc07906f2b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _timer:
+  timer:
     restingTime: 3
     maxTimePerCombo: 5
     currentTimer: 0

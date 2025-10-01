@@ -35,20 +35,16 @@ namespace Kaede.Scripts.GamePlay
         [Title("Debug")]
         [SerializeField, ReadOnly] private List<MenuData> completedMenus = new List<MenuData>();
         
-        private bool _isStepComplete = false;
-        private bool _checking;
-        
         private InventoryController _inventoryController;
         private RandomSystem _randomSystem;
         
-        private ComboCookingModel _model;
         private ComboCookingView  _view;
-        private ComboKeySetting _currentComboSetting;
-        private PlayerInputHandler _inputHandler;
-        private IDisposable _confirmSubscription;
+        private ComboCookingModel _model;
         private IDisposable _cancelSubscription;
-        private IComboHandler _currentHandler;
-        private CancellationTokenSource _inputCts;
+        private IDisposable _confirmSubscription;
+        private ComboInputProcessor _inputProcessor;
+        private ComboMenuManager    _menuManager;
+        private PlayerInputHandler  _inputHandler;
         
         #region Awake, Start, Update
         
@@ -56,15 +52,25 @@ namespace Kaede.Scripts.GamePlay
         {
             _inputHandler = FindObjectOfType<PlayerInputHandler>();
             _randomSystem = FindObjectOfType<RandomSystem>();
-            ApplyRandomMenus(true);
-            
+            _menuManager = new ComboMenuManager(() =>
+            {
+                _randomSystem ??= FindObjectOfType<RandomSystem>();
+                return _randomSystem;
+            });
+
+            if (_menuManager.Initialize(true))
+            {
+                MenuDatasList = new List<MenuData>(_menuManager.CurrentMenus);
+            }
             base.Awake();
         }
 
         private void Start()
         {
-            ApplyRandomMenus(false);
-            
+            if (_menuManager.Initialize(false))
+            {
+                MenuDatasList = new List<MenuData>(_menuManager.CurrentMenus);
+            }
             _model = new ComboCookingModel(MenuDatasList, timer.MaxTimePerCombo);
             _view  = GetComponent<ComboCookingView>();
             _inventoryController = GetComponent<InventoryController>();
@@ -84,7 +90,8 @@ namespace Kaede.Scripts.GamePlay
             timer.Tick(Time.deltaTime);
             if (_model.GameState == CookingState.Resting) return;
 
-            CheckComboButton();
+            _inputProcessor?.Process(_model);
+            
         }
         #endregion
 
@@ -107,12 +114,13 @@ namespace Kaede.Scripts.GamePlay
                 }
             });
         }
-        
+
         private void OnDisable()
         {
             _confirmSubscription?.Dispose();
             _cancelSubscription?.Dispose();
-            CancelInputLoop();
+            _inputProcessor?.ResetState();
+            
         }
 
         private void OnDestroy()
@@ -120,45 +128,20 @@ namespace Kaede.Scripts.GamePlay
             timer.TimedOut     -= HandleComboTimeout;
             timer.RestEntered  -= HandleRestEntered;
             timer.RestFinished -= HandleRestFinished;
+            _inputProcessor?.Dispose();
         }
 
         #endregion
 
         #region Menu Setup
-        private void SetMenuDatas(IEnumerable<MenuData> menus)
-        {
-            MenuDatasList = menus?.Where(menu => menu != null).ToList() ?? new List<MenuData>();
-        }
-
-        private bool ApplyRandomMenus(bool forceRegenerate, bool advanceToNextType = false)
-        {
-            if (_randomSystem == null)
-            {
-                _randomSystem = FindObjectOfType<RandomSystem>();
-            }
-
-            if (_randomSystem == null) return false;
-
-            List<MenuData> menus;
-
-            if (advanceToNextType)
-            {
-                menus = _randomSystem.MoveToNextMenuSetForCombo();
-            }
-            else
-            {
-                menus = _randomSystem.GetMenuSetForCombo(forceRegenerate);
-            }
-
-            if (menus == null || menus.Count == 0) return false;
-
-            SetMenuDatas(menus);
-            return true;
-        }
-        
         private bool TryAdvanceMenuType()
         {
-            if (!ApplyRandomMenus(false, true))
+            if (_menuManager == null)
+            {
+                return false;
+            }
+
+            if (!_menuManager.MoveToNextMenuType())
             {
                 return false;
             }
@@ -170,99 +153,20 @@ namespace Kaede.Scripts.GamePlay
             _model.ResetStep();
             timer.ResetTimer();
             _view.ResetCombo();
+            _inputProcessor?.ResetState();
             ShowCurrentCombo();
 
             _inventoryController?.ReloadMenus();
-
-            _isStepComplete = false;
-            _currentHandler = null;
-            _currentComboSetting = null;
-            CancelInputLoop();
-
             return true;
-        }
-        #endregion
-        
-        #region Combo Logic
-        private void CheckComboButton()
-        {
-            if (_model is { GameState: CookingState.Resting }) return;
-            if (_checking) return;
-            _checking   = true;
-            _inputCts ??= new CancellationTokenSource();
-
-            try
-            {
-                if (!_model.TryGetCurrentSequenceCount(out var count) || count == 0) return;
-                if (_model.CurrentComboIndex >= count) return;
-
-                if (!_model.TryGetExpectedCombo(out var expectedCombo)) return;
-
-                if (_currentHandler == null || _currentComboSetting != expectedCombo)
-                {
-                    _currentHandler      = ComboHandlerFactory.Create(expectedCombo);
-                    _currentComboSetting = expectedCombo;
-                }
-
-                var result = _currentHandler.CheckInput(_inputHandler, expectedCombo.key, _inputCts.Token);
-                if (_isStepComplete) return;
-                
-                _view.CurrentKeyPressed(_model.CurrentComboIndex);
-                
-                switch (result)
-                {
-                    case ComboInputResult.Correct:
-                        _view.PressCorrectKey(_model.CurrentComboIndex);
-                        _model.ScoreManager.AddPendingStepScore(scorePerButton);
-                        NextCombo();
-                        break;
-
-                    case ComboInputResult.Wrong:
-                        if (!_isStepComplete)
-                            _view.PressWrongKey(_model.CurrentComboIndex);
-                        NextCombo();
-                        break;
-
-                    case ComboInputResult.None:
-                    default:
-                        break;
-                }
-            }
-            finally
-            {
-                _checking = false;
-            }
         }
         #endregion
 
         #region Combo Features
-        private void NextCombo()
-        {
-            if (!_model.TryGetCurrentSequenceCount(out var count) || count == 0) return;
-            
-            if (_model.CurrentComboIndex + 1 >= count)
-            {
-                _isStepComplete       = true;
-                _currentHandler       = null;
-                _currentComboSetting  = null;
-                CancelInputLoop();
-                return;
-            }
-
-            _currentHandler      = null;
-            _currentComboSetting = null;
-            _model.NextCombo();
-        }
-        
         private void NextStep()
         {
             if (_model is { GameState: CookingState.Resting }) return;
-            if (!_isStepComplete) return;
-
-            CancelInputLoop();
-            _isStepComplete      = false;
-            _currentHandler      = null;
-            _currentComboSetting = null;
+            if (_inputProcessor == null || !_inputProcessor.IsStepComplete) return;
+            _inputProcessor?.ResetState();
             
             _model.ScoreManager.CommitPendingStepScore();
             var hasNext = _model.NextStep();
@@ -281,11 +185,7 @@ namespace Kaede.Scripts.GamePlay
         
         private void NextMenu()
         {
-            CancelInputLoop();
-            _isStepComplete      = false;
-            
-            _currentHandler      = null;
-            _currentComboSetting = null;
+            _inputProcessor?.ResetState();
             
             if (!_model.HasNextMenu())
             {
@@ -319,13 +219,9 @@ namespace Kaede.Scripts.GamePlay
         {
             if (_model is { GameState: CookingState.Resting }) return;
             
-            CancelInputLoop();
-            _isStepComplete      = false;
-            _currentHandler      = null;
-            _currentComboSetting = null;
+            _inputProcessor?.ResetStateWithCombo(_model);
             
             _model.ResetCombo();
-            ShowCurrentCombo();
             _model.ScoreManager.AddRedoCount();
             Debug.Log("Redo Step");
         }
@@ -354,14 +250,12 @@ namespace Kaede.Scripts.GamePlay
             _model.ResetCombo();
             _view.ResetCombo();
             _model.ScoreManager.ResetPendingStepScore();
+            _inputProcessor?.ResetState();
         }
 
         private void HandleRestEntered()
         {
-            CancelInputLoop();
-            _checking = false;
-            _currentHandler      = null;
-            _currentComboSetting = null;
+            _inputProcessor?.ResetState();
         }
         
         private void HandleRestFinished()
@@ -369,17 +263,7 @@ namespace Kaede.Scripts.GamePlay
             _inventoryController?.SetVisible(true);
             _model.ResetCombo();
             _view.ResetCombo();
-            CancelInputLoop();
-            _currentHandler      = null;
-            _currentComboSetting = null;
             ShowCurrentCombo();
-        }
-        
-        private void CancelInputLoop()
-        {
-            _inputCts?.Cancel();
-            _inputCts?.Dispose();
-            _inputCts = new CancellationTokenSource();
         }
         #endregion
     }
