@@ -1,5 +1,6 @@
 using Kaede.Scripts.GamePlay;
 using Kaede.Scripts.Item;
+using Kaede.Scripts.Utils;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -28,14 +29,9 @@ namespace Kaede.Scripts.Animation
             }
         }
 
-        public void SetState(KeyState state, Sprite sprite)
+        public void SetState(KeyState state)
         {
             _ = state;
-
-            if (iconImage != null)
-            {
-                iconImage.sprite = sprite;
-            }
         }
 
         public void SetColor(Color color)
@@ -43,6 +39,14 @@ namespace Kaede.Scripts.Animation
             if (iconImage != null)
             {
                 iconImage.color = color;
+            }
+        }
+        
+        public void SetSprite(Sprite sprite)
+        {
+            if (!iconImage)
+            {
+                iconImage.sprite = sprite;
             }
         }
     }

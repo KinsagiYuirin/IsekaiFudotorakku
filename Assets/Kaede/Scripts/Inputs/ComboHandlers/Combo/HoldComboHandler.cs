@@ -1,4 +1,5 @@
 using System.Threading;
+using Kaede.Scripts.Animation;
 using Kaede.Scripts.GamePlay;
 using Kaede.Scripts.Item;
 using Kaede.Scripts.Utils;
@@ -20,11 +21,12 @@ namespace Kaede.Scripts.Inputs.ComboHandlers.Combo
             _requiredTimeRange = new Vector2(requiredTime - 0.5f, requiredTime + 0.5f);
         }
         
-        public ComboInputResult CheckInput(PlayerInputHandler input, ComboKey expectedKey, CancellationToken ct)
+        public ComboInputResult CheckInput(PlayerInputHandler input, ComboKey expectedKey, CancellationToken ct, IComboButtonVisual visual)
         {
             if (input.IsKeyHeld(expectedKey))
             {
                 _elapsed += Time.deltaTime;
+                visual.SetState(KeyState.Active);
                 if (_elapsed > _requiredTimeRange.y)
                 {
                     _elapsed = 0f;
@@ -35,6 +37,7 @@ namespace Kaede.Scripts.Inputs.ComboHandlers.Combo
             {
                 var t = _elapsed;
                 _elapsed = 0f;
+                visual.SetState(KeyState.Ideal);
 
                 if (t >= _requiredTimeRange.x && t <= _requiredTimeRange.y)
                 {
@@ -46,10 +49,6 @@ namespace Kaede.Scripts.Inputs.ComboHandlers.Combo
             if (!input.AnyOtherKeyDown(expectedKey)) return ComboInputResult.None;
             _elapsed = 0f;
             return ComboInputResult.Wrong;
-        }
-        
-        public void ButtonAnimation(ButtonAnimation buttonAnimation)
-        {
         }
     }
 }

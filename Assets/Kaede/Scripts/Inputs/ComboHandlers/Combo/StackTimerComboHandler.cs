@@ -1,4 +1,5 @@
 using System.Threading;
+using Kaede.Scripts.Animation;
 using Kaede.Scripts.GamePlay;
 using Kaede.Scripts.Item;
 using MadDuck.Scripts.Inputs;
@@ -19,7 +20,7 @@ namespace Kaede.Scripts.Inputs.ComboHandlers.Combo
             _requiredPressCount = requiredPressCount;
         }
 
-        public ComboInputResult CheckInput(PlayerInputHandler input, ComboKey expectedKey, CancellationToken ct)
+        public ComboInputResult CheckInput(PlayerInputHandler input, ComboKey expectedKey, CancellationToken ct, IComboButtonVisual visual)
         {
             if (input.IsKeyDown(expectedKey))
             {

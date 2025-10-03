@@ -48,7 +48,7 @@ namespace Kaede.Scripts.GamePlay
                     _currentComboSetting = expectedCombo;
                 }
 
-                var result = _currentHandler.CheckInput(_inputHandler, expectedCombo.key, _inputCts.Token);
+                var result = _currentHandler.CheckInput(_inputHandler, expectedCombo.key, _inputCts.Token, _view.ButtonVisuals[model.CurrentComboIndex]);
                 if (IsStepComplete) return;
 
                 _view.CurrentKeyPressed(model.CurrentComboIndex);
@@ -72,7 +72,6 @@ namespace Kaede.Scripts.GamePlay
                         }
                         NextCombo(model);
                         break;
-
                     case ComboInputResult.None:
                     default:
                         break;

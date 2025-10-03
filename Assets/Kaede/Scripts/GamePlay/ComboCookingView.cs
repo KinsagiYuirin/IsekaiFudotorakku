@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using Kaede.Scripts.Animation;
 using Kaede.Scripts.Item;
+using MadDuck.Scripts.Inputs;
 using Sirenix.OdinInspector;
 using TMPro;
 using UnityCommunity.UnitySingleton;
@@ -12,6 +13,7 @@ namespace Kaede.Scripts.GamePlay
 {
     public enum KeyState
     {
+        Active,
         Current,
         Prepare,
         Ideal
@@ -62,6 +64,7 @@ namespace Kaede.Scripts.GamePlay
         private Dictionary<(ComboType type, KeyState state), Sprite> _buttonSpriteLookup;
         private readonly List<ComboType> _comboTypes = new();
         private readonly List<IComboButtonVisual> _buttonVisuals = new();
+        public List<IComboButtonVisual> ButtonVisuals => _buttonVisuals ;
         
         #region Unity Lifecycle
         protected override void Awake()
@@ -210,7 +213,6 @@ namespace Kaede.Scripts.GamePlay
                             var holdIcon = Instantiate(holdIconPrefab, ComboPanel);
                             _comboTypes.Add(comboSetting.type);
                             SetupKeyIcon(holdIcon, comboSetting);
-                            SetUpAnimationButton(holdIcon, comboSetting.type);
                         }
                         break;
                     case {type:ComboType.Stack or ComboType.StackTimer}:
@@ -235,20 +237,11 @@ namespace Kaede.Scripts.GamePlay
             var displayKey = Gamepad.current != null ? ConvertToGamepadKey(key) : key.ToString();
 
             visual.Initialize(comboSetting, displayKey);
-            visual.SetState(KeyState.Ideal, initialSprite);
+            visual.SetState(KeyState.Ideal);
             visual.SetColor(Color.white);
+            visual.SetSprite(initialSprite);
 
             _buttonVisuals.Add(visual);
-        }
-        
-        private void SetUpAnimationButton(GameObject icon, ComboType comboType)
-        {
-            var slideBar = icon.GetComponent<ButtonAnimation>();
-            if (slideBar != null)
-            {
-                slideBar.SetBlockType(comboType);
-                Debug.Log("Getting ButtonAnimation Component");
-            }
         }
         
         private string ConvertToGamepadKey(ComboKey key)
@@ -278,7 +271,8 @@ namespace Kaede.Scripts.GamePlay
 
             var comboType = GetComboType(index);
             var sprite = GetButtonSprite(comboType, state);
-            _buttonVisuals[index]?.SetState(state, sprite);
+            _buttonVisuals[index]?.SetState(state);
+            _buttonVisuals[index]?.SetSprite(sprite);
         }
 
         private ComboType GetComboType(int index)

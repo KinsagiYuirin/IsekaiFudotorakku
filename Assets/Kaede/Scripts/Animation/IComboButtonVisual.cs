@@ -7,7 +7,8 @@ namespace Kaede.Scripts.Animation
     public interface IComboButtonVisual
     {
         void Initialize(ComboKeySetting comboSetting, string displayKey);
-        void SetState(KeyState state, Sprite sprite);
+        void SetState(KeyState state);
         void SetColor(Color color);
+        void SetSprite(Sprite sprite);
     }
 }
