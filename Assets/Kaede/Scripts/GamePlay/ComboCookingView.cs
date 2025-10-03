@@ -1,13 +1,12 @@
 using System;
 using System.Collections.Generic;
+using Kaede.Scripts.Animation;
 using Kaede.Scripts.Item;
 using Sirenix.OdinInspector;
 using TMPro;
-using Unity.VisualScripting;
 using UnityCommunity.UnitySingleton;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using UnityEngine.UI;
 
 namespace Kaede.Scripts.GamePlay
 {
@@ -59,12 +58,10 @@ namespace Kaede.Scripts.GamePlay
         [Title("Key Mappings")]
         [field: SerializeField] public List<KeySpriteMapping> KeySprite { get; private set; }
         
-        [Title("Debug")]
-        [field: SerializeField, DisplayAsString] public int CurrentMenuIndex { get; private set; }
-        
         private Dictionary<ComboKey, Sprite> _spriteLookup;
         private Dictionary<(ComboType type, KeyState state), Sprite> _buttonSpriteLookup;
         private readonly List<ComboType> _comboTypes = new();
+        private readonly List<IComboButtonVisual> _buttonVisuals = new();
         
         #region Unity Lifecycle
         protected override void Awake()
@@ -73,12 +70,6 @@ namespace Kaede.Scripts.GamePlay
             InitializeButtonSpriteLookup();
             base.Awake();
         }
-
-        private void Start()
-        {
-            
-        }
-
         #endregion
 
         #region Public Methods
@@ -139,15 +130,13 @@ namespace Kaede.Scripts.GamePlay
         public void ClearCombo()
         {
             ClearComboPanel();
-            CurrentMenuIndex = 0;
         }
         
         public void ResetCombo()
         {
-            CurrentMenuIndex = 0;
             SetAllKeysColor(Color.white);
         }
-
+        
         public void SetRestingMode(bool isResting)
         {
             SetUIElementActive(ComboPanel?.gameObject, !isResting);
@@ -187,7 +176,6 @@ namespace Kaede.Scripts.GamePlay
             }
         }
 
-
         private void ClearComboPanel()
         {
             if (ComboPanel == null) return;
@@ -197,6 +185,7 @@ namespace Kaede.Scripts.GamePlay
                 Destroy(child.gameObject);
             }
             _comboTypes.Clear();
+            _buttonVisuals.Clear();
         }
 
         private void CreateKeyIcons(List<ComboKeySetting> comboSettings)
@@ -221,6 +210,7 @@ namespace Kaede.Scripts.GamePlay
                             var holdIcon = Instantiate(holdIconPrefab, ComboPanel);
                             _comboTypes.Add(comboSetting.type);
                             SetupKeyIcon(holdIcon, comboSetting);
+                            SetUpAnimationButton(holdIcon, comboSetting.type);
                         }
                         break;
                     case {type:ComboType.Stack or ComboType.StackTimer}:
@@ -234,25 +224,33 @@ namespace Kaede.Scripts.GamePlay
                 }
             }
         }
-
+        
         private void SetupKeyIcon(GameObject icon, ComboKeySetting comboSetting)
         {
-            var img = icon.GetComponent<Image>();
-            var text = icon.GetComponentInChildren<TMP_Text>();
+            var visual = icon.GetComponent<IComboButtonVisual>() ?? icon.AddComponent<DefaultComboButtonVisual>();
+            
+            var comboType = comboSetting?.type ?? ComboType.Single;
+            var key = comboSetting?.key ?? ComboKey.None;
+            var initialSprite = GetButtonSprite(comboType, KeyState.Ideal);
+            var displayKey = Gamepad.current != null ? ConvertToGamepadKey(key) : key.ToString();
 
-            if (img != null)
-            {
-                var comboType = comboSetting?.type ?? ComboType.Single;
-                img.sprite = GetButtonSprite(comboType, KeyState.Ideal);
-            }
+            visual.Initialize(comboSetting, displayKey);
+            visual.SetState(KeyState.Ideal, initialSprite);
+            visual.SetColor(Color.white);
 
-            if (text != null)
+            _buttonVisuals.Add(visual);
+        }
+        
+        private void SetUpAnimationButton(GameObject icon, ComboType comboType)
+        {
+            var slideBar = icon.GetComponent<ButtonAnimation>();
+            if (slideBar != null)
             {
-                var key = comboSetting?.key ?? ComboKey.None;
-                text.text = Gamepad.current != null ? ConvertToGamepadKey(key) : key.ToString();
+                slideBar.SetBlockType(comboType);
+                Debug.Log("Getting ButtonAnimation Component");
             }
         }
-
+        
         private string ConvertToGamepadKey(ComboKey key)
         {
             return key switch
@@ -276,15 +274,11 @@ namespace Kaede.Scripts.GamePlay
 
         private void SetKeySprite(int index, KeyState state)
         {
-            if (index >= 0 && index < ComboPanel.childCount)
-            {
-                var icon = ComboPanel.GetChild(index).GetComponent<Image>();
-                if (icon != null)
-                {
-                    var comboType = GetComboType(index);
-                    icon.sprite = GetButtonSprite(comboType, state);
-                }
-            }
+            if (index < 0 || index >= _buttonVisuals.Count) return;
+
+            var comboType = GetComboType(index);
+            var sprite = GetButtonSprite(comboType, state);
+            _buttonVisuals[index]?.SetState(state, sprite);
         }
 
         private ComboType GetComboType(int index)
@@ -311,21 +305,16 @@ namespace Kaede.Scripts.GamePlay
         
         private void SetKeyColor(int index, Color color)
         {
-            if (index >= 0 && index < ComboPanel.childCount)
-            {
-                var icon = ComboPanel.GetChild(index).GetComponent<Image>();
-                if (icon != null)
-                {
-                    icon.color = color;
-                }
-            }
+            if (index < 0 || index >= _buttonVisuals.Count) return;
+
+            _buttonVisuals[index]?.SetColor(color);
         }
 
         private void SetAllKeysColor(Color color)
         {
-            for (int i = 0; i < ComboPanel.childCount; i++)
+            foreach (var visual in _buttonVisuals)
             {
-                SetKeyColor(i, color);
+                visual?.SetColor(color);
             }
         }
 

@@ -1,8 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading;
-using Kaede.Scripts.Inputs.ComboHandlers;
 using Kaede.Scripts.Item;
 using Kaede.Scripts.Managers;
 using MadDuck.Scripts.Inputs;

@@ -1,6 +1,7 @@
 using System;
 using System.Threading;
 using Kaede.Scripts.Inputs.ComboHandlers;
+using Kaede.Scripts.Inputs.ComboHandlers.Combo;
 using Kaede.Scripts.Item;
 using MadDuck.Scripts.Inputs;
 

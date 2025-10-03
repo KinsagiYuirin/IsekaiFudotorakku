@@ -1,4 +1,6 @@
+using System;
 using System.Collections;
+using Kaede.Scripts.Inputs.ComboHandlers.Combo;
 using Sirenix.OdinInspector;
 using UnityEngine;
 using UnityEngine.UI;
@@ -11,7 +13,7 @@ namespace Kaede.Scripts.Utils
         [SerializeField] private Image fillImage;
         [SerializeField] private float currentIndex;
         public float CurrentIndex{get => currentIndex; set => currentIndex = value;}
-        [SerializeField] private float updateSpeed = 0.5f;
+        [SerializeField] private float updateSpeed = 1f;
         [SerializeField] private float currentIndexPercent = 1f;
 
         [Header("Details")] 
@@ -19,10 +21,14 @@ namespace Kaede.Scripts.Utils
         [SerializeField] private bool needSmoothFill = true;
         
         private Coroutine _slideCoroutine;
-        
-        /// <summary>
-        /// เรียกเมื่อ HP เปลี่ยน เพื่ออัปเดตหลอดเลือดแบบ Smooth
-        /// </summary>
+
+        private void OnDisable()
+        {
+            if (_slideCoroutine != null)
+                StopCoroutine(_slideCoroutine);
+            _slideCoroutine = null;
+        }
+
         public void UpdateSlideUI(float index, float maxIndex)
         {
             var targetPercent = Mathf.Clamp01(index / maxIndex);
@@ -32,10 +38,7 @@ namespace Kaede.Scripts.Utils
         
             _slideCoroutine = StartCoroutine(SmoothFill(targetPercent));
         }
-
-        /// <summary>
-        /// ค่อยๆ เปลี่ยนค่าหลอดเลือดแบบลื่น
-        /// </summary>
+        
         private IEnumerator SmoothFill(float targetPercent)
         {
             var initialPercent = currentIndexPercent;
@@ -53,5 +56,21 @@ namespace Kaede.Scripts.Utils
             fillImage.fillAmount = targetPercent;
             _slideCoroutine = null;
         }
+        
+        public void ResetFill()
+        {
+            if (_slideCoroutine != null)
+            {
+                StopCoroutine(_slideCoroutine);
+                _slideCoroutine = null;
+            }
+
+            currentIndexPercent = 0f;
+            if (fillImage != null)
+            {
+                fillImage.fillAmount = 0f;
+            }
+        }
+
     }
 }

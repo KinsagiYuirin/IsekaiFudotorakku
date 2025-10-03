@@ -86,7 +86,9 @@ GameObject:
   - component: {fileID: 8575168638338492503}
   - component: {fileID: 7656420364010079626}
   - component: {fileID: 1183932755247005723}
+  - component: {fileID: 4364637787677945597}
   - component: {fileID: 4676379657033386579}
+  - component: {fileID: -2402562671009786746}
   m_Layer: 5
   m_Name: Hold Button
   m_TagString: Untagged
@@ -144,7 +146,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   m_Sprite: {fileID: -8369992958421603183, guid: d5b772d1e8f7460459578b0da05a71a8, type: 3}
-  m_Type: 1
+  m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
   m_FillMethod: 4
@@ -153,6 +155,19 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!114 &4364637787677945597
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1147449572475279101}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0638c9a1a63341f459fc075d019b5d3d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  slideBar: {fileID: 4676379657033386579}
 --- !u!114 &4676379657033386579
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -168,9 +183,23 @@ MonoBehaviour:
   fillImage: {fileID: 8125303326650330900}
   currentIndex: 0
   updateSpeed: 0.5
-  currentIndexPercent: 1
+  currentIndexPercent: 0
   firstUpdateSpeed: 0
   needSmoothFill: 1
+--- !u!114 &-2402562671009786746
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1147449572475279101}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e7a37076f584b9c479f761a6153da907, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  iconImage: {fileID: 1183932755247005723}
+  labelText: {fileID: 3758292827327587621}
 --- !u!1 &1215787788728107017
 GameObject:
   m_ObjectHideFlags: 0
