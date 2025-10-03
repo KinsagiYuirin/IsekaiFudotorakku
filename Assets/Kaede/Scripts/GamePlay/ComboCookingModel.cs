@@ -117,7 +117,7 @@ namespace Kaede.Scripts.GamePlay
         {
             count = 0;
             var seq = GetCurrentSequence();
-            if (seq == null) return false;               // ไม่มีเมนู/สเต็ปปัจจุบัน
+            if (seq == null) return false;
             count = seq.Count;
             return true;
         }

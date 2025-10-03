@@ -261,7 +261,6 @@ namespace Kaede.Scripts.GamePlay
                     _view.SetCookingImage(sprite);
                 }
             }
-            
         }
         #endregion
 
@@ -270,12 +269,16 @@ namespace Kaede.Scripts.GamePlay
         {
             _model.ResetCombo();
             _view.ResetCombo();
+            NextMenu();
             _model.ScoreManager.ResetPendingStepScore();
             _inputProcessor?.ResetState();
         }
 
         private void HandleRestEntered()
         {
+            _inventoryController?.SetVisible(false);
+            _model.ResetCombo();
+            _view.ResetCombo();
             _inputProcessor?.ResetState();
         }
         

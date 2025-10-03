@@ -321,8 +321,11 @@ namespace Kaede.Scripts.Managers
                 Debug.LogWarning($"{nameof(InventoryController)}: Inventory canvas group is not assigned.");
                 return;
             }
-            
-            inventoryCanvasGroup.alpha = isVisible ? 1f : 0f;
+
+            if (isVisible)
+                inventoryCanvasGroup.alpha = 1f;
+            else
+                inventoryCanvasGroup.alpha = 0f;
             inventoryCanvasGroup.interactable = isVisible;
             inventoryCanvasGroup.blocksRaycasts = isVisible;
         }

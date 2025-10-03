@@ -2,6 +2,7 @@ using System.Threading;
 using Cysharp.Threading.Tasks;
 using Kaede.Scripts.GamePlay;
 using Kaede.Scripts.Item;
+using Kaede.Scripts.Utils;
 using MadDuck.Scripts.Inputs;
 using UnityEngine;
 
@@ -10,13 +11,12 @@ namespace Kaede.Scripts.Inputs.ComboHandlers.Combo
     public class HoldComboHandler : IComboHandler
     {
         private float _elapsed;
-        private readonly float _requiredTime;
+        private readonly float _maxAmount;
         private readonly Vector2 _requiredTimeRange;
-
         
         public HoldComboHandler(float requiredTime)
         {
-            _requiredTime = requiredTime;
+            _maxAmount = requiredTime;
             _requiredTimeRange = new Vector2(requiredTime - 0.5f, requiredTime + 0.5f);
         }
 

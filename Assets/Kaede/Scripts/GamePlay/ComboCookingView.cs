@@ -45,9 +45,12 @@ namespace Kaede.Scripts.GamePlay
         [field: SerializeField] public Transform ComboPanel { get; private set; }
         [field: SerializeField] public Sprite CookingImage { get; private set; }
         [field: SerializeField] public GameObject CookingImageObject { get; private set; }
+        [field: SerializeField] public TMP_Text ComboText { get; private set; }
         
         [Title("Prefabs")]
-        [SerializeField] private GameObject keyIconPrefab;
+        [SerializeField] private GameObject normalIconPrefab;
+        [SerializeField] private GameObject holdIconPrefab;
+        [SerializeField] private GameObject stackIconPrefab;
         
         [Title("Button Sprites")]
         [SerializeField] private Sprite defaultSprite;
@@ -70,9 +73,29 @@ namespace Kaede.Scripts.GamePlay
             InitializeButtonSpriteLookup();
             base.Awake();
         }
+
+        private void Start()
+        {
+            
+        }
+
         #endregion
 
         #region Public Methods
+        public void UpdateComboText(int current)
+        {
+            if (ComboText == null) return;
+            if (current == 0)
+            {
+                ComboText.alpha = 0;
+            }
+            else
+            {
+                ComboText.alpha = 1;
+                ComboText.text = current.ToString();
+            }
+        }
+        
         public void ShowCombo(List<ComboKeySetting> comboSettings)
         {
             ClearComboPanel();
@@ -178,13 +201,37 @@ namespace Kaede.Scripts.GamePlay
 
         private void CreateKeyIcons(List<ComboKeySetting> comboSettings)
         {
-            if (comboSettings == null || keyIconPrefab == null) return;
+            if (comboSettings == null) return;
             
             foreach (var comboSetting in comboSettings)
             {
-                var icon = Instantiate(keyIconPrefab, ComboPanel);
-                _comboTypes.Add(comboSetting?.type ?? ComboType.Single);
-                SetupKeyIcon(icon, comboSetting);
+                switch (comboSetting)
+                {
+                    case {type: ComboType.Single}:
+                        if (normalIconPrefab != null)
+                        {
+                            var singleIcon = Instantiate(normalIconPrefab, ComboPanel);
+                            _comboTypes.Add(comboSetting.type);
+                            SetupKeyIcon(singleIcon, comboSetting);
+                        }
+                        break;
+                    case {type: ComboType.Hold}:
+                        if (holdIconPrefab != null)
+                        {
+                            var holdIcon = Instantiate(holdIconPrefab, ComboPanel);
+                            _comboTypes.Add(comboSetting.type);
+                            SetupKeyIcon(holdIcon, comboSetting);
+                        }
+                        break;
+                    case {type:ComboType.Stack or ComboType.StackTimer}:
+                        if (stackIconPrefab != null)
+                        {
+                            var stackIcon = Instantiate(stackIconPrefab, ComboPanel);
+                            _comboTypes.Add(comboSetting.type);
+                            SetupKeyIcon(stackIcon, comboSetting);
+                        }
+                        break;
+                }
             }
         }
 

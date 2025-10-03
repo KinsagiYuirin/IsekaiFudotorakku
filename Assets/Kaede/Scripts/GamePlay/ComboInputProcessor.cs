@@ -57,13 +57,17 @@ namespace Kaede.Scripts.GamePlay
                     case ComboInputResult.Correct:
                         _view.PressCorrectKey(model.CurrentComboIndex);
                         model.ScoreManager.AddPendingStepScore(_scorePerButton);
+                        model.ScoreManager.AddCombo();
                         NextCombo(model);
+                        _view.UpdateComboText(model.ScoreManager.ComboCount);
                         break;
 
                     case ComboInputResult.Wrong:
                         if (!IsStepComplete)
                         {
                             _view.PressWrongKey(model.CurrentComboIndex);
+                            model.ScoreManager.ResetCombo();
+                            _view.UpdateComboText(model.ScoreManager.ComboCount);
                         }
                         NextCombo(model);
                         break;
