@@ -13,12 +13,13 @@ namespace Kaede.Scripts.Inputs.ComboHandlers.Combo
         private float _elapsed;
         private readonly float _maxAmount;
         private readonly Vector2 _requiredTimeRange;
+        private bool _isHolding;
         public float Progress => _maxAmount <= 0f ? 0f : Mathf.Clamp01(_elapsed / _maxAmount);
 
         public HoldComboHandler(float requiredTime)
         {
             _maxAmount = requiredTime;
-            _requiredTimeRange = new Vector2(requiredTime - 0.5f, requiredTime + 0.5f);
+            _requiredTimeRange = new Vector2(requiredTime - 0.5f, requiredTime + 0.7f);
         }
         
         public ComboInputResult CheckInput(PlayerInputHandler input, ComboKey expectedKey, CancellationToken ct, IComboButtonVisual visual)
@@ -26,12 +27,12 @@ namespace Kaede.Scripts.Inputs.ComboHandlers.Combo
             if (input.IsKeyHeld(expectedKey))
             {
                 _elapsed += Time.deltaTime;
-                visual.SetState(KeyState.Active, null, _elapsed);
                 if (_elapsed > _requiredTimeRange.y)
                 {
                     _elapsed = 0f;
                     return ComboInputResult.Wrong;
                 }
+                visual.SetState(KeyState.Active, null, _elapsed);
             }
             if (input.IsKeyUp(expectedKey))
             {

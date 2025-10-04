@@ -70,7 +70,7 @@ MonoBehaviour:
   m_PreserveAspect: 0
   m_FillCenter: 1
   m_FillMethod: 0
-  m_FillAmount: 0
+  m_FillAmount: 1
   m_FillClockwise: 1
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
@@ -168,9 +168,9 @@ MonoBehaviour:
   iconImage: {fileID: 1183932755247005723}
   labelText: {fileID: 3758292827327587621}
   fillImage: {fileID: 8125303326650330900}
-  updateSpeed: 0.1
+  updateSpeed: 0.5
   currentIndexPercent: 1
-  needSmoothFill: 1
+  needSmoothFill: 0
   _holdDuration: 1
 --- !u!1 &1215787788728107017
 GameObject:

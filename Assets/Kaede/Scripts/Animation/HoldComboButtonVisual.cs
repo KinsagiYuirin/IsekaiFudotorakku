@@ -105,23 +105,23 @@ namespace Kaede.Scripts.Animation
             if (!_isHolding)
             {
                 _isHolding = true;
-                ApplyFill(0f, true);
+                ApplyFill(0f);
             }
 
-            var targetPercent = _holdDuration <= 0f
-                ? 1f
+            var targetPercent = _holdDuration <= 0f 
+                ? 1f 
                 : Mathf.Clamp01(elapsedTime / _holdDuration);
             ApplyFill(targetPercent);
         }
 
-        private void ApplyFill(float targetPercent, bool immediate = false)
+        private void ApplyFill(float targetPercent)
         {
             targetPercent = Mathf.Clamp01(targetPercent);
 
-            if (!immediate && needSmoothFill && updateSpeed > Mathf.Epsilon)
+            if (needSmoothFill && updateSpeed > Mathf.Epsilon)
             {
-                var step = Time.deltaTime / updateSpeed;
-                currentIndexPercent = Mathf.MoveTowards(currentIndexPercent, targetPercent, step);
+                var t = 1f - Mathf.Exp(-updateSpeed * Time.deltaTime);
+                currentIndexPercent = Mathf.Lerp(currentIndexPercent, targetPercent, t);
             }
             else
             {
@@ -138,7 +138,7 @@ namespace Kaede.Scripts.Animation
         {
             _isHolding = false;
             currentIndexPercent = 0f;
-            ApplyFill(0f, true);
+            ApplyFill(0f);
         }
     }
 }
