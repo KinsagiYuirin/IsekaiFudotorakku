@@ -20,10 +20,10 @@ MonoBehaviour:
     type: 2
     doubleTapDelay: 0.3
     pressCount: 2
-    holdTime: 1
+    holdTime: 8
     stackCount: 3
   - key: 2
-    type: 0
+    type: 2
     doubleTapDelay: 0.3
     pressCount: 2
     holdTime: 1

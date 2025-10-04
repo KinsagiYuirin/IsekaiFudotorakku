@@ -85,8 +85,10 @@ GameObject:
   m_Component:
   - component: {fileID: 8575168638338492503}
   - component: {fileID: 7656420364010079626}
+  - component: {fileID: 251972248414950566}
   - component: {fileID: 1183932755247005723}
   - component: {fileID: 7274957628740517606}
+  - component: {fileID: -2631633700790150971}
   m_Layer: 5
   m_Name: Hold Button
   m_TagString: Untagged
@@ -123,6 +125,26 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1147449572475279101}
   m_CullTransparentMesh: 1
+--- !u!114 &251972248414950566
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1147449572475279101}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 306cc8c2b49d7114eaa3623786fc2126, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_IgnoreLayout: 0
+  m_MinWidth: -1
+  m_MinHeight: -1
+  m_PreferredWidth: 100
+  m_PreferredHeight: -1
+  m_FlexibleWidth: -1
+  m_FlexibleHeight: -1
+  m_LayoutPriority: 1
 --- !u!114 &1183932755247005723
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -170,8 +192,24 @@ MonoBehaviour:
   fillImage: {fileID: 8125303326650330900}
   updateSpeed: 0.5
   currentIndexPercent: 1
+  baseWidth: 100
+  pixelsPerSecond: 50
+  sizeRange: {x: 80, y: 400}
+  layoutElement: {fileID: 251972248414950566}
   needSmoothFill: 0
   _holdDuration: 1
+--- !u!225 &-2631633700790150971
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1147449572475279101}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
 --- !u!1 &1215787788728107017
 GameObject:
   m_ObjectHideFlags: 0
