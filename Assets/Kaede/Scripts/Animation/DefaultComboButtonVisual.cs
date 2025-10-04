@@ -29,7 +29,7 @@ namespace Kaede.Scripts.Animation
             }
         }
 
-        public void SetState(KeyState state)
+        public void SetState(KeyState state, int? index, float? indexFloat)
         {
             _ = state;
         }

@@ -26,7 +26,7 @@ namespace Kaede.Scripts.Inputs.ComboHandlers.Combo
             if (input.IsKeyHeld(expectedKey))
             {
                 _elapsed += Time.deltaTime;
-                visual.SetState(KeyState.Active);
+                visual.SetState(KeyState.Active, null, _elapsed);
                 if (_elapsed > _requiredTimeRange.y)
                 {
                     _elapsed = 0f;
@@ -37,12 +37,12 @@ namespace Kaede.Scripts.Inputs.ComboHandlers.Combo
             {
                 var t = _elapsed;
                 _elapsed = 0f;
-                visual.SetState(KeyState.Ideal);
 
                 if (t >= _requiredTimeRange.x && t <= _requiredTimeRange.y)
                 {
                     return ComboInputResult.Correct;
                 }
+                //visual.SetState(KeyState.Ideal);
                 return ComboInputResult.Wrong;
             }
 

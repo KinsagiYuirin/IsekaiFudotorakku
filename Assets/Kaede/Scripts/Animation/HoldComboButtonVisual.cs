@@ -23,17 +23,16 @@ namespace Kaede.Scripts.Animation
         [SerializeField] private float updateSpeed = 1f;
         [SerializeField] private float currentIndexPercent = 1f;
         [Header("Details")]
-        [SerializeField] private float firstUpdateSpeed;
         [SerializeField] private bool needSmoothFill = true;
         private CancellationTokenSource _slideCts;
 
-        private float _currentProgress;
-        private float _holdDuration = 1f;
+        [SerializeField, DisplayAsString] private float _holdDuration;
         private Coroutine _fillRoutine;
 
         private void Awake()
         {
             iconImage ??= GetComponent<Image>();
+            fillImage ??= GetComponentInChildren<Image>();
             labelText ??= GetComponentInChildren<TMP_Text>();
 
             ResetProgress();
@@ -58,7 +57,7 @@ namespace Kaede.Scripts.Animation
             ResetProgress();
         }
 
-        public void SetState(KeyState state)
+        public void SetState(KeyState state, int? index, float? indexFloat)
         {
             switch (state)
             {
@@ -66,6 +65,7 @@ namespace Kaede.Scripts.Animation
                     break;
                 case KeyState.Active:
                     StartHoldAnimation();
+                    Debug.Log("Start Hold Animation");
                     break;
                 case KeyState.Ideal:
                     StopHoldAnimation();
@@ -79,22 +79,22 @@ namespace Kaede.Scripts.Animation
 
         public void SetColor(Color color)
         {
-            if (!iconImage)
+            if (iconImage != null)
             {
                 iconImage.color = color;
             }
 
-            if (!fillImage)
+            /*if (fillImage != null)
             {
                 var progressColor = color;
                 progressColor.a = Mathf.Clamp01(color.a * 0.6f);
                 fillImage.color = progressColor;
-            }
+            }*/
         }
 
         public void SetSprite(Sprite sprite)
         {
-            if (!iconImage)
+            if (iconImage != null)
             {
                 iconImage.sprite = sprite;
             }
@@ -109,25 +109,49 @@ namespace Kaede.Scripts.Animation
         {
             StopHoldAnimation();
             _slideCts = new CancellationTokenSource();
-            await SmoothFillAsync(_currentProgress, _holdDuration, _slideCts.Token);
-        }
+            var token = _slideCts.Token;
 
-        private async UniTask SmoothFillAsync(float index, float maxIndex, CancellationToken token)
-        {
-            var targetPercent = Mathf.Clamp01(index / maxIndex);
-            var initialPercent = currentIndexPercent;
-            var timer = 0f;
-            while (timer < updateSpeed)
+            var elapsed = 0f;
+
+            while (elapsed < _holdDuration)
             {
-                timer += Time.deltaTime;
-                currentIndexPercent = Mathf.Lerp(initialPercent, targetPercent, timer / updateSpeed);
-                if (fillImage != null)
-                    fillImage.fillAmount = currentIndexPercent;
+                token.ThrowIfCancellationRequested();
+
+                elapsed = Mathf.Min(elapsed + Time.deltaTime, _holdDuration);
+                await SmoothFillAsync(elapsed, _holdDuration, token);
+
                 await UniTask.Yield(PlayerLoopTiming.Update, token);
             }
-            currentIndexPercent = targetPercent;
+            await SmoothFillAsync(_holdDuration, _holdDuration, token);
+        }
+
+        private UniTask SmoothFillAsync(float elapsed, float maxIndex, CancellationToken token)
+        {
+            token.ThrowIfCancellationRequested();
+
+            var targetPercent = maxIndex <= 0f ? 1f : Mathf.Clamp01(elapsed / maxIndex);
+
+            if (needSmoothFill && updateSpeed > 0f)
+            {
+                var step = Time.deltaTime / updateSpeed;
+                currentIndexPercent = Mathf.MoveTowards(currentIndexPercent, targetPercent, step);
+            }
+            else
+            {
+                currentIndexPercent = targetPercent;
+            }
+
+            if (elapsed >= maxIndex)
+            {
+                currentIndexPercent = targetPercent;
+            }
+
             if (fillImage != null)
+            {
                 fillImage.fillAmount = targetPercent;
+            }
+
+            return UniTask.CompletedTask;
         }
         
         private void StopHoldAnimation()

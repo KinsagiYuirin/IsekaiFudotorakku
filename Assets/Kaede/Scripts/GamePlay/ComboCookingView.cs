@@ -237,7 +237,7 @@ namespace Kaede.Scripts.GamePlay
             var displayKey = Gamepad.current != null ? ConvertToGamepadKey(key) : key.ToString();
 
             visual.Initialize(comboSetting, displayKey);
-            visual.SetState(KeyState.Ideal);
+            visual.SetState(KeyState.Ideal, null, null);
             visual.SetColor(Color.white);
             visual.SetSprite(initialSprite);
 
@@ -271,7 +271,7 @@ namespace Kaede.Scripts.GamePlay
 
             var comboType = GetComboType(index);
             var sprite = GetButtonSprite(comboType, state);
-            _buttonVisuals[index]?.SetState(state);
+            _buttonVisuals[index]?.SetState(state, null, null);
             _buttonVisuals[index]?.SetSprite(sprite);
         }
 
