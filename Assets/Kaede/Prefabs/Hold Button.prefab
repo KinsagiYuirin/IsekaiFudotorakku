@@ -70,7 +70,7 @@ MonoBehaviour:
   m_PreserveAspect: 0
   m_FillCenter: 1
   m_FillMethod: 0
-  m_FillAmount: 0
+  m_FillAmount: 1
   m_FillClockwise: 1
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
@@ -87,7 +87,6 @@ GameObject:
   - component: {fileID: 7656420364010079626}
   - component: {fileID: 1183932755247005723}
   - component: {fileID: 7274957628740517606}
-  - component: {fileID: 8828493262979920751}
   m_Layer: 5
   m_Name: Hold Button
   m_TagString: Untagged
@@ -166,22 +165,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4ac3357e13ed8d4458982fa00b7d0596, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  slideBar: {fileID: 8828493262979920751}
   iconImage: {fileID: 1183932755247005723}
-  holdProgressImage: {fileID: 8125303326650330900}
   labelText: {fileID: 3758292827327587621}
---- !u!114 &8828493262979920751
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1147449572475279101}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2fa482d99a56ec54bab6256889c33ac5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
   fillImage: {fileID: 8125303326650330900}
   updateSpeed: 1
   currentIndexPercent: 1

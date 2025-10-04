@@ -3699,7 +3699,9 @@ MonoBehaviour:
   <CookingImage>k__BackingField: {fileID: 0}
   <CookingImageObject>k__BackingField: {fileID: 1648427667}
   <ComboText>k__BackingField: {fileID: 85986212}
-  keyIconPrefab: {fileID: 1147449572475279101, guid: 9bef29be7d4dfd4488468388b3730a79, type: 3}
+  normalIconPrefab: {fileID: 1147449572475279101, guid: 9bef29be7d4dfd4488468388b3730a79, type: 3}
+  holdIconPrefab: {fileID: 1147449572475279101, guid: 66e42ee9f6faaa44eb5255d458518d90, type: 3}
+  stackIconPrefab: {fileID: 1147449572475279101, guid: 12165a1547e7b0249a229980a22e786f, type: 3}
   defaultSprite: {fileID: 1176796594314619274, guid: 9ed185cd6eff41c4f8477b8d9d01fed5, type: 3}
   buttonSprites:
   - comboType: 0
@@ -3720,7 +3722,6 @@ MonoBehaviour:
     sprite: {fileID: -1212395759, guid: d5b772d1e8f7460459578b0da05a71a8, type: 3}
   - key: 4
     sprite: {fileID: -2608320827309421740, guid: d5b772d1e8f7460459578b0da05a71a8, type: 3}
-  <CurrentMenuIndex>k__BackingField: 0
 --- !u!114 &1835431554
 MonoBehaviour:
   m_ObjectHideFlags: 0

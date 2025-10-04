@@ -21,7 +21,13 @@ MonoBehaviour:
     customSequence: []
   - preset: {fileID: 11400000, guid: f538f8a8e939dba47a4af57dcb9e00a5, type: 2}
     overrideSequence: 0
-    customSequence: []
+    customSequence:
+    - key: 1
+      type: 2
+      doubleTapDelay: 0.3
+      pressCount: 2
+      holdTime: 3
+      stackCount: 3
   - preset: {fileID: 11400000, guid: 2471bbdc1e5453048b42144a3b3ec81d, type: 2}
     overrideSequence: 0
     customSequence: []

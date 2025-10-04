@@ -1,4 +1,6 @@
 using System.Collections;
+using System.Threading;
+using Cysharp.Threading.Tasks;
 using Kaede.Scripts.GamePlay;
 using Kaede.Scripts.Item;
 using Kaede.Scripts.Utils;
@@ -13,12 +15,17 @@ namespace Kaede.Scripts.Animation
     public class HoldComboButtonVisual : MonoBehaviour, IComboButtonVisual
     {
         [Title("References")]
-        [SerializeField] private YuirinSlideBar slideBar;
-        
-        [Header("UI References")]
         [SerializeField] private Image iconImage;
-        [SerializeField] private Image holdProgressImage;
         [SerializeField] private TMP_Text labelText;
+
+        [Header("Slide Bar")]
+        [SerializeField] private Image fillImage;
+        [SerializeField] private float updateSpeed = 1f;
+        [SerializeField] private float currentIndexPercent = 1f;
+        [Header("Details")]
+        [SerializeField] private float firstUpdateSpeed;
+        [SerializeField] private bool needSmoothFill = true;
+        private CancellationTokenSource _slideCts;
 
         private float _currentProgress;
         private float _holdDuration = 1f;
@@ -72,16 +79,16 @@ namespace Kaede.Scripts.Animation
 
         public void SetColor(Color color)
         {
-            if (iconImage != null)
+            if (!iconImage)
             {
                 iconImage.color = color;
             }
 
-            if (holdProgressImage != null)
+            if (!fillImage)
             {
                 var progressColor = color;
                 progressColor.a = Mathf.Clamp01(color.a * 0.6f);
-                holdProgressImage.color = progressColor;
+                fillImage.color = progressColor;
             }
         }
 
@@ -92,21 +99,55 @@ namespace Kaede.Scripts.Animation
                 iconImage.sprite = sprite;
             }
         }
-
+        
         private void StartHoldAnimation()
         {
-            Debug.Log("Starting hold animation");
-            slideBar.UpdateSlideUI(_currentProgress, _holdDuration);
+            StartHoldAnimationAsync().Forget();
         }
 
+        private async UniTaskVoid StartHoldAnimationAsync()
+        {
+            StopHoldAnimation();
+            _slideCts = new CancellationTokenSource();
+            await SmoothFillAsync(_currentProgress, _holdDuration, _slideCts.Token);
+        }
+
+        private async UniTask SmoothFillAsync(float index, float maxIndex, CancellationToken token)
+        {
+            var targetPercent = Mathf.Clamp01(index / maxIndex);
+            var initialPercent = currentIndexPercent;
+            var timer = 0f;
+            while (timer < updateSpeed)
+            {
+                timer += Time.deltaTime;
+                currentIndexPercent = Mathf.Lerp(initialPercent, targetPercent, timer / updateSpeed);
+                if (fillImage != null)
+                    fillImage.fillAmount = currentIndexPercent;
+                await UniTask.Yield(PlayerLoopTiming.Update, token);
+            }
+            currentIndexPercent = targetPercent;
+            if (fillImage != null)
+                fillImage.fillAmount = targetPercent;
+        }
+        
         private void StopHoldAnimation()
         {
-            slideBar.StopSlide();
+            if (_slideCts != null)
+            {
+                _slideCts.Cancel();
+                _slideCts.Dispose();
+                _slideCts = null;
+            }
         }
 
         private void ResetProgress()
         {
-            slideBar.ResetFill();
+            StopHoldAnimation();
+            currentIndexPercent = 0f;
+            if (fillImage != null)
+            {
+                fillImage.fillAmount = 0f;
+            }
         }
     }
 }
