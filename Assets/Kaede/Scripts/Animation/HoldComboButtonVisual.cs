@@ -21,14 +21,14 @@ namespace Kaede.Scripts.Animation
         [Header("Slide Bar")]
         [SerializeField] private Image fillImage;
         [SerializeField] private float updateSpeed = 1f;
-        [SerializeField] private float currentIndexPercent = 1f;
+        [SerializeField, DisplayAsString] private float currentIndexPercent = 1f;
+        
         [Header("Details")]
         [SerializeField] private bool needSmoothFill = true;
-        private CancellationTokenSource _slideCts;
 
         [SerializeField, DisplayAsString] private float _holdDuration;
-        private Coroutine _fillRoutine;
-
+        private bool _isHolding;
+        
         private void Awake()
         {
             iconImage ??= GetComponent<Image>();
@@ -59,19 +59,19 @@ namespace Kaede.Scripts.Animation
 
         public void SetState(KeyState state, int? index, float? indexFloat)
         {
+            _ = index;
+
             switch (state)
             {
-                case KeyState.Current:
-                    break;
                 case KeyState.Active:
-                    StartHoldAnimation();
-                    Debug.Log("Start Hold Animation");
+                    UpdateProgress(indexFloat ?? 0f);
+                    break;
+                case KeyState.Current:
+                case KeyState.Prepare:
+                    _isHolding = false;
                     break;
                 case KeyState.Ideal:
-                    StopHoldAnimation();
-                    break;
                 default:
-                    StopHoldAnimation();
                     ResetProgress();
                     break;
             }
@@ -100,38 +100,25 @@ namespace Kaede.Scripts.Animation
             }
         }
         
-        private void StartHoldAnimation()
+        private void UpdateProgress(float elapsedTime)
         {
-            StartHoldAnimationAsync().Forget();
-        }
-
-        private async UniTaskVoid StartHoldAnimationAsync()
-        {
-            StopHoldAnimation();
-            _slideCts = new CancellationTokenSource();
-            var token = _slideCts.Token;
-
-            var elapsed = 0f;
-
-            while (elapsed < _holdDuration)
+            if (!_isHolding)
             {
-                token.ThrowIfCancellationRequested();
-
-                elapsed = Mathf.Min(elapsed + Time.deltaTime, _holdDuration);
-                await SmoothFillAsync(elapsed, _holdDuration, token);
-
-                await UniTask.Yield(PlayerLoopTiming.Update, token);
+                _isHolding = true;
+                ApplyFill(0f, true);
             }
-            await SmoothFillAsync(_holdDuration, _holdDuration, token);
+
+            var targetPercent = _holdDuration <= 0f
+                ? 1f
+                : Mathf.Clamp01(elapsedTime / _holdDuration);
+            ApplyFill(targetPercent);
         }
 
-        private UniTask SmoothFillAsync(float elapsed, float maxIndex, CancellationToken token)
+        private void ApplyFill(float targetPercent, bool immediate = false)
         {
-            token.ThrowIfCancellationRequested();
+            targetPercent = Mathf.Clamp01(targetPercent);
 
-            var targetPercent = maxIndex <= 0f ? 1f : Mathf.Clamp01(elapsed / maxIndex);
-
-            if (needSmoothFill && updateSpeed > 0f)
+            if (!immediate && needSmoothFill && updateSpeed > Mathf.Epsilon)
             {
                 var step = Time.deltaTime / updateSpeed;
                 currentIndexPercent = Mathf.MoveTowards(currentIndexPercent, targetPercent, step);
@@ -141,37 +128,17 @@ namespace Kaede.Scripts.Animation
                 currentIndexPercent = targetPercent;
             }
 
-            if (elapsed >= maxIndex)
-            {
-                currentIndexPercent = targetPercent;
-            }
-
             if (fillImage != null)
             {
-                fillImage.fillAmount = targetPercent;
+                fillImage.fillAmount = currentIndexPercent;
             }
-
-            return UniTask.CompletedTask;
         }
         
-        private void StopHoldAnimation()
-        {
-            if (_slideCts != null)
-            {
-                _slideCts.Cancel();
-                _slideCts.Dispose();
-                _slideCts = null;
-            }
-        }
-
         private void ResetProgress()
         {
-            StopHoldAnimation();
+            _isHolding = false;
             currentIndexPercent = 0f;
-            if (fillImage != null)
-            {
-                fillImage.fillAmount = 0f;
-            }
+            ApplyFill(0f, true);
         }
     }
 }
