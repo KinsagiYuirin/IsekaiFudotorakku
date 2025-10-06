@@ -14,7 +14,7 @@ namespace Kaede.Scripts.Animation
     [DisallowMultipleComponent]
     public class HoldComboButtonVisual : MonoBehaviour, IComboButtonVisual
     {
-        [Title("References")]
+        [Title("Icon References")]
         [SerializeField] private Image iconImage;
         [SerializeField] private TMP_Text labelText;
 
@@ -35,7 +35,7 @@ namespace Kaede.Scripts.Animation
         [Header("Details")]
         [SerializeField] private bool needSmoothFill = true;
 
-        [SerializeField, DisplayAsString] private float _holdDuration;
+        [SerializeField, DisplayAsString] private float holdDuration;
         private bool _isHolding;
         
         private void Awake()
@@ -63,14 +63,7 @@ namespace Kaede.Scripts.Animation
 
         public void Initialize(ComboKeySetting comboSetting, string displayKey)
         {
-            if (comboSetting is { type: ComboType.Hold })
-            {
-                _holdDuration = comboSetting.holdTime;
-            }
-            else
-            {
-                _holdDuration = 1f;
-            }
+            holdDuration = comboSetting is { type: ComboType.Hold } ? comboSetting.holdTime : 1f;
 
             if (labelText != null)
             {
@@ -108,13 +101,6 @@ namespace Kaede.Scripts.Animation
             {
                 iconImage.color = color;
             }
-
-            /*if (fillImage != null)
-            {
-                var progressColor = color;
-                progressColor.a = Mathf.Clamp01(color.a * 0.6f);
-                fillImage.color = progressColor;
-            }*/
         }
 
         public void SetSprite(Sprite sprite)
@@ -133,9 +119,9 @@ namespace Kaede.Scripts.Animation
                 ApplyFill(0f);
             }
 
-            var targetPercent = _holdDuration <= 0f 
+            var targetPercent = holdDuration <= 0f 
                 ? 1f 
-                : Mathf.Clamp01(elapsedTime / _holdDuration);
+                : Mathf.Clamp01(elapsedTime / holdDuration);
             ApplyFill(targetPercent);
         }
 
@@ -168,11 +154,10 @@ namespace Kaede.Scripts.Animation
             
         private void UpdateLayoutElementSize()
         {
-            // คำนวณความกว้างตาม hold duration
-            var calculatedWidth = baseWidth + (_holdDuration * pixelsPerSecond);
+            var calculatedWidth = baseWidth + (holdDuration * pixelsPerSecond);
             var targetWidth = Mathf.Clamp(calculatedWidth, sizeRange.x, sizeRange.y);
             
-            Debug.Log($"Calculating size: Duration={_holdDuration}s, Target Width={targetWidth}px");
+            Debug.Log($"Calculating size: Duration={holdDuration}s, Target Width={targetWidth}px");
             
             // Method 1: ใช้ LayoutElement
             if (layoutElement != null)
@@ -192,10 +177,7 @@ namespace Kaede.Scripts.Animation
                 Debug.Log($"RectTransform size set to: {_rectTransform.sizeDelta.x}");
             }
             
-            // ปรับ fillImage ให้ stretch ตาม parent
             SetupFillImageAnchors();
-            
-            // Force rebuild layout
             StartCoroutine(RebuildLayoutNextFrame());
         }
 
@@ -209,7 +191,6 @@ namespace Kaede.Scripts.Animation
             _fillImageRect.anchorMin = new Vector2(0f, 0.5f);
             _fillImageRect.anchorMax = new Vector2(1f, 0.5f);
             
-            // รีเซ็ต position
             _fillImageRect.anchoredPosition = Vector2.zero;
             
             // ให้ width ถูกกำหนดโดย anchor, เซ็ตแค่ height
@@ -226,7 +207,6 @@ namespace Kaede.Scripts.Animation
 
         private IEnumerator RebuildLayoutNextFrame()
         {
-            // รอ 1 frame
             yield return null;
             
             Debug.Log("Rebuilding layout...");
@@ -242,10 +222,7 @@ namespace Kaede.Scripts.Animation
                 }
             }
             
-            // Rebuild own layout
             LayoutRebuilder.ForceRebuildLayoutImmediate(_rectTransform);
-            
-            // Log final sizes
             Debug.Log($"Final sizes - GameObject: {_rectTransform.sizeDelta.x}, FillImage: {_fillImageRect?.sizeDelta.x}");
         }
     }

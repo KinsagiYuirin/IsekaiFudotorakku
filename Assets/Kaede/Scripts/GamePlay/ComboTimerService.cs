@@ -1,5 +1,6 @@
 using System;
 using System.Globalization;
+using Cysharp.Threading.Tasks;
 using Sirenix.OdinInspector;
 using UnityEngine;
 
@@ -12,15 +13,18 @@ namespace Kaede.Scripts.GamePlay
         [SerializeField] private float maxTimePerCombo = 5f;
         [SerializeField, DisplayAsString] private float currentTimer;
         [SerializeField] private float dividerTime;
+        [SerializeField] private float delayAfterFinishMenu = 2f;
 
         private ComboCookingView _view;
         private bool _isResting;
         private bool _hasTriggered;
+        private bool _paused;
 
         public float CurrentTimer => currentTimer;
         public float RestingTime => restingTime;
         public float MaxTimePerCombo => maxTimePerCombo;
-
+        public float DelayAfterFinishMenu => delayAfterFinishMenu;
+        
         public event Action TimedOut;
         public event Action RestEntered;
         public event Action RestFinished;
@@ -37,7 +41,8 @@ namespace Kaede.Scripts.GamePlay
         public void Tick(float deltaTime)
         {
             if (_view == null) return;
-
+            if (_paused) return;
+            
             if (currentTimer > 0f)
             {
                 currentTimer = Mathf.Max(0f, currentTimer - deltaTime);
@@ -58,6 +63,19 @@ namespace Kaede.Scripts.GamePlay
             }
         }
 
+        public async void PauseTimerForSeconds(float seconds)
+        {
+            SetPaused();
+            await UniTask.Delay(TimeSpan.FromSeconds(seconds));
+            SetResuming();
+        }
+        
+        public void SetPaused()
+        { _paused = true; }
+        
+        public void SetResuming()
+        { _paused = false; }
+        
         public void ResetTimer()
         {
             currentTimer = maxTimePerCombo;

@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Cysharp.Threading.Tasks;
 using Kaede.Scripts.Item;
 using Kaede.Scripts.Managers;
 using MadDuck.Scripts.Inputs;
@@ -198,8 +199,10 @@ namespace Kaede.Scripts.GamePlay
             Debug.Log("Next Step");
         }
         
-        private void NextMenu()
+        private async void NextMenu()
         {
+            timer.PauseTimerForSeconds(timer.DelayAfterFinishMenu);
+            await UniTask.Delay(TimeSpan.FromSeconds(timer.DelayAfterFinishMenu));
             _inputProcessor?.ResetState();
 
             var multiplier = MathF.Round(timer.DividerTimeToMultiply(), 1);

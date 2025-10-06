@@ -20,12 +20,14 @@ namespace Kaede.Scripts.Inputs.ComboHandlers.Combo
         {
             if (input.IsKeyDown(expectedKey))
             {
+                
                 _count++;
                 if (_count >= _requiredCount)
                 {
                     _count = 0;
                     return ComboInputResult.Correct;
                 }
+                visual.SetState(KeyState.Active, _count,null);
             }
             else if (input.AnyOtherKeyDown(expectedKey))
             {

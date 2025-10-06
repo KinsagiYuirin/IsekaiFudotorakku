@@ -19,7 +19,7 @@ namespace Kaede.Scripts.Inputs.ComboHandlers.Combo
         public HoldComboHandler(float requiredTime)
         {
             _maxAmount = requiredTime;
-            _requiredTimeRange = new Vector2(requiredTime - 0.5f, requiredTime + 0.7f);
+            _requiredTimeRange = new Vector2(requiredTime - 1f, requiredTime + 1f);
         }
         
         public ComboInputResult CheckInput(PlayerInputHandler input, ComboKey expectedKey, CancellationToken ct, IComboButtonVisual visual)
