@@ -3660,6 +3660,7 @@ MonoBehaviour:
     maxTimePerCombo: 1000
     currentTimer: 0
     dividerTime: 10
+    delayAfterFinishMenu: 10
   <MenuDatasList>k__BackingField: []
   <TimeBetweenCombos>k__BackingField: 1
   scorePerButton: 10
