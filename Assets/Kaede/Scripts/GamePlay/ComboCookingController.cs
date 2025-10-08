@@ -43,6 +43,7 @@ namespace Kaede.Scripts.GamePlay
         private ComboInputProcessor _inputProcessor;
         private ComboMenuManager    _menuManager;
         private PlayerInputHandler  _inputHandler;
+        private VFX_Control _VFX;
         
         #region Awake, Start, Update
         
@@ -88,6 +89,7 @@ namespace Kaede.Scripts.GamePlay
             _view  = GetComponent<ComboCookingView>();
             _inventoryController = GetComponent<InventoryController>();
             _model.ScoreManager.SetPendingStepScore(0);
+            _VFX = GetComponent<VFX_Control>();
             if (_inputHandler == null)
             {
                 _inputHandler = FindObjectOfType<PlayerInputHandler>();
