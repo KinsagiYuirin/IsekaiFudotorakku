@@ -1,9 +1,11 @@
+using System;
 using MessagePipe;
 using VContainer;
 using VContainer.Unity;
 
 public class MessagePipeLifetimeScope : LifetimeScope
 {
+    public static event Action OnGlobalMessagePipeSet;
     protected override void Configure(IContainerBuilder builder)
     {
         builder.RegisterMessagePipe();
@@ -11,6 +13,7 @@ public class MessagePipeLifetimeScope : LifetimeScope
         builder.RegisterBuildCallback(resolver =>
         {
             GlobalMessagePipe.SetProvider(resolver.AsServiceProvider());
+            OnGlobalMessagePipeSet?.Invoke();
         });
 
     }
