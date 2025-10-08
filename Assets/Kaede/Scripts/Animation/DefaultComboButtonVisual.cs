@@ -44,7 +44,7 @@ namespace Kaede.Scripts.Animation
         
         public void SetSprite(Sprite sprite)
         {
-            if (!iconImage)
+            if (iconImage != null)
             {
                 iconImage.sprite = sprite;
             }
