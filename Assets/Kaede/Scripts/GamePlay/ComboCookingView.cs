@@ -98,6 +98,7 @@ namespace Kaede.Scripts.GamePlay
         
         public void CurrentKeyPressed(int comboIndex)
         {
+            Debug.Log($"CurrentKeyPressed called with index: {comboIndex}");
             SetKeySprite(comboIndex, KeyState.Current);
             PrepareNextButton(comboIndex);
         }
@@ -259,6 +260,7 @@ namespace Kaede.Scripts.GamePlay
         private void PrepareNextButton(int comboIndex)
         {
             var nextIndex = comboIndex + 1;
+            Debug.Log($"PrepareNextButton - Current: {comboIndex}, Next: {nextIndex}, Total buttons: {ComboPanel.childCount}");
             if (nextIndex < ComboPanel.childCount)
             {
                 SetKeySprite(nextIndex, KeyState.Prepare);
@@ -267,7 +269,12 @@ namespace Kaede.Scripts.GamePlay
 
         private void SetKeySprite(int index, KeyState state)
         {
-            if (index < 0 || index >= _buttonVisuals.Count) return;
+            Debug.Log($"SetKeySprite called - Index: {index}, State: {state}");
+            if (index < 0 || index >= _buttonVisuals.Count)
+            {
+                Debug.LogWarning($"Invalid index {index}, ButtonVisuals count: {_buttonVisuals.Count}");
+                return;
+            }
 
             var comboType = GetComboType(index);
             var sprite = GetButtonSprite(comboType, state);
