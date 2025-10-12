@@ -9,7 +9,6 @@ namespace Kaede.Scripts.Managers
 {
     public class ScoreManager
     {
-        
         public List<List<float>> StepScoresPerMenu { get; } = new();
         public List<float> MenuScores { get; } = new();
         public float GrandTotalScore { get; private set; }

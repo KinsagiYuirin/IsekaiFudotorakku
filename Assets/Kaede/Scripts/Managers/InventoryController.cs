@@ -7,6 +7,8 @@ using Kaede.Scripts.Model;
 using R3;
 using Sirenix.OdinInspector;
 using UnityEngine;
+using UnityEngine.UI;
+using Color = System.Drawing.Color;
 
 namespace Kaede.Scripts.Managers
 {
@@ -20,6 +22,9 @@ namespace Kaede.Scripts.Managers
         
         [Title("Settings")]
         [SerializeField] private int maxDisplayCount = 5;
+        [SerializeField] private Image menuImages1;
+        [SerializeField] private Image menuImages2;
+        [SerializeField] private Image menuImages3;
         
         [Title("Debug")]
         [SerializeField, ReadOnly] private List<MenuData> allMenus;
@@ -285,6 +290,8 @@ namespace Kaede.Scripts.Managers
                 slot.Initialize(menu);
                 slotIndex++;
             }
+            
+            MenuPaper(slotIndex);
         }
 
         private void HideUnusedSlots()
@@ -298,6 +305,37 @@ namespace Kaede.Scripts.Managers
                     _menuSlots[i].gameObject.SetActive(false);
                 }
             }
+        }
+
+        private void MenuPaper(int index)
+        {
+            switch (index)
+            {
+                case 3:
+                    SetMenuPaperAlpha(menuImages1, 1f);
+                    SetMenuPaperAlpha(menuImages2, 1f);
+                    SetMenuPaperAlpha(menuImages3, 1f);
+                    break;
+                case 2:
+                    SetMenuPaperAlpha(menuImages1, 1f);
+                    SetMenuPaperAlpha(menuImages2, 1f);
+                    SetMenuPaperAlpha(menuImages3, 0f);
+                    break;
+                case 1:
+                    SetMenuPaperAlpha(menuImages1, 1f);
+                    SetMenuPaperAlpha(menuImages2, 0f);
+                    SetMenuPaperAlpha(menuImages3, 0f);
+                    break;
+            }
+        }
+        
+        private void SetMenuPaperAlpha(Image image, float alpha)
+        {
+            if (image == null) return;
+            
+            var color = image.color;
+            color.a = Mathf.Clamp01(alpha);
+            image.color = color;
         }
         #endregion
 

@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using Kaede.Scripts.Item;
 using R3;
@@ -9,7 +8,7 @@ namespace Kaede.Scripts.Model
     {
         private List<MenuData> _inventoryDataList;
         private readonly ReactiveProperty<List<MenuData>> _inventoryData = new();
-
+        
         public IReadOnlyList<MenuData> InventoryDataList => _inventoryDataList ?? new List<MenuData>();
         public ReadOnlyReactiveProperty<List<MenuData>> InventoryDataObservable => _inventoryData;
 

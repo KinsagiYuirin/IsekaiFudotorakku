@@ -1861,6 +1861,62 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 617236029}
   m_CullTransparentMesh: 1
+--- !u!1 &628094011
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 628094013}
+  - component: {fileID: 628094012}
+  m_Layer: 0
+  m_Name: MenuSlot Manager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &628094012
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 628094011}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3e08494549cdf5247886cfbbac38d733, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  menuSlotPrefab: {fileID: 8713201990277120889, guid: ddaff2e3db329cb45865a84a89c9d565, type: 3}
+  menuSlotContainer: {fileID: 896250905}
+  inventoryCanvasGroup: {fileID: 305841596}
+  slotPositions:
+  - {fileID: 574267957}
+  - {fileID: 1265959051}
+  - {fileID: 447529014}
+  maxDisplayCount: 3
+  menuImages1: {fileID: 574267958}
+  menuImages2: {fileID: 1265959052}
+  menuImages3: {fileID: 447529015}
+  allMenus: []
+--- !u!4 &628094013
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 628094011}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 863.27234, y: 481.31177, z: -5.016656}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &648465475
 GameObject:
   m_ObjectHideFlags: 0
@@ -2901,7 +2957,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &965994008
 RectTransform:
   m_ObjectHideFlags: 0
@@ -2941,7 +2997,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: bb56fc3138933c9488fcd4460b64f73b, type: 3}
+  m_Sprite: {fileID: 0}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -5415,7 +5471,6 @@ GameObject:
   - component: {fileID: 1835431556}
   - component: {fileID: 1835431551}
   - component: {fileID: 1835431553}
-  - component: {fileID: 1835431555}
   - component: {fileID: 1835431557}
   - component: {fileID: 1835431554}
   m_Layer: 0
@@ -5521,27 +5576,6 @@ MonoBehaviour:
     TypeName: 
   autoRun: 1
   autoInjectGameObjects: []
---- !u!114 &1835431555
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1835431550}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3e08494549cdf5247886cfbbac38d733, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  menuSlotPrefab: {fileID: 8713201990277120889, guid: ddaff2e3db329cb45865a84a89c9d565, type: 3}
-  menuSlotContainer: {fileID: 896250905}
-  inventoryCanvasGroup: {fileID: 305841596}
-  slotPositions:
-  - {fileID: 574267957}
-  - {fileID: 1265959051}
-  - {fileID: 447529014}
-  maxDisplayCount: 3
-  allMenus: []
 --- !u!114 &1835431556
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6409,6 +6443,7 @@ SceneRoots:
   - {fileID: 593271828}
   - {fileID: 1431733539}
   - {fileID: 1835431552}
+  - {fileID: 628094013}
   - {fileID: 278328124}
   - {fileID: 1049526166}
   - {fileID: 2047785684}
