@@ -16,19 +16,7 @@ MonoBehaviour:
   foodType: 0
   menuLevel: 1
   steps:
-  - preset: {fileID: 11400000, guid: f538f8a8e939dba47a4af57dcb9e00a5, type: 2}
-    overrideSequence: 0
-    customSequence: []
-  - preset: {fileID: 11400000, guid: f538f8a8e939dba47a4af57dcb9e00a5, type: 2}
-    overrideSequence: 0
-    customSequence:
-    - key: 1
-      type: 2
-      doubleTapDelay: 0.3
-      pressCount: 2
-      holdTime: 3
-      stackCount: 3
-  - preset: {fileID: 11400000, guid: 2471bbdc1e5453048b42144a3b3ec81d, type: 2}
+  - preset: {fileID: 11400000, guid: 4d56c98ce7934d440802adff5e05e875, type: 2}
     overrideSequence: 0
     customSequence: []
   menuIcon: {fileID: 0}

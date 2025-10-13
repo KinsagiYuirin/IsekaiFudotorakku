@@ -17,38 +17,38 @@ MonoBehaviour:
   cookingSprite: {fileID: 21300000, guid: a4282f1b75a795e4583eefee8d697dfd, type: 3}
   comboSequence:
   - key: 1
-    type: 2
-    doubleTapDelay: 0.3
-    pressCount: 2
+    type: 1
+    buttonDuration: 5
+    pressCount: 10
     holdTime: 8
     stackCount: 3
   - key: 2
     type: 2
-    doubleTapDelay: 0.3
+    buttonDuration: 0.3
     pressCount: 2
     holdTime: 1
     stackCount: 3
   - key: 1
     type: 0
-    doubleTapDelay: 0.3
+    buttonDuration: 0.3
     pressCount: 2
     holdTime: 1
     stackCount: 3
   - key: 2
     type: 0
-    doubleTapDelay: 0.3
+    buttonDuration: 0.3
     pressCount: 2
     holdTime: 1
     stackCount: 3
   - key: 4
     type: 0
-    doubleTapDelay: 0.3
+    buttonDuration: 0.3
     pressCount: 2
     holdTime: 1
     stackCount: 3
   - key: 3
     type: 0
-    doubleTapDelay: 0.3
+    buttonDuration: 0.3
     pressCount: 2
     holdTime: 1
     stackCount: 3

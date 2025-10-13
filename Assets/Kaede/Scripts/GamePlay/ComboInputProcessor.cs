@@ -54,6 +54,10 @@ namespace Kaede.Scripts.GamePlay
 
                 switch (result)
                 {
+                    case ComboInputResult.Progress:
+                        model.ScoreManager.AddPendingStepScore(_scorePerButton);
+                        break;
+                        
                     case ComboInputResult.Correct:
                         _view.PressCorrectKey(model.CurrentComboIndex);
                         model.ScoreManager.AddPendingStepScore(_scorePerButton);

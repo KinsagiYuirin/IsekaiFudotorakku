@@ -47,7 +47,7 @@ namespace Kaede.Scripts.Inputs.ComboHandlers.Combo
                 {
                     _hasReachedRequired = true;
                 }
-                return ComboInputResult.None;
+                return ComboInputResult.Progress;
             }
 
             if (!input.AnyOtherKeyDown(expectedKey)) return ComboInputResult.None;

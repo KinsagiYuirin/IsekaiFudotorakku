@@ -14,6 +14,7 @@ namespace Kaede.Scripts.GamePlay
     public enum ComboInputResult
     {
         None,
+        Progress,
         Correct,
         Wrong
     }
