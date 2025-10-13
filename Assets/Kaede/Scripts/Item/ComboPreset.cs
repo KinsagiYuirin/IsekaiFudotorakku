@@ -44,7 +44,7 @@ namespace Kaede.Scripts.Item
         public ComboType type;
     
         [ShowIf("type", ComboType.StackTimer)] 
-        public float doubleTapDelay = 0.3f;
+        public float buttonDuration = 0.3f;
         [ShowIf("type", ComboType.StackTimer)]
         public int pressCount = 2;
     

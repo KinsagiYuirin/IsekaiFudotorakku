@@ -9,49 +9,57 @@ namespace Kaede.Scripts.Inputs.ComboHandlers.Combo
 {
     public class StackTimerComboHandler : IComboHandler
     {
-        private float _lastPressTime = -1f;
+        private float _comboStartTime = -1f;
         private int _currentPressCount;
+        private bool _hasReachedRequired;
         private readonly int _requiredPressCount;
-        private readonly float _maxDelay;
+        private readonly float _maxDuration;
 
-        public StackTimerComboHandler(float maxDelay = 0.3f, int requiredPressCount = 2)
+        public StackTimerComboHandler(float maxDuration = 0.3f, int requiredPressCount = 2)
         {
-            _maxDelay = maxDelay;
+            _maxDuration = maxDuration;
             _requiredPressCount = requiredPressCount;
         }
 
         public ComboInputResult CheckInput(PlayerInputHandler input, ComboKey expectedKey, CancellationToken ct, IComboButtonVisual visual)
         {
+            if (_comboStartTime >= 0f && Time.time > _comboStartTime + _maxDuration)
+            {
+                var result = _hasReachedRequired ? ComboInputResult.Correct : ComboInputResult.Wrong;
+                ResetCombo();
+                return result;
+            }
+            
             if (input.IsKeyDown(expectedKey))
             {
                 var time = Time.time;
 
-                if (_currentPressCount == 0 || time - _lastPressTime <= _maxDelay)
+                if (_comboStartTime < 0f)
                 {
-                    _currentPressCount++;
-                    _lastPressTime = time;
+                    _comboStartTime = time;
+                    _currentPressCount = 0;
+                    _hasReachedRequired = false;
+                }
+                
+                _currentPressCount++;
 
-                    if (_currentPressCount >= _requiredPressCount)
-                    {
-                        _currentPressCount = 0;
-                        _lastPressTime = -1f;
-                        return ComboInputResult.Correct;
-                    }
-                }
-                else
+                if (!_hasReachedRequired && _currentPressCount >= _requiredPressCount)
                 {
-                    _currentPressCount = 1;
-                    _lastPressTime = time;
+                    _hasReachedRequired = true;
                 }
-            }
-            else if (input.AnyOtherKeyDown(expectedKey))
-            {
-                _currentPressCount = 0;
-                _lastPressTime = -1f;
-                return ComboInputResult.Wrong;
+                return ComboInputResult.None;
             }
 
-            return ComboInputResult.None;
+            if (!input.AnyOtherKeyDown(expectedKey)) return ComboInputResult.None;
+            ResetCombo();
+            return ComboInputResult.Wrong;
+        }
+        
+        private void ResetCombo()
+        {
+            _comboStartTime = -1f;
+            _currentPressCount = 0;
+            _hasReachedRequired = false;
         }
     }
 }
