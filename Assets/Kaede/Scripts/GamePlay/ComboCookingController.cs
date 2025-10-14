@@ -214,6 +214,7 @@ namespace Kaede.Scripts.GamePlay
             {
                 _model.CompleteMenu(multiplier);
                 _view.CompleteCombo();
+                GameManager.Instance.GameOver(_model.ScoreManager.GrandTotalScore);
                 Debug.Log($"Grand Total Score: {_model.ScoreManager.GrandTotalScore}");
                 Debug.Log($"multiplier: {multiplier}");
 

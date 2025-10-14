@@ -1,8 +1,12 @@
 using MadDuck.Scripts.Inputs;
 using R3;
 using System;
+using Kaede.Scripts.GamePlay;
+using Kaede.Scripts.UI;
+using Sirenix.OdinInspector;
 using UnityCommunity.UnitySingleton;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 namespace Kaede.Scripts.Managers
 {
@@ -11,6 +15,9 @@ namespace Kaede.Scripts.Managers
         [Header("Pause Settings")]
         [SerializeField] private GameObject pauseMenuUI;
         [SerializeField] private bool isPaused = false;
+        
+        [Title("ResultUI")]
+        [SerializeField] private ResultUI resultUI;
         
         private PlayerInputHandler _inputHandler;
         private IDisposable _pauseButtonSubscription;
@@ -55,8 +62,8 @@ namespace Kaede.Scripts.Managers
         {
             _pauseButtonSubscription?.Dispose();
         }
-        
-        public void TogglePause()
+
+        private void TogglePause()
         {
             if (isPaused)
                 ResumeGame();
@@ -75,7 +82,6 @@ namespace Kaede.Scripts.Managers
             AudioListener.pause = true;
             
             OnPauseStateChanged?.Invoke(true);
-            Debug.Log("Game Paused");
         }
         
         public void ResumeGame()
@@ -91,6 +97,31 @@ namespace Kaede.Scripts.Managers
             OnPauseStateChanged?.Invoke(false);
             
             Debug.Log("Game Resumed");
+        }
+        
+        public void GameOver(float index)
+        {
+            isPaused = true;
+            Time.timeScale = 0f;
+            
+            if (resultUI != null)
+                resultUI.gameObject.SetActive(true);
+            
+            AudioListener.pause = true;
+            OnPauseStateChanged?.Invoke(true);
+            resultUI.SetResultScore(index);
+        }
+        
+        public void QuitGame()
+        {
+            Debug.Log("Quitting Game...");
+            Application.Quit();
+        }
+
+        public void RestartGame()
+        {
+            Debug.Log("Restarting Game...");
+            SceneManager.LoadScene(SceneManager.GetActiveScene().name);
         }
     }
 }

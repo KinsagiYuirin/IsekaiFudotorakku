@@ -567,9 +567,8 @@ RectTransform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children:
-  - {fileID: 741872668}
-  m_Father: {fileID: 801574466}
+  m_Children: []
+  m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
@@ -2182,7 +2181,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &640123891
 RectTransform:
   m_ObjectHideFlags: 0
@@ -3423,8 +3422,7 @@ RectTransform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children:
-  - {fileID: 801574466}
+  m_Children: []
   m_Father: {fileID: 382246677}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
@@ -3445,8 +3443,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   resumeButton: {fileID: 209790083}
-  mainMenuButton: {fileID: 1115016175}
-  quitButton: {fileID: 1102849203}
+  mainMenuButton: {fileID: 0}
+  quitButton: {fileID: 0}
 --- !u!114 &1132565242
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4336,7 +4334,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1482555812
 RectTransform:
   m_ObjectHideFlags: 0
@@ -5134,7 +5132,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1810404193
 RectTransform:
   m_ObjectHideFlags: 0
@@ -5204,8 +5202,8 @@ GameObject:
   - component: {fileID: 1835431556}
   - component: {fileID: 1835431551}
   - component: {fileID: 1835431553}
-  - component: {fileID: 1835431557}
   - component: {fileID: 1835431554}
+  - component: {fileID: 1835431555}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Untagged
@@ -5326,9 +5324,12 @@ MonoBehaviour:
   inventoryCanvasGroup: {fileID: 305841596}
   slotPositions:
   - {fileID: 574267957}
-  - {fileID: 0}
-  - {fileID: 0}
+  - {fileID: 1761365418}
+  - {fileID: 724879539}
   maxDisplayCount: 3
+  menuImages1: {fileID: 574267958}
+  menuImages2: {fileID: 1761365419}
+  menuImages3: {fileID: 724879540}
   allMenus: []
 --- !u!114 &1835431556
 MonoBehaviour:
@@ -6107,7 +6108,6 @@ SceneRoots:
   - {fileID: 593271828}
   - {fileID: 1431733539}
   - {fileID: 1835431552}
-  - {fileID: 628094013}
   - {fileID: 278328124}
   - {fileID: 1049526166}
   - {fileID: 2047785684}
@@ -6124,3 +6124,4 @@ SceneRoots:
   - {fileID: 1648427669}
   - {fileID: 410143553}
   - {fileID: 510283085}
+  - {fileID: 209790082}
