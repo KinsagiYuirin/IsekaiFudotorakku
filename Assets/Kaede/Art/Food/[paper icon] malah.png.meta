@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: 1ce6dc9d1ccd89647a211f934ca4efc9
+guid: 0b787d1e8e557ed469aa590564628421
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 3425164275509785543
-    second: kaprao_0
+      213: -1240688201547671087
+    second: '[paper icon] malah_0'
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -46,7 +46,7 @@ TextureImporter:
   nPOTScale: 0
   lightmap: 0
   compressionQuality: 50
-  spriteMode: 1
+  spriteMode: 2
   spriteExtrude: 1
   spriteMeshType: 1
   alignment: 0
@@ -96,30 +96,17 @@ TextureImporter:
     ignorePlatformSupport: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
-  - serializedVersion: 4
-    buildTarget: WebGL
-    maxTextureSize: 2048
-    resizeAlgorithm: 0
-    textureFormat: -1
-    textureCompression: 1
-    compressionQuality: 50
-    crunchedCompression: 0
-    allowsAlphaSplitting: 0
-    overridden: 0
-    ignorePlatformSupport: 0
-    androidETC2FallbackOverride: 0
-    forceMaximumCompressionQuality_BC6H_BC7: 0
   spriteSheet:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: kaprao_0
+      name: '[paper icon] malah_0'
       rect:
         serializedVersion: 2
-        x: 0
-        y: 15
-        width: 302
-        height: 155
+        x: 74
+        y: 0
+        width: 959
+        height: 1091
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -128,8 +115,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 7c37e13e2c0a88f20800000000000000
-      internalID: 3425164275509785543
+      spriteID: 1d99bb577a038cee0800000000000000
+      internalID: -1240688201547671087
       vertices: []
       indices: 
       edges: []
@@ -148,7 +135,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      kaprao_0: 3425164275509785543
+      '[paper icon] malah_0': -1240688201547671087
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

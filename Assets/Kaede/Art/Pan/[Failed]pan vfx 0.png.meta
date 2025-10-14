@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: 1ce6dc9d1ccd89647a211f934ca4efc9
+guid: 9197758c1cab75047a756ef6a6355124
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 3425164275509785543
-    second: kaprao_0
+      213: -8713250622880581183
+    second: '[Failed]pan vfx 0_0'
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -96,30 +96,17 @@ TextureImporter:
     ignorePlatformSupport: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
-  - serializedVersion: 4
-    buildTarget: WebGL
-    maxTextureSize: 2048
-    resizeAlgorithm: 0
-    textureFormat: -1
-    textureCompression: 1
-    compressionQuality: 50
-    crunchedCompression: 0
-    allowsAlphaSplitting: 0
-    overridden: 0
-    ignorePlatformSupport: 0
-    androidETC2FallbackOverride: 0
-    forceMaximumCompressionQuality_BC6H_BC7: 0
   spriteSheet:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: kaprao_0
+      name: '[Failed]pan vfx 0_0'
       rect:
         serializedVersion: 2
-        x: 0
-        y: 15
-        width: 302
-        height: 155
+        x: 401
+        y: 266
+        width: 1349
+        height: 1458
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -128,8 +115,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 7c37e13e2c0a88f20800000000000000
-      internalID: 3425164275509785543
+      spriteID: 1c9704829b0541780800000000000000
+      internalID: -8713250622880581183
       vertices: []
       indices: 
       edges: []
@@ -148,7 +135,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      kaprao_0: 3425164275509785543
+      '[Failed]pan vfx 0_0': -8713250622880581183
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
