@@ -17,7 +17,8 @@ public class VFX_Control : MonoBehaviour
     
     [Title("Light")]
     [SerializeField] private Light2D globlaLight;
-    [SerializeField] private Light2D panLights;
+    [SerializeField] private Light2D panLightsNormal;
+    [SerializeField] private Light2D panLightsFailed;
     [SerializeField] private Light2D truckLights;
     [SerializeField] private Light2D shopLights;
     
@@ -57,14 +58,30 @@ public class VFX_Control : MonoBehaviour
         screenVFXvignetteIntensity = screenVFXmat.GetFloat("_VignetteIntensity");
     }
 
-    public void StartPanFlickering(bool flickering)
+    public void StartPanNormalFlickering(bool flickering)
     {
         
         if (flickering == true)
         {
             if (!_flashTween.isAlive)
                 _flashTween = Tween.Custom(minIntensity, maxIntensity, flickerDuration, 
-                    onValueChange: intensityField => panLights.intensity = intensityField,cycles: -1, cycleMode: CycleMode.Yoyo);
+                    onValueChange: intensityField => panLightsNormal.intensity = intensityField,cycles: -1, cycleMode: CycleMode.Yoyo);
+        }
+        else
+        {
+            StopPanFlickering();
+        }
+        
+    }
+    
+    public void StartPanFailedFlickering(bool flickering)
+    {
+        
+        if (flickering == true)
+        {
+            if (!_flashTween.isAlive)
+                _flashTween = Tween.Custom(minIntensity, maxIntensity, flickerDuration, 
+                    onValueChange: intensityField => panLightsFailed.intensity = intensityField,cycles: -1, cycleMode: CycleMode.Yoyo);
         }
         else
         {
@@ -85,7 +102,16 @@ public class VFX_Control : MonoBehaviour
     
     public void OnScreenRendererFeature(bool On)
     {
-        ScreenRandererFeature.SetActive(On);
+        if (On == true)
+        {
+            ScreenRandererFeature.SetActive(true);
+        }
+
+        if (On == false)
+        {
+            ScreenRandererFeature.SetActive(false);
+        }
+        
     }
 
     public void ChangeBGColor(bool failed)
@@ -103,7 +129,7 @@ public class VFX_Control : MonoBehaviour
 
     public void WaitingCombo()
     {
-        StartPanFlickering(true);
+        StartPanNormalFlickering(true);
         OnScreenRendererFeature(false);
         ChangeBGColor(false);
         globlaLight.intensity = 1f;
@@ -113,14 +139,23 @@ public class VFX_Control : MonoBehaviour
 
     public void Comboing()
     {
-        StartPanFlickering(true);
+        StartPanNormalFlickering(true);
+        OnScreenRendererFeature(false);
         ChangeBGColor(false);
         globlaLight.intensity = 0.75f;
     }
 
+    public void Fevering()
+    {
+        OnScreenRendererFeature(true);
+    }
+    
     public void Failing()
     {
+        StopPanFlickering();
+        OnScreenRendererFeature(false);
         ChangeBGColor(true);
+        StartPanFailedFlickering(true);
     }
 
 }
