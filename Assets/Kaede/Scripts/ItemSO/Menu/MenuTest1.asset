@@ -16,13 +16,13 @@ MonoBehaviour:
   foodType: 1
   menuLevel: 1
   steps:
-  - preset: {fileID: 11400000, guid: 2471bbdc1e5453048b42144a3b3ec81d, type: 2}
-    overrideSequence: 0
-    customSequence: []
   - preset: {fileID: 11400000, guid: f538f8a8e939dba47a4af57dcb9e00a5, type: 2}
     overrideSequence: 0
     customSequence: []
   - preset: {fileID: 11400000, guid: 2471bbdc1e5453048b42144a3b3ec81d, type: 2}
     overrideSequence: 0
     customSequence: []
-  menuIcon: {fileID: 3425164275509785543, guid: 1ce6dc9d1ccd89647a211f934ca4efc9, type: 3}
+  - preset: {fileID: 11400000, guid: 2471bbdc1e5453048b42144a3b3ec81d, type: 2}
+    overrideSequence: 0
+    customSequence: []
+  menuIcon: {fileID: 0}
