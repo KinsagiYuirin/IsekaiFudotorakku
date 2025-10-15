@@ -1,5 +1,6 @@
 using System;
 using System.Threading;
+using Kaede.Scripts.Animation;
 using Kaede.Scripts.Inputs.ComboHandlers;
 using Kaede.Scripts.Inputs.ComboHandlers.Combo;
 using Kaede.Scripts.Item;
@@ -12,17 +13,19 @@ namespace Kaede.Scripts.GamePlay
         private readonly PlayerInputHandler _inputHandler;
         private readonly ComboCookingView   _view;
         private readonly float              _scorePerButton;
+        private readonly ComboStepAnimationPlayer _animationPlayer;
 
         private IComboHandler _currentHandler;
         private ComboKeySetting _currentComboSetting;
         private CancellationTokenSource _inputCts;
         private bool _checking;
 
-        public ComboInputProcessor(PlayerInputHandler inputHandler, ComboCookingView view, float scorePerButton)
+        public ComboInputProcessor(PlayerInputHandler inputHandler, ComboCookingView view, float scorePerButton, ComboStepAnimationPlayer animationPlayer)
         {
             _inputHandler    = inputHandler;
             _view            = view;
             _scorePerButton  = scorePerButton;
+            _animationPlayer = animationPlayer;
         }
 
         public bool IsStepComplete { get; private set; }
@@ -55,10 +58,12 @@ namespace Kaede.Scripts.GamePlay
                 switch (result)
                 {
                     case ComboInputResult.Progress:
+                        TriggerAnimation();
                         model.ScoreManager.AddPendingStepScore(_scorePerButton);
                         break;
                         
                     case ComboInputResult.Correct:
+                        TriggerAnimation();
                         _view.PressCorrectKey(model.CurrentComboIndex);
                         model.ScoreManager.AddPendingStepScore(_scorePerButton);
                         model.ScoreManager.AddCombo();
@@ -67,6 +72,7 @@ namespace Kaede.Scripts.GamePlay
                         break;
 
                     case ComboInputResult.Wrong:
+                        TriggerAnimation();
                         if (!IsStepComplete)
                         {
                             _view.PressWrongKey(model.CurrentComboIndex);
@@ -121,6 +127,16 @@ namespace Kaede.Scripts.GamePlay
             _currentComboSetting = null;
         }
 
+        private void TriggerAnimation()
+        {
+            if (_animationPlayer == null)
+            {
+                return;
+            }
+
+            _animationPlayer.Play();
+        }
+        
         private void CancelInputLoop()
         {
             _inputCts?.Cancel();

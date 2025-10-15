@@ -67,6 +67,9 @@ namespace Kaede.Scripts.Item
         [LabelText("Image")]
         public Sprite cookingSprite;
 
+        [LabelText("Animation")]
+        public AnimationClip comboAnimation;
+        
         [Title("Sequence")]
         [ListDrawerSettings(
             Expanded = true, DraggableItems = true,

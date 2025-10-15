@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using Cysharp.Threading.Tasks;
+using Kaede.Scripts.Animation;
 using Kaede.Scripts.Item;
 using Kaede.Scripts.Managers;
 using MadDuck.Scripts.Inputs;
@@ -45,6 +46,7 @@ namespace Kaede.Scripts.GamePlay
         private ComboMenuManager    _menuManager;
         private PlayerInputHandler  _inputHandler;
         private VFX_Control _VFX;
+        [SerializeField] private ComboStepAnimationPlayer _animationPlayer;
         
         #region Awake, Start, Update
         
@@ -88,6 +90,8 @@ namespace Kaede.Scripts.GamePlay
             }
             _model = new ComboCookingModel(MenuDatasList, timer.MaxTimePerCombo);
             _view  = GetComponent<ComboCookingView>();
+            _animationPlayer ??= GetComponent<ComboStepAnimationPlayer>();
+            _animationPlayer ??= GetComponentInChildren<ComboStepAnimationPlayer>();
             _inventoryController = GetComponent<InventoryController>();
             _model.ScoreManager.SetPendingStepScore(0);
             _VFX = GetComponent<VFX_Control>();
@@ -102,7 +106,7 @@ namespace Kaede.Scripts.GamePlay
             }
             else
             {
-                _inputProcessor = new ComboInputProcessor(_inputHandler, _view, scorePerButton);
+                _inputProcessor = new ComboInputProcessor(_inputHandler, _view, scorePerButton, _animationPlayer);;
             }
             
             timer.Initialize(_view);
@@ -258,11 +262,24 @@ namespace Kaede.Scripts.GamePlay
                 _view.ShowCombo(combos);
 
                 var menu = _model.MenuDatas[_model.CurrentMenuIndex];
-                if (menu?.steps != null && _model.CurrentMenuIndex < menu.steps.Count)
+                if (menu?.steps != null && _model.CurrentStepIndex < menu.steps.Count)
                 {
                     var step = menu.steps[_model.CurrentStepIndex];
                     var sprite = step?.preset != null ? step.preset.cookingSprite : null;
                     _view.SetCookingImage(sprite);
+                    var animationClip = step?.ResolveAnimation();
+                    if (animationClip != null)
+                    {
+                        _animationPlayer?.SetAnimation(animationClip);
+                    }
+                    else
+                    {
+                        _animationPlayer?.ClearAnimation();
+                    }
+                }
+                else
+                {
+                    _animationPlayer?.ClearAnimation();
                 }
             }
         }
@@ -276,6 +293,7 @@ namespace Kaede.Scripts.GamePlay
             NextMenu();
             _model.ScoreManager.ResetPendingStepScore();
             _inputProcessor?.ResetState();
+            _animationPlayer?.Stop();
         }
 
         private void HandleRestEntered()
@@ -283,6 +301,7 @@ namespace Kaede.Scripts.GamePlay
             _inventoryController?.SetVisible(false);
             _model.ResetCombo();
             _view.ResetCombo();
+            _animationPlayer?.Stop();
             _inputProcessor?.ResetState();
         }
         
@@ -291,6 +310,7 @@ namespace Kaede.Scripts.GamePlay
             _inventoryController?.SetVisible(true);
             _model.ResetCombo();
             _view.ResetCombo();
+            _animationPlayer?.Stop();
             ShowCurrentCombo();
         }
         #endregion

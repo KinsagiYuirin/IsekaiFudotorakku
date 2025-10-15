@@ -29,6 +29,9 @@ namespace Kaede.Scripts.Item
             => overrideSequence && customSequence != null && customSequence.Count > 0
                 ? customSequence
                 : preset != null ? preset.comboSequence : new List<ComboKeySetting>();
+        
+        public AnimationClip ResolveAnimation()
+            => preset != null ? preset.comboAnimation : null;
     }
 
     [CreateAssetMenu(fileName = "MenuData", menuName = "Kaede/MenuData")]
