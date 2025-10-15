@@ -24,8 +24,8 @@ namespace Kaede.Scripts.Item
         
         private void UpdateView()
         {
-            itemIcon.sprite = _menuData.menuIcon;
-            itemName.text = _menuData.menuName;
+            itemIcon.sprite = _menuData.menuSprite;
+            //itemName.text = _menuData.menuName;
         }
     }
 }

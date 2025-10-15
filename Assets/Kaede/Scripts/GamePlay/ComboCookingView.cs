@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using Kaede.Scripts.Animation;
 using Kaede.Scripts.Item;
+using Kaede.Scripts.Utils;
 using MadDuck.Scripts.Inputs;
 using Sirenix.OdinInspector;
 using TMPro;
@@ -41,7 +42,7 @@ namespace Kaede.Scripts.GamePlay
         [field: SerializeField] public Sprite CookingImage { get; private set; }
         [field: SerializeField] public GameObject CookingImageObject { get; private set; }
         [field: SerializeField] public TMP_Text ComboText { get; private set; }
-        
+         
         [Title("Prefabs")]
         [SerializeField] private GameObject normalIconPrefab;
         [SerializeField] private GameObject holdIconPrefab;

@@ -4,6 +4,7 @@ using Cysharp.Threading.Tasks;
 using Kaede.Scripts.Animation;
 using Kaede.Scripts.Item;
 using Kaede.Scripts.Managers;
+using Kaede.Scripts.Utils;
 using MadDuck.Scripts.Inputs;
 using R3;
 using Sirenix.OdinInspector;
@@ -49,6 +50,7 @@ namespace Kaede.Scripts.GamePlay
         private VFX_Control _VFX;
         [SerializeField] private ComboStepAnimationPlayer _animationPlayer;
         [SerializeField] private ComboCharacterEmotionPlayer _characterEmotionPlayer;
+        [SerializeField] private SendFood sendFood;
         
         #region Awake, Start, Update
         
@@ -216,6 +218,7 @@ namespace Kaede.Scripts.GamePlay
         
         private async void NextMenu()
         {
+            sendFood.SetToStartPosition(_model.MenuDatas[_model.CurrentMenuIndex].menuSprite);
             timer.PauseTimerForSeconds(timer.DelayAfterFinishMenu);
             await UniTask.Delay(TimeSpan.FromSeconds(timer.DelayAfterFinishMenu));
             _inputProcessor?.ResetState();

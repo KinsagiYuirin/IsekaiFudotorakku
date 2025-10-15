@@ -49,7 +49,7 @@ namespace Kaede.Scripts.Animation
                     break;
                 
                 case KeyState.Prepare:
-                    UpdateLightAlpha(0.5f);
+                    UpdateLightAlpha(0.2f);
                     break;
                 
                 case KeyState.Ideal: 

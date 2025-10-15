@@ -12,7 +12,7 @@ namespace Kaede.Scripts.GamePlay
         [SerializeField] private float restingTime = 3f;
         [SerializeField] private float maxTimePerCombo = 5f;
         [SerializeField, DisplayAsString] private float currentTimer;
-        [SerializeField] private float dividerTime;
+        [SerializeField] private float dividerTimeScore;
         [SerializeField] private float delayAfterFinishMenu = 2f;
 
         private ComboCookingView _view;
@@ -122,12 +122,12 @@ namespace Kaede.Scripts.GamePlay
 
         public float DividerTimeToMultiply()
         {
-            if (Mathf.Approximately(dividerTime, 0f))
+            if (Mathf.Approximately(dividerTimeScore, 0f))
             {
                 return 1f;
             }
             
-            var newTime = currentTimer / dividerTime;
+            var newTime = currentTimer / dividerTimeScore;
             return newTime;
         }
 

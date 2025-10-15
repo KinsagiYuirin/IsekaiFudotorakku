@@ -47,7 +47,7 @@ namespace Kaede.Scripts.Item
         public List<MenuStepRef> steps = new();
 
         [Title("References")]
-        [PreviewField(70)] public Sprite menuIcon;
+        [PreviewField(70)] public Sprite menuSprite;
         
         private float _totalTime;
         private float _totalScore;
