@@ -101,7 +101,7 @@ namespace Kaede.Scripts.GamePlay
         
         public void PressCorrectKey(int comboIndex)
         {
-            SetKeySprite(comboIndex, KeyState.Ideal);
+            SetKeySprite(comboIndex, KeyState.Current);
             SetKeyColor(comboIndex, correctKeyColor);
         }
 

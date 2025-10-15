@@ -1,0 +1,38 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: eeda0f5053aef294d83f03f8b1e4f0b6, type: 3}
+  m_Name: Gameplay
+  m_EditorClassIdentifier: 
+  <BusData>k__BackingField:
+    keys: 000000000100000002000000
+    values:
+    - <Path>k__BackingField: bus:/
+      <IsMaster>k__BackingField: 1
+      <LinearVolume>k__BackingField: 1
+      <Linear01Volume>k__BackingField: 0
+      <DecibelVolume>k__BackingField: 0
+      <Decibel01Volume>k__BackingField: 0
+      <IsMuted>k__BackingField: 0
+    - <Path>k__BackingField: bus:/BGM
+      <IsMaster>k__BackingField: 0
+      <LinearVolume>k__BackingField: 1
+      <Linear01Volume>k__BackingField: 0
+      <DecibelVolume>k__BackingField: 0
+      <Decibel01Volume>k__BackingField: 0
+      <IsMuted>k__BackingField: 0
+    - <Path>k__BackingField: bus:/SFX
+      <IsMaster>k__BackingField: 0
+      <LinearVolume>k__BackingField: 1
+      <Linear01Volume>k__BackingField: 0
+      <DecibelVolume>k__BackingField: 0
+      <Decibel01Volume>k__BackingField: 0
+      <IsMuted>k__BackingField: 0

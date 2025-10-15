@@ -12,7 +12,11 @@ namespace Kaede.Scripts.Managers
 {
     public class GameManager : MonoSingleton<GameManager>
     {
-        [Header("Pause Settings")]
+        [Title("Tutorial")]
+        [SerializeField] private TutorialDemo tutorialDemo;
+        public bool tutorialCompleted = false;
+        
+        [Title("Pause Settings")]
         [SerializeField] private GameObject pauseMenuUI;
         [SerializeField] private bool isPaused = false;
         
@@ -42,6 +46,14 @@ namespace Kaede.Scripts.Managers
         private void Start()
         {
             SubscribeToInput();
+            if (tutorialDemo)
+            {
+                PauseGame();
+                tutorialCompleted = false;
+            }
+            
+            if (tutorialDemo != null)
+                tutorialDemo.gameObject.SetActive(true);
             
             if (pauseMenuUI != null)
                 pauseMenuUI.SetActive(false);
@@ -72,20 +84,25 @@ namespace Kaede.Scripts.Managers
 
         private void TogglePause()
         {
+            if (!tutorialCompleted) return;
             if (isPaused)
+            {
                 ResumeGame();
+                if (pauseMenuUI != null)
+                    pauseMenuUI.SetActive(false);
+            }
             else
+            {
                 PauseGame();
+                if (pauseMenuUI != null)
+                    pauseMenuUI.SetActive(true);
+            }
         }
         
         public void PauseGame()
         {
             isPaused = true;
             Time.timeScale = 0f;
-            
-            if (pauseMenuUI != null)
-                pauseMenuUI.SetActive(true);
-            
             AudioListener.pause = true;
         }
         
@@ -93,13 +110,7 @@ namespace Kaede.Scripts.Managers
         {
             isPaused = false;
             Time.timeScale = 1f;
-            
-            if (pauseMenuUI != null)
-                pauseMenuUI.SetActive(false);
-            
             AudioListener.pause = false;
-            
-            Debug.Log("Game Resumed");
         }
         
         public void GameOver(float index)

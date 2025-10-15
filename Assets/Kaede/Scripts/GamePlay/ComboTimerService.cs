@@ -134,7 +134,8 @@ namespace Kaede.Scripts.GamePlay
         private void UpdateTimerText()
         {
             if (_view == null) return;
-            _view.TimerText.text = currentTimer.ToString("N0", CultureInfo.InvariantCulture);
+            var ts = TimeSpan.FromSeconds(currentTimer);
+            _view.TimerText.text = ts.ToString("mm\\:ss");
         }
     }
 }
