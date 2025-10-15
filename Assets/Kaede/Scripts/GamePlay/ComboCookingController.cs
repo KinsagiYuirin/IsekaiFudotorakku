@@ -17,7 +17,8 @@ namespace Kaede.Scripts.GamePlay
         None,
         Progress,
         Correct,
-        Wrong
+        Wrong,
+        Holding
     }
     
     public class ComboCookingController : MonoSingleton<ComboCookingController>
@@ -47,6 +48,7 @@ namespace Kaede.Scripts.GamePlay
         private PlayerInputHandler  _inputHandler;
         private VFX_Control _VFX;
         [SerializeField] private ComboStepAnimationPlayer _animationPlayer;
+        [SerializeField] private ComboCharacterEmotionPlayer _characterEmotionPlayer;
         
         #region Awake, Start, Update
         
@@ -90,9 +92,15 @@ namespace Kaede.Scripts.GamePlay
             }
             _model = new ComboCookingModel(MenuDatasList, timer.MaxTimePerCombo);
             _view  = GetComponent<ComboCookingView>();
+            
             _animationPlayer ??= GetComponent<ComboStepAnimationPlayer>();
             _animationPlayer ??= GetComponentInChildren<ComboStepAnimationPlayer>();
+            
+            _characterEmotionPlayer ??= GetComponent<ComboCharacterEmotionPlayer>();
+            _characterEmotionPlayer ??= GetComponentInChildren<ComboCharacterEmotionPlayer>();
+            
             _inventoryController = GetComponent<InventoryController>();
+            
             _model.ScoreManager.SetPendingStepScore(0);
             _VFX = GetComponent<VFX_Control>();
             if (_inputHandler == null)
@@ -106,7 +114,7 @@ namespace Kaede.Scripts.GamePlay
             }
             else
             {
-                _inputProcessor = new ComboInputProcessor(_inputHandler, _view, scorePerButton, _animationPlayer);;
+                _inputProcessor = new ComboInputProcessor(_inputHandler, _view, scorePerButton, _animationPlayer, _characterEmotionPlayer);
             }
             
             timer.Initialize(_view);
@@ -260,6 +268,7 @@ namespace Kaede.Scripts.GamePlay
             if (_model.TryGetCurrentComboSettings(out var combos))
             {
                 _view.ShowCombo(combos);
+                _characterEmotionPlayer?.ResetToIdle();
 
                 var menu = _model.MenuDatas[_model.CurrentMenuIndex];
                 if (menu?.steps != null && _model.CurrentStepIndex < menu.steps.Count)
@@ -294,6 +303,7 @@ namespace Kaede.Scripts.GamePlay
             _model.ScoreManager.ResetPendingStepScore();
             _inputProcessor?.ResetState();
             _animationPlayer?.Stop();
+            _characterEmotionPlayer?.ResetToIdle();
         }
 
         private void HandleRestEntered()
@@ -303,6 +313,7 @@ namespace Kaede.Scripts.GamePlay
             _view.ResetCombo();
             _animationPlayer?.Stop();
             _inputProcessor?.ResetState();
+            _characterEmotionPlayer?.ResetToIdle();
         }
         
         private void HandleRestFinished()
@@ -312,6 +323,7 @@ namespace Kaede.Scripts.GamePlay
             _view.ResetCombo();
             _animationPlayer?.Stop();
             ShowCurrentCombo();
+            _characterEmotionPlayer?.ResetToIdle();
         }
         #endregion
     }

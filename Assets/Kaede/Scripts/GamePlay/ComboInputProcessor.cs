@@ -14,21 +14,25 @@ namespace Kaede.Scripts.GamePlay
         private readonly ComboCookingView   _view;
         private readonly float              _scorePerButton;
         private readonly ComboStepAnimationPlayer _animationPlayer;
+        private readonly ComboCharacterEmotionPlayer _emotionPlayer;
 
         private IComboHandler _currentHandler;
         private ComboKeySetting _currentComboSetting;
         private CancellationTokenSource _inputCts;
         private bool _checking;
 
-        public ComboInputProcessor(PlayerInputHandler inputHandler, ComboCookingView view, float scorePerButton, ComboStepAnimationPlayer animationPlayer)
+        public ComboInputProcessor(PlayerInputHandler inputHandler, ComboCookingView view, float scorePerButton, 
+            ComboStepAnimationPlayer animationPlayer, ComboCharacterEmotionPlayer emotionPlayer)
         {
             _inputHandler    = inputHandler;
             _view            = view;
             _scorePerButton  = scorePerButton;
             _animationPlayer = animationPlayer;
+            _emotionPlayer   = emotionPlayer;
         }
 
         public bool IsStepComplete { get; private set; }
+        private bool _holdAnimationActive;
 
         public void Process(ComboCookingModel model)
         {
@@ -59,11 +63,13 @@ namespace Kaede.Scripts.GamePlay
                 {
                     case ComboInputResult.Progress:
                         TriggerAnimation();
+                        PlaySuccessEmotion();
                         model.ScoreManager.AddPendingStepScore(_scorePerButton);
                         break;
                         
                     case ComboInputResult.Correct:
                         TriggerAnimation();
+                        PlaySuccessEmotion();
                         _view.PressCorrectKey(model.CurrentComboIndex);
                         model.ScoreManager.AddPendingStepScore(_scorePerButton);
                         model.ScoreManager.AddCombo();
@@ -73,6 +79,7 @@ namespace Kaede.Scripts.GamePlay
 
                     case ComboInputResult.Wrong:
                         TriggerAnimation();
+                        PlayFailureEmotion();
                         if (!IsStepComplete)
                         {
                             _view.PressWrongKey(model.CurrentComboIndex);
@@ -80,6 +87,9 @@ namespace Kaede.Scripts.GamePlay
                             _view.UpdateComboText(model.ScoreManager.ComboCount);
                         }
                         NextCombo(model);
+                        break;
+                    case ComboInputResult.Holding:
+                        BeginHoldEmotion();
                         break;
                     case ComboInputResult.None:
                     default:
@@ -97,6 +107,8 @@ namespace Kaede.Scripts.GamePlay
             CancelInputLoop();
             IsStepComplete = false;
             ResetHandler();
+            ResetHoldEmotion();
+            _emotionPlayer?.ResetToIdle();
         }
 
         public void ResetStateWithCombo(ComboCookingModel model)
@@ -114,6 +126,8 @@ namespace Kaede.Scripts.GamePlay
                 IsStepComplete = true;
                 ResetHandler();
                 CancelInputLoop();
+                ResetHoldEmotion();
+                _emotionPlayer?.ResetToIdle();
                 return;
             }
 
@@ -137,6 +151,49 @@ namespace Kaede.Scripts.GamePlay
             _animationPlayer.Play();
         }
         
+        private void BeginHoldEmotion()
+        {
+            if (_emotionPlayer == null || _holdAnimationActive)
+            {
+                return;
+            }
+
+            _holdAnimationActive = true;
+            _emotionPlayer.PlayHoldLoop();
+        }
+
+        private void ResetHoldEmotion()
+        {
+            if (!_holdAnimationActive)
+            {
+                return;
+            }
+
+            _holdAnimationActive = false;
+        }
+
+        private void PlaySuccessEmotion()
+        {
+            if (_emotionPlayer == null)
+            {
+                return;
+            }
+
+            ResetHoldEmotion();
+            _emotionPlayer.PlaySuccess();
+        }
+
+        private void PlayFailureEmotion()
+        {
+            if (_emotionPlayer == null)
+            {
+                return;
+            }
+
+            ResetHoldEmotion();
+            _emotionPlayer.PlayFailure();
+        }
+        
         private void CancelInputLoop()
         {
             _inputCts?.Cancel();
@@ -147,6 +204,8 @@ namespace Kaede.Scripts.GamePlay
         public void Dispose()
         {
             CancelInputLoop();
+            ResetHoldEmotion();
+            _emotionPlayer?.ResetToIdle();
         }
     }
 }

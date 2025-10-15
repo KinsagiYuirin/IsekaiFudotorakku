@@ -33,6 +33,7 @@ namespace Kaede.Scripts.Inputs.ComboHandlers.Combo
                     return ComboInputResult.Wrong;
                 }
                 visual.SetState(KeyState.Active, null, _elapsed);
+                return ComboInputResult.Holding;
             }
             if (input.IsKeyUp(expectedKey))
             {

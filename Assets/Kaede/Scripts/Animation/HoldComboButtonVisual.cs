@@ -202,6 +202,7 @@ namespace Kaede.Scripts.Animation
             
             // ให้ width ถูกกำหนดโดย anchor, เซ็ตแค่ height
             var fillSize = _fillImageRect.sizeDelta;
+            fillSize.y = gameObject.GetComponent<RectTransform>().sizeDelta.y * 1f; // height
             fillSize.x = 0f; // width จะใช้จาก anchor
             _fillImageRect.sizeDelta = fillSize;
             
