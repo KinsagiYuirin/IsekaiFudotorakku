@@ -4,6 +4,7 @@ using System;
 using Kaede.Scripts.GamePlay;
 using Kaede.Scripts.UI;
 using Sirenix.OdinInspector;
+using TMPro;
 using UnityCommunity.UnitySingleton;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -13,6 +14,10 @@ namespace Kaede.Scripts.Managers
     public class GameManager : MonoSingleton<GameManager>
     {
         [SerializeField] public bool test;
+        
+        [Title("Game Settings")]
+        [SerializeField] private float readyTime = 3f;
+        [SerializeField] private TMP_Text readyText;
         
         [Title("Tutorial")]
         [SerializeField] private TutorialDemo tutorialDemo;
@@ -57,14 +62,32 @@ namespace Kaede.Scripts.Managers
                     tutorialDemo.gameObject.SetActive(true);
             }
             
+            readyText.gameObject.SetActive(false);
             
             if (pauseMenuUI != null)
                 pauseMenuUI.SetActive(false);
         }
-        
+
+        private void Update()
+        {
+            CountdownReady();
+        }
+
         private void OnDestroy()
         {
             UnsubscribeFromInput();
+        }
+        
+        private void CountdownReady()
+        {
+            if (!tutorialCompleted) return;
+            readyText.gameObject.SetActive(true);
+            readyTime -= Time.unscaledDeltaTime;
+            readyText.text = readyTime.ToString("N0");
+            
+            if (!(readyTime <= 0f)) return;
+            readyText.gameObject.SetActive(false);
+            ResumeGame();
         }
         
         private void SubscribeToInput()
@@ -106,14 +129,12 @@ namespace Kaede.Scripts.Managers
         {
             isPaused = true;
             Time.timeScale = 0f;
-            AudioListener.pause = true;
         }
         
         public void ResumeGame()
         {
             isPaused = false;
             Time.timeScale = 1f;
-            AudioListener.pause = false;
         }
         
         public void GameOver(float index)
@@ -124,7 +145,6 @@ namespace Kaede.Scripts.Managers
             if (resultUI != null)
                 resultUI.gameObject.SetActive(true);
             
-            AudioListener.pause = true;
             resultUI.SetResultScore(index);
         }
         

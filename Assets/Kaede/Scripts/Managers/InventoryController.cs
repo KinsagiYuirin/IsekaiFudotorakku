@@ -6,6 +6,7 @@ using Kaede.Scripts.Item;
 using Kaede.Scripts.Model;
 using R3;
 using Sirenix.OdinInspector;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 using Color = System.Drawing.Color;
@@ -19,6 +20,7 @@ namespace Kaede.Scripts.Managers
         [SerializeField] private GameObject menuSlotContainer;
         [SerializeField] private CanvasGroup inventoryCanvasGroup;
         [SerializeField] private List<Transform> slotPositions;
+        [SerializeField] private TMP_Text restingText;
         
         [Title("Settings")]
         [SerializeField] private int maxDisplayCount = 5;
@@ -73,10 +75,12 @@ namespace Kaede.Scripts.Managers
             if (isVisible)
             {
                 RenderMenus();
+                restingText.alpha = 0;
             }
             else
             {
                 HideAllSlots();
+                restingText.alpha = 1;
             }
         }
 

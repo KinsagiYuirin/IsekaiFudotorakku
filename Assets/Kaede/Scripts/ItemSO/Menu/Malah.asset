@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 6f108eedc8f2fc34a9a05d04b5878ca2, type: 3}
-  m_Name: Kapao
+  m_Name: Malah
   m_EditorClassIdentifier: 
   menuName: kapao
   foodType: 1
@@ -25,4 +25,4 @@ MonoBehaviour:
   - preset: {fileID: 11400000, guid: bff2f168f0941e949855f28593401dc8, type: 2}
     overrideSequence: 0
     customSequence: []
-  menuSprite: {fileID: 6841128214485677621, guid: 6166c33652e0c784da0ca402648674ba, type: 3}
+  menuSprite: {fileID: -1240688201547671087, guid: 0b787d1e8e557ed469aa590564628421, type: 3}

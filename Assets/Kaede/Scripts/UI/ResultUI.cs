@@ -17,6 +17,7 @@ namespace Kaede.Scripts.UI
         
         [Title("Text")]
         [SerializeField] private TMP_Text scoreText;
+        [SerializeField] private TMP_Text niceText;
     
         private void Awake()
         {
@@ -51,7 +52,23 @@ namespace Kaede.Scripts.UI
         {
             if (scoreText != null)
             {
-                scoreText.text = score.ToString("N");
+                scoreText.text = score.ToString($"Score: {score:N0}");
+                
+                if (niceText == null) return;
+                switch (score)
+                {
+                    case > 1000: 
+                        niceText.text = "Perfect!";
+                        break;
+                        
+                    case < 1000:
+                        niceText.text = "Nice!";
+                        break;
+                    
+                    default:
+                        niceText.text = "Let's Try Again!";
+                        break;
+                }
             }
         }
         

@@ -9,7 +9,8 @@ namespace Kaede.Scripts.UI
     public class TutorialDemo : MonoBehaviour
     {
         [Title("UI References")]
-        [SerializeField] private Image[] tutorialImages;
+        [SerializeField] private Image tutorialImage;
+        [SerializeField] private Sprite[] tutorialImages;
         [SerializeField] private Button nextButton;
         [SerializeField] private Button prevButton;
         [SerializeField] private Button closeButton;
@@ -56,7 +57,7 @@ namespace Kaede.Scripts.UI
             gameObject.SetActive(true);
             if (tutorialImages.Length > 0)
             {
-                tutorialImages[_currentIndex].gameObject.SetActive(true);
+                tutorialImage.sprite = tutorialImages[_currentIndex];
             }
         }
         
@@ -90,7 +91,6 @@ namespace Kaede.Scripts.UI
         {
             gameObject.SetActive(false);
             GameManager.Instance.tutorialCompleted = true;
-            GameManager.Instance.ResumeGame();
         }
     }
 }

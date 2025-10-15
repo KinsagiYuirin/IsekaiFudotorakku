@@ -1,8 +1,8 @@
 using System;
 using System.Threading;
 using Kaede.Scripts.Animation;
+using Kaede.Scripts.Audios;
 using Kaede.Scripts.Inputs.ComboHandlers;
-using Kaede.Scripts.Inputs.ComboHandlers.Combo;
 using Kaede.Scripts.Item;
 using MadDuck.Scripts.Inputs;
 
@@ -15,20 +15,22 @@ namespace Kaede.Scripts.GamePlay
         private readonly float              _scorePerButton;
         private readonly ComboStepAnimationPlayer _animationPlayer;
         private readonly ComboCharacterEmotionPlayer _emotionPlayer;
-
+        private readonly SfxManagerDemo _sfxManager;
+        
         private IComboHandler _currentHandler;
         private ComboKeySetting _currentComboSetting;
         private CancellationTokenSource _inputCts;
         private bool _checking;
 
         public ComboInputProcessor(PlayerInputHandler inputHandler, ComboCookingView view, float scorePerButton, 
-            ComboStepAnimationPlayer animationPlayer, ComboCharacterEmotionPlayer emotionPlayer)
+            ComboStepAnimationPlayer animationPlayer, ComboCharacterEmotionPlayer emotionPlayer, SfxManagerDemo sfxManager)
         {
             _inputHandler    = inputHandler;
             _view            = view;
             _scorePerButton  = scorePerButton;
             _animationPlayer = animationPlayer;
             _emotionPlayer   = emotionPlayer;
+            _sfxManager      = sfxManager;
         }
 
         public bool IsStepComplete { get; private set; }
@@ -68,6 +70,7 @@ namespace Kaede.Scripts.GamePlay
                         break;
                         
                     case ComboInputResult.Correct:
+                        _sfxManager.PlaySuccessSound();
                         TriggerAnimation();
                         PlaySuccessEmotion();
                         _view.PressCorrectKey(model.CurrentComboIndex);
@@ -78,6 +81,7 @@ namespace Kaede.Scripts.GamePlay
                         break;
 
                     case ComboInputResult.Wrong:
+                        _sfxManager.PlayFailureSound();
                         TriggerAnimation();
                         PlayFailureEmotion();
                         if (!IsStepComplete)
@@ -144,9 +148,7 @@ namespace Kaede.Scripts.GamePlay
         private void TriggerAnimation()
         {
             if (_animationPlayer == null)
-            {
-                return;
-            }
+            { return; }
 
             _animationPlayer.Play();
         }
@@ -154,9 +156,7 @@ namespace Kaede.Scripts.GamePlay
         private void BeginHoldEmotion()
         {
             if (_emotionPlayer == null || _holdAnimationActive)
-            {
-                return;
-            }
+            { return; }
 
             _holdAnimationActive = true;
             _emotionPlayer.PlayHoldLoop();
@@ -165,9 +165,7 @@ namespace Kaede.Scripts.GamePlay
         private void ResetHoldEmotion()
         {
             if (!_holdAnimationActive)
-            {
-                return;
-            }
+            { return; }
 
             _holdAnimationActive = false;
         }
@@ -175,9 +173,7 @@ namespace Kaede.Scripts.GamePlay
         private void PlaySuccessEmotion()
         {
             if (_emotionPlayer == null)
-            {
-                return;
-            }
+            { return; }
 
             ResetHoldEmotion();
             _emotionPlayer.PlaySuccess();
@@ -186,9 +182,7 @@ namespace Kaede.Scripts.GamePlay
         private void PlayFailureEmotion()
         {
             if (_emotionPlayer == null)
-            {
-                return;
-            }
+            { return; }
 
             ResetHoldEmotion();
             _emotionPlayer.PlayFailure();
