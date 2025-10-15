@@ -22,15 +22,9 @@ namespace Kaede.Scripts.GamePlay
     [Serializable]
     public class ButtonSprite
     {
+        public ComboKey key;
         public ComboType comboType;
         public KeyState state;
-        public Sprite sprite;
-    }
-    
-    [Serializable]
-    public class KeySpriteMapping
-    {
-        public ComboKey key;
         public Sprite sprite;
     }
     
@@ -54,22 +48,19 @@ namespace Kaede.Scripts.GamePlay
         [SerializeField] private GameObject stackIconPrefab;
         
         [Title("Button Sprites")]
+        [SerializeField] private bool useStringDisplayKey = false;
         [SerializeField] private Sprite defaultSprite;
         [SerializeField] private ButtonSprite[] buttonSprites;
         
-        [Title("Key Mappings")]
-        [field: SerializeField] public List<KeySpriteMapping> KeySprite { get; private set; }
-        
-        private Dictionary<ComboKey, Sprite> _spriteLookup;
-        private Dictionary<(ComboType type, KeyState state), Sprite> _buttonSpriteLookup;
-        private readonly List<ComboType> _comboTypes = new();
+        private Dictionary<(ComboKey key, ComboType type, KeyState state), Sprite> _buttonSpriteLookup;
+        private Dictionary<(ComboKey key, ComboType type), string> _displayKeyLookup;
+        private readonly List<ComboKeySetting> _comboSettings = new();
         private readonly List<IComboButtonVisual> _buttonVisuals = new();
         public List<IComboButtonVisual> ButtonVisuals => _buttonVisuals ;
         
         #region Unity Lifecycle
         protected override void Awake()
         {
-            InitializeSpriteLookup();
             InitializeButtonSpriteLookup();
             base.Awake();
         }
@@ -149,33 +140,18 @@ namespace Kaede.Scripts.GamePlay
         #endregion
 
         #region Private Methods
-        private void InitializeSpriteLookup()
-        {
-            _spriteLookup = new Dictionary<ComboKey, Sprite>();
-            
-            if (KeySprite == null) return;
-            
-            foreach (var mapping in KeySprite)
-            {
-                if (!_spriteLookup.ContainsKey(mapping.key))
-                {
-                    _spriteLookup.Add(mapping.key, mapping.sprite);
-                }
-            }
-        }
-        
         private void InitializeButtonSpriteLookup()
         {
-            _buttonSpriteLookup = new Dictionary<(ComboType, KeyState), Sprite>();
+            _buttonSpriteLookup = new Dictionary<(ComboKey, ComboType, KeyState), Sprite>();
 
             if (buttonSprites == null) return;
 
             foreach (var buttonSprite in buttonSprites)
             {
-                var key = (buttonSprite.comboType, buttonSprite.state);
-                if (!_buttonSpriteLookup.ContainsKey(key) && buttonSprite.sprite != null)
+                var spriteKey = (buttonSprite.key, buttonSprite.comboType, buttonSprite.state);
+                if (!_buttonSpriteLookup.ContainsKey(spriteKey) && buttonSprite.sprite != null)
                 {
-                    _buttonSpriteLookup.Add(key, buttonSprite.sprite);
+                    _buttonSpriteLookup.Add(spriteKey, buttonSprite.sprite);
                 }
             }
         }
@@ -188,7 +164,7 @@ namespace Kaede.Scripts.GamePlay
             {
                 Destroy(child.gameObject);
             }
-            _comboTypes.Clear();
+            _comboSettings.Clear();
             _buttonVisuals.Clear();
         }
 
@@ -204,7 +180,7 @@ namespace Kaede.Scripts.GamePlay
                         if (normalIconPrefab != null)
                         {
                             var singleIcon = Instantiate(normalIconPrefab, ComboPanel);
-                            _comboTypes.Add(comboSetting.type);
+                            _comboSettings.Add(comboSetting);
                             SetupKeyIcon(singleIcon, comboSetting);
                         }
                         break;
@@ -212,7 +188,7 @@ namespace Kaede.Scripts.GamePlay
                         if (holdIconPrefab != null)
                         {
                             var holdIcon = Instantiate(holdIconPrefab, ComboPanel);
-                            _comboTypes.Add(comboSetting.type);
+                            _comboSettings.Add(comboSetting);
                             SetupKeyIcon(holdIcon, comboSetting);
                         }
                         break;
@@ -220,7 +196,7 @@ namespace Kaede.Scripts.GamePlay
                         if (stackIconPrefab != null)
                         {
                             var stackIcon = Instantiate(stackIconPrefab, ComboPanel);
-                            _comboTypes.Add(comboSetting.type);
+                            _comboSettings.Add(comboSetting);
                             SetupKeyIcon(stackIcon, comboSetting);
                         }
                         break;
@@ -234,15 +210,25 @@ namespace Kaede.Scripts.GamePlay
             
             var comboType = comboSetting?.type ?? ComboType.Single;
             var key = comboSetting?.key ?? ComboKey.None;
-            var initialSprite = GetButtonSprite(comboType, KeyState.Ideal);
-            var displayKey = Gamepad.current != null ? ConvertToGamepadKey(key) : key.ToString();
+            var initialSprite = GetButtonSprite(key, comboType, KeyState.Ideal);
+            var displayKey = GetDisplayKey(key);
 
-            visual.Initialize(comboSetting, displayKey);
+            visual.Initialize(comboSetting, displayKey, useStringDisplayKey);
             visual.SetState(KeyState.Ideal, null, null);
             visual.SetColor(Color.white);
             visual.SetSprite(initialSprite);
 
             _buttonVisuals.Add(visual);
+        }
+        
+        private string GetDisplayKey(ComboKey key)
+        {
+            if (key == ComboKey.None)
+            {
+                return string.Empty;
+            }
+
+            return Gamepad.current != null ? ConvertToGamepadKey(key) : key.ToString();
         }
         
         private string ConvertToGamepadKey(ComboKey key)
@@ -276,31 +262,40 @@ namespace Kaede.Scripts.GamePlay
                 return;
             }
 
-            var comboType = GetComboType(index);
-            var sprite = GetButtonSprite(comboType, state);
+            var comboSetting = GetComboSetting(index);
+            var comboType = comboSetting?.type ?? ComboType.Single;
+            var key = comboSetting?.key ?? ComboKey.None;
+            var sprite = GetButtonSprite(key, comboType, state);
             _buttonVisuals[index]?.SetState(state, null, null);
             _buttonVisuals[index]?.SetSprite(sprite);
         }
 
-        private ComboType GetComboType(int index)
+        private ComboKeySetting GetComboSetting(int index)
         {
-            if (index >= 0 && index < _comboTypes.Count)
+            if (index >= 0 && index < _comboSettings.Count)
             {
-                return _comboTypes[index];
+                return _comboSettings[index];
             }
 
-            return ComboType.Single;
+            return null;
         }
 
-        private Sprite GetButtonSprite(ComboType comboType, KeyState state)
+        private Sprite GetButtonSprite(ComboKey key, ComboType comboType, KeyState state)
         {
             if (_buttonSpriteLookup != null &&
-                _buttonSpriteLookup.TryGetValue((comboType, state), out var sprite) &&
+                _buttonSpriteLookup.TryGetValue((key, comboType, state), out var sprite) &&
                 sprite != null)
             {
                 return sprite;
             }
-
+            
+            if (_buttonSpriteLookup != null &&
+                _buttonSpriteLookup.TryGetValue((ComboKey.None, comboType, state), out var fallbackSprite) &&
+                fallbackSprite != null)
+            {
+                return fallbackSprite;
+            }
+            
             return defaultSprite;
         }
         

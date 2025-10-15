@@ -23,13 +23,21 @@ namespace Kaede.Scripts.Animation
             labelText ??= GetComponentInChildren<TMP_Text>();
         }
         
-        public void Initialize(ComboKeySetting comboSetting, string displayKey)
+        public void Initialize(ComboKeySetting comboSetting, string displayKey, bool isStringKey)
         {
             maxCount = comboSetting is { type: ComboType.StackTimer} ? comboSetting.stackCount : 5;
             
-            if (labelText != null)
+            if (!isStringKey)
             {
-                labelText.text = displayKey;
+                labelText.alpha = 0f;
+            }
+            else
+            {
+                labelText.alpha = 1f;
+                if (labelText != null)
+                {
+                    labelText.text = displayKey;
+                }
             }
         }
 

@@ -61,16 +61,23 @@ namespace Kaede.Scripts.Animation
             ResetProgress();
         }
 
-        public void Initialize(ComboKeySetting comboSetting, string displayKey)
+        public void Initialize(ComboKeySetting comboSetting, string displayKey, bool isStringKey)
         {
             holdDuration = comboSetting is { type: ComboType.Hold } ? comboSetting.holdTime : 1f;
 
-            if (labelText != null)
+            if (!isStringKey)
             {
-                labelText.text = displayKey;
+                labelText.alpha = 0f;
+            }
+            else
+            {
+                labelText.alpha = 1f;
+                if (labelText != null)
+                {
+                    labelText.text = displayKey;
+                }
             }
 
-            // ใช้ LayoutElement แทนการปรับ sizeDelta
             UpdateLayoutElementSize();
             ResetProgress();
         }
