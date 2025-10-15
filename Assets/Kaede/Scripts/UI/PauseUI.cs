@@ -52,10 +52,10 @@ namespace Kaede.Scripts.UI
 
         private void ResumeGame()
         {
-            if (GameManager.Instance != null)
-            {
-                GameManager.Instance.ResumeGame();
-            }
+            GameManager.Instance.IsPaused = false;
+            Time.timeScale = 1f;
+            gameObject.SetActive(false);
+            AudioListener.pause = false;
         }
 
         private void RestartGame()

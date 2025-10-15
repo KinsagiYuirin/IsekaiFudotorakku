@@ -22,14 +22,21 @@ namespace Kaede.Scripts.Managers
         private PlayerInputHandler _inputHandler;
         private IDisposable _pauseButtonSubscription;
         
-        public bool IsPaused => isPaused;
-        
-        public static event Action<bool> OnPauseStateChanged;
-        
+        public bool IsPaused
+        {
+            get => isPaused;
+            set => isPaused = value;
+        }
+
         protected override void Awake()
         {
             base.Awake();
             _inputHandler = FindObjectOfType<PlayerInputHandler>();
+
+            if (pauseMenuUI != null)
+                pauseMenuUI.SetActive(false);
+            if (resultUI != null)
+                resultUI.gameObject.SetActive(false);
         }
         
         private void Start()
@@ -80,8 +87,6 @@ namespace Kaede.Scripts.Managers
                 pauseMenuUI.SetActive(true);
             
             AudioListener.pause = true;
-            
-            OnPauseStateChanged?.Invoke(true);
         }
         
         public void ResumeGame()
@@ -93,8 +98,6 @@ namespace Kaede.Scripts.Managers
                 pauseMenuUI.SetActive(false);
             
             AudioListener.pause = false;
-            
-            OnPauseStateChanged?.Invoke(false);
             
             Debug.Log("Game Resumed");
         }
@@ -108,19 +111,16 @@ namespace Kaede.Scripts.Managers
                 resultUI.gameObject.SetActive(true);
             
             AudioListener.pause = true;
-            OnPauseStateChanged?.Invoke(true);
             resultUI.SetResultScore(index);
         }
         
         public void QuitGame()
         {
-            Debug.Log("Quitting Game...");
             Application.Quit();
         }
 
         public void RestartGame()
         {
-            Debug.Log("Restarting Game...");
             SceneManager.LoadScene(SceneManager.GetActiveScene().name);
         }
     }
