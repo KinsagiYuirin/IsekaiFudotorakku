@@ -12,10 +12,13 @@ namespace Kaede.Scripts.Managers
 {
     public class RandomSystem : MonoSingleton<RandomSystem>
     {
+        [Title("Menu Settings")]
         [SerializeField] private List<MenuData> allMenuInLevel;
-        [SerializeField, Min(0)] private int appetizerRandomMenuCount;
-        [SerializeField, Min(0)] private int mainCourseRandomMenuCount;
-        [SerializeField, Min(0)] private int dessertRandomMenuCount;
+        [SerializeField] private int appetizerRandomMenuCount;
+        [SerializeField] private int mainCourseRandomMenuCount;
+        [SerializeField] private int dessertRandomMenuCount;
+        
+        [Title("Debug")]
         [SerializeField, ReadOnly] private List<MenuData> appetizerRandomMenu = new();
         [SerializeField, ReadOnly] private List<MenuData> mainCourseRandomMenu = new();
         [SerializeField, ReadOnly] private List<MenuData> dessertRandomMenu = new();

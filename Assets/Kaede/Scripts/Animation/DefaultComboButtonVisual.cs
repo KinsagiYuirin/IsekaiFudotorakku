@@ -11,6 +11,7 @@ namespace Kaede.Scripts.Animation
     public class DefaultComboButtonVisual : MonoBehaviour, IComboButtonVisual
     {
         [SerializeField] private Image iconImage;
+        [SerializeField] private Image lightImage;
         [SerializeField] private TMP_Text labelText;
 
         private void Awake()
@@ -40,6 +41,22 @@ namespace Kaede.Scripts.Animation
         public void SetState(KeyState state, int? index, float? indexFloat)
         {
             _ = state;
+
+            switch (state)
+            {
+                case KeyState.Current:
+                    UpdateLightAlpha(1f);
+                    break;
+                
+                case KeyState.Prepare:
+                    UpdateLightAlpha(0.5f);
+                    break;
+                
+                case KeyState.Ideal: 
+                case KeyState.Active:
+                    UpdateLightAlpha(0f);
+                    break;
+            }
         }
 
         public void SetColor(Color color)
@@ -55,6 +72,16 @@ namespace Kaede.Scripts.Animation
             if (iconImage != null)
             {
                 iconImage.sprite = sprite;
+            }
+        }
+        
+        private void UpdateLightAlpha(float alpha)
+        {
+            if (lightImage != null)
+            {
+                Color color = lightImage.color;
+                color.a = alpha;
+                lightImage.color = color;
             }
         }
     }

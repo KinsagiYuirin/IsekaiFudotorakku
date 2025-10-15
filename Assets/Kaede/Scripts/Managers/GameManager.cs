@@ -12,6 +12,8 @@ namespace Kaede.Scripts.Managers
 {
     public class GameManager : MonoSingleton<GameManager>
     {
+        [SerializeField] public bool test;
+        
         [Title("Tutorial")]
         [SerializeField] private TutorialDemo tutorialDemo;
         public bool tutorialCompleted = false;
@@ -46,14 +48,15 @@ namespace Kaede.Scripts.Managers
         private void Start()
         {
             SubscribeToInput();
-            if (tutorialDemo)
+            if (tutorialDemo && !test)
             {
                 PauseGame();
                 tutorialCompleted = false;
+
+                if (tutorialDemo != null)
+                    tutorialDemo.gameObject.SetActive(true);
             }
             
-            if (tutorialDemo != null)
-                tutorialDemo.gameObject.SetActive(true);
             
             if (pauseMenuUI != null)
                 pauseMenuUI.SetActive(false);

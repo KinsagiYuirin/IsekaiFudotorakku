@@ -23,7 +23,8 @@ namespace Kaede.Scripts.UI
 
         private void Start()
         {
-            UpdateTutorialDisplay();
+            if (!GameManager.Instance.test)
+                UpdateTutorialDisplay();
         }
 
         private void SetupButtons()
