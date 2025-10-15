@@ -2,6 +2,7 @@
 using System;
 using PrimeTween;
 using Sirenix.OdinInspector;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Rendering.Universal;
 public class VFX_Control : MonoBehaviour
@@ -135,6 +136,8 @@ public class VFX_Control : MonoBehaviour
         globlaLight.intensity = 1f;
         truckLights.intensity = 0.2f;
         shopLights.intensity = 0.2f;
+        panLightsNormal.gameObject.SetActive(true);
+        panLightsFailed.gameObject.SetActive(false);
     }
 
     public void Comboing()
@@ -143,11 +146,15 @@ public class VFX_Control : MonoBehaviour
         OnScreenRendererFeature(false);
         ChangeBGColor(false);
         globlaLight.intensity = 0.75f;
+        panLightsNormal.gameObject.SetActive(true);
+        panLightsFailed.gameObject.SetActive(false);
     }
 
     public void Fevering()
     {
         OnScreenRendererFeature(true);
+        panLightsNormal.gameObject.SetActive(true);
+        panLightsFailed.gameObject.SetActive(false);
     }
     
     public void Failing()
@@ -156,6 +163,8 @@ public class VFX_Control : MonoBehaviour
         OnScreenRendererFeature(false);
         ChangeBGColor(true);
         StartPanFailedFlickering(true);
+        panLightsNormal.gameObject.SetActive(false);
+        panLightsFailed.gameObject.SetActive(true);
     }
 
 }
