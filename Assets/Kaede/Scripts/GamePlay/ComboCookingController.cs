@@ -78,9 +78,13 @@ namespace Kaede.Scripts.GamePlay
             Initialized();
         }
 
+        /// <summary>
+        /// After Build Demo, com to delete "if (GameManager.Instance.ReadyTime > 0) return;"
+        /// </summary>
         private void Update()
         { 
             if (_model == null) return;
+            if (GameManager.Instance.ReadyTime > 0) return;
             timer.Tick(Time.deltaTime);
             if (_model.GameState == CookingState.Resting) return;
 

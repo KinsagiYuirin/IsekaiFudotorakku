@@ -17,6 +17,7 @@ namespace Kaede.Scripts.Managers
         
         [Title("Game Settings")]
         [SerializeField] private float readyTime = 3f;
+        public float ReadyTime => readyTime;
         [SerializeField] private TMP_Text readyText;
         
         [Title("Tutorial")]
@@ -68,8 +69,12 @@ namespace Kaede.Scripts.Managers
                 pauseMenuUI.SetActive(false);
         }
 
+        /// <summary>
+        /// After build Demo, Delete Update method and call CountdownReady in other script.
+        /// </summary>
         private void Update()
         {
+            if (readyTime <= 0) return;
             CountdownReady();
         }
 
