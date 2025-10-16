@@ -117,6 +117,7 @@ namespace Kaede.Scripts.Managers
         private void TogglePause()
         {
             if (!tutorialCompleted) return;
+            if (readyTime > 0) return;
             if (isPaused)
             {
                 ResumeGame();
