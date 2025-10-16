@@ -63,7 +63,8 @@ namespace Kaede.Scripts.Managers
                     tutorialDemo.gameObject.SetActive(true);
             }
             
-            readyText.gameObject.SetActive(false);
+            if (readyText != null)
+                readyText.gameObject.SetActive(false);
             
             if (pauseMenuUI != null)
                 pauseMenuUI.SetActive(false);
@@ -129,7 +130,7 @@ namespace Kaede.Scripts.Managers
                     pauseMenuUI.SetActive(true);
             }
         }
-        
+
         public void PauseGame()
         {
             isPaused = true;

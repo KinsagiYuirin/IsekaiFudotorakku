@@ -19,10 +19,10 @@ namespace Kaede.Scripts.UI
 
     public struct SceneActivateEvent
     {
-        public readonly SceneType sceneType;
+        public readonly SceneType SceneType;
         public SceneActivateEvent(SceneType sceneType)
         {
-            this.sceneType = sceneType;
+            this.SceneType = sceneType;
         }
     }
     
@@ -33,7 +33,6 @@ namespace Kaede.Scripts.UI
         
         [Title("UI Buttons")]
         [SerializeField] private Button startButton;
-        [SerializeField] private Button settingsButton;
         [SerializeField] private Button quitButton;
         
         [Title("Settings")]
@@ -120,9 +119,6 @@ namespace Kaede.Scripts.UI
         {
             if (startButton != null)
                 startButton.onClick.AddListener(StartGame);
-
-            if (settingsButton != null)
-                settingsButton.onClick.AddListener(ShowSettings);
                 
             if (quitButton != null)
                 quitButton.onClick.AddListener(QuitGame);
@@ -132,9 +128,6 @@ namespace Kaede.Scripts.UI
         {
             if (startButton != null)
                 startButton.onClick.RemoveAllListeners();
-                
-            if (settingsButton != null)
-                settingsButton.onClick.RemoveAllListeners();
 
             if (quitButton != null)
                 quitButton.onClick.RemoveAllListeners();
@@ -144,8 +137,7 @@ namespace Kaede.Scripts.UI
         {
             if (startButton != null)
                 startButton.interactable = interactable;
-            if (settingsButton != null)
-                settingsButton.interactable = interactable;
+
             if (quitButton != null)
                 quitButton.interactable = interactable;
         }

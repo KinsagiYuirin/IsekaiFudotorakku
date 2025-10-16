@@ -184,7 +184,9 @@ namespace Kaede.Scripts.GamePlay
             {
                 return false;
             }
-
+            
+            MenuDatasList = new List<MenuData>(_menuManager.CurrentMenus);
+            
             var scoreManager = _model != null ? _model.ScoreManager : new ScoreManager();
             _model = new ComboCookingModel(MenuDatasList, timer.MaxTimePerCombo, scoreManager);
             _model.ScoreManager.SetPendingStepScore(0);
@@ -195,7 +197,10 @@ namespace Kaede.Scripts.GamePlay
             _inputProcessor?.ResetState();
             ShowCurrentCombo();
 
-            _inventoryController?.ReloadMenus();
+            if (_inventoryController != null)
+            {
+                _inventoryController.SetInventoryData(MenuDatasList);
+            }
             return true;
         }
         #endregion
@@ -233,12 +238,18 @@ namespace Kaede.Scripts.GamePlay
             
             if (!_model.HasNextMenu())
             {
+                _inventoryController.ReloadMenus();
                 _model.CompleteMenu(multiplier);
                 _view.CompleteCombo();
                 Debug.Log($"Grand Total Score: {_model.ScoreManager.GrandTotalScore}");
                 Debug.Log($"multiplier: {multiplier}");
 
-                if (!TryAdvanceMenuType()) return;
+                if (!TryAdvanceMenuType())
+                {
+                    await UniTask.Delay(TimeSpan.FromSeconds(timer.DelayBeforeGameOver));
+                    GameManager.Instance.GameOver(_model.ScoreManager.GrandTotalScore);
+                    return;
+                }
                 _model.Resting(timer.RestingTime);
                 timer.BeginRestingPhase();
                 Debug.Log("Next Menu Type");
@@ -253,7 +264,6 @@ namespace Kaede.Scripts.GamePlay
 
             var latestMenuScore = _model.ScoreManager.MenuScores[^1];
             var allScore        =  _model.ScoreManager.GrandTotalScore;
-            GameManager.Instance.GameOver(_model.ScoreManager.GrandTotalScore);
             Debug.Log($"Menu {_model.ScoreManager.MenuScores.Count} Score: {latestMenuScore} \n" +
                       $"All Score: {allScore}");
                         

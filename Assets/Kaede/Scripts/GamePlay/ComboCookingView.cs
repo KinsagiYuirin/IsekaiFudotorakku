@@ -41,6 +41,7 @@ namespace Kaede.Scripts.GamePlay
         [field: SerializeField] public Transform ComboPanel { get; private set; }
         [field: SerializeField] public Sprite CookingImage { get; private set; }
         [field: SerializeField] public GameObject CookingImageObject { get; private set; }
+        [SerializeField] private GameObject cookingLightEffect;
         [field: SerializeField] public TMP_Text ComboText { get; private set; }
          
         [Title("Prefabs")]
@@ -137,6 +138,7 @@ namespace Kaede.Scripts.GamePlay
         {
             SetUIElementActive(ComboPanel?.gameObject, !isResting);
             SetUIElementActive(CookingImageObject?.gameObject, !isResting);
+            SetUIElementActive(cookingLightEffect?.gameObject, !isResting);
         }
         #endregion
 
