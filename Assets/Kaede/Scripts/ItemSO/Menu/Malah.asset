@@ -12,17 +12,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6f108eedc8f2fc34a9a05d04b5878ca2, type: 3}
   m_Name: Malah
   m_EditorClassIdentifier: 
-  menuName: kapao
-  foodType: 1
+  menuName: Malah
+  foodType: 0
   menuLevel: 1
   steps:
-  - preset: {fileID: 11400000, guid: 03dfa2455f8934940a817294acd65cf2, type: 2}
+  - preset: {fileID: 11400000, guid: 08731a1ebe4e67c47a39e2dc5057e904, type: 2}
     overrideSequence: 0
     customSequence: []
-  - preset: {fileID: 11400000, guid: dd84eec4116a071468e372365c736054, type: 2}
+  - preset: {fileID: 11400000, guid: 19e48516be4bd324dae4f9d334f87db8, type: 2}
     overrideSequence: 0
     customSequence: []
-  - preset: {fileID: 11400000, guid: bff2f168f0941e949855f28593401dc8, type: 2}
+  - preset: {fileID: 11400000, guid: c9031a9a9ca402a4fb3c805df0c35f23, type: 2}
     overrideSequence: 0
     customSequence: []
   menuSprite: {fileID: -1240688201547671087, guid: 0b787d1e8e557ed469aa590564628421, type: 3}

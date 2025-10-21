@@ -36,14 +36,8 @@ MonoBehaviour:
     holdTime: 1
     stackCount: 3
   - key: 1
-    type: 0
+    type: 2
     buttonDuration: 0.3
     pressCount: 2
-    holdTime: 1
-    stackCount: 3
-  - key: 3
-    type: 0
-    buttonDuration: 0.3
-    pressCount: 2
-    holdTime: 1
+    holdTime: 3
     stackCount: 3

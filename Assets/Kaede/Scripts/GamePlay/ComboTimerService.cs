@@ -14,6 +14,7 @@ namespace Kaede.Scripts.GamePlay
         [SerializeField, DisplayAsString] private float currentTimer;
         [SerializeField] private float dividerTimeScore;
         [SerializeField] private float delayAfterFinishMenu = 2f;
+        [SerializeField] private float delayBeforeGameOver = 2f;
 
         private ComboCookingView _view;
         private bool _isResting;
@@ -24,6 +25,7 @@ namespace Kaede.Scripts.GamePlay
         public float RestingTime => restingTime;
         public float MaxTimePerCombo => maxTimePerCombo;
         public float DelayAfterFinishMenu => delayAfterFinishMenu;
+        public float DelayBeforeGameOver => delayBeforeGameOver;
         
         public event Action TimedOut;
         public event Action RestEntered;
