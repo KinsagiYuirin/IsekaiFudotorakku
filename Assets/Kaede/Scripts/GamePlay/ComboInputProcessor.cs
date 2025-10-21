@@ -131,7 +131,6 @@ namespace Kaede.Scripts.GamePlay
                 ResetHandler();
                 CancelInputLoop();
                 ResetHoldEmotion();
-                _emotionPlayer?.ResetToIdle();
                 return;
             }
 
