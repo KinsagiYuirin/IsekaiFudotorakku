@@ -20,15 +20,6 @@ namespace Kaede.Scripts.GamePlay
         Ideal
     }
     
-    [Serializable]
-    public class ButtonSprite
-    {
-        public ComboKey key;
-        public ComboType comboType;
-        public KeyState state;
-        public Sprite sprite;
-    }
-    
     public class ComboCookingView : MonoSingleton<ComboCookingView>
     {
         [Title("Color Settings")]
@@ -49,13 +40,9 @@ namespace Kaede.Scripts.GamePlay
         [SerializeField] private GameObject holdIconPrefab;
         [SerializeField] private GameObject stackIconPrefab;
         
-        [Title("Button Sprites")]
+        [Title("Display Settings")]
         [SerializeField] private bool useStringDisplayKey = false;
-        [SerializeField] private Sprite defaultSprite;
-        [SerializeField] private ButtonSprite[] buttonSprites;
-        
-        private Dictionary<(ComboKey key, ComboType type, KeyState state), Sprite> _buttonSpriteLookup;
-        private Dictionary<(ComboKey key, ComboType type), string> _displayKeyLookup;
+
         private readonly List<ComboKeySetting> _comboSettings = new();
         private readonly List<IComboButtonVisual> _buttonVisuals = new();
         public List<IComboButtonVisual> ButtonVisuals => _buttonVisuals ;
@@ -63,7 +50,6 @@ namespace Kaede.Scripts.GamePlay
         #region Unity Lifecycle
         protected override void Awake()
         {
-            InitializeButtonSpriteLookup();
             base.Awake();
         }
         #endregion
@@ -143,21 +129,6 @@ namespace Kaede.Scripts.GamePlay
         #endregion
 
         #region Private Methods
-        private void InitializeButtonSpriteLookup()
-        {
-            _buttonSpriteLookup = new Dictionary<(ComboKey, ComboType, KeyState), Sprite>();
-
-            if (buttonSprites == null) return;
-
-            foreach (var buttonSprite in buttonSprites)
-            {
-                var spriteKey = (buttonSprite.key, buttonSprite.comboType, buttonSprite.state);
-                if (!_buttonSpriteLookup.ContainsKey(spriteKey) && buttonSprite.sprite != null)
-                {
-                    _buttonSpriteLookup.Add(spriteKey, buttonSprite.sprite);
-                }
-            }
-        }
 
         private void ClearComboPanel()
         {
@@ -211,15 +182,12 @@ namespace Kaede.Scripts.GamePlay
         {
             var visual = icon.GetComponent<IComboButtonVisual>() ?? icon.AddComponent<DefaultComboButtonVisual>();
             
-            var comboType = comboSetting?.type ?? ComboType.Single;
             var key = comboSetting?.key ?? ComboKey.None;
-            var initialSprite = GetButtonSprite(key, comboType, KeyState.Ideal);
             var displayKey = GetDisplayKey(key);
 
             visual.Initialize(comboSetting, displayKey, useStringDisplayKey);
             visual.SetState(KeyState.Ideal, null, null);
             visual.SetColor(Color.white);
-            visual.SetSprite(initialSprite);
 
             _buttonVisuals.Add(visual);
         }
@@ -264,42 +232,7 @@ namespace Kaede.Scripts.GamePlay
                 Debug.LogWarning($"Invalid index {index}, ButtonVisuals count: {_buttonVisuals.Count}");
                 return;
             }
-
-            var comboSetting = GetComboSetting(index);
-            var comboType = comboSetting?.type ?? ComboType.Single;
-            var key = comboSetting?.key ?? ComboKey.None;
-            var sprite = GetButtonSprite(key, comboType, state);
             _buttonVisuals[index]?.SetState(state, null, null);
-            _buttonVisuals[index]?.SetSprite(sprite);
-        }
-
-        private ComboKeySetting GetComboSetting(int index)
-        {
-            if (index >= 0 && index < _comboSettings.Count)
-            {
-                return _comboSettings[index];
-            }
-
-            return null;
-        }
-
-        private Sprite GetButtonSprite(ComboKey key, ComboType comboType, KeyState state)
-        {
-            if (_buttonSpriteLookup != null &&
-                _buttonSpriteLookup.TryGetValue((key, comboType, state), out var sprite) &&
-                sprite != null)
-            {
-                return sprite;
-            }
-            
-            if (_buttonSpriteLookup != null &&
-                _buttonSpriteLookup.TryGetValue((ComboKey.None, comboType, state), out var fallbackSprite) &&
-                fallbackSprite != null)
-            {
-                return fallbackSprite;
-            }
-            
-            return defaultSprite;
         }
         
         private void SetKeyColor(int index, Color color)

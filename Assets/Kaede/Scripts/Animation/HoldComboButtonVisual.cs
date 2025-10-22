@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Collections.Generic;
 using System.Threading;
 using Cysharp.Threading.Tasks;
 using Kaede.Scripts.GamePlay;
@@ -14,6 +15,16 @@ namespace Kaede.Scripts.Animation
     [DisallowMultipleComponent]
     public class HoldComboButtonVisual : MonoBehaviour, IComboButtonVisual
     {
+        [System.Serializable]
+        private class SpriteEntry
+        {
+            public ComboKey key = ComboKey.None;
+            public Sprite idealSprite;
+            public Sprite prepareSprite;
+            public Sprite currentSprite;
+            public Sprite activeSprite;
+        }
+        
         [Title("Icon References")]
         [SerializeField] private Image iconImage;
         [SerializeField] private TMP_Text labelText;
@@ -29,6 +40,10 @@ namespace Kaede.Scripts.Animation
         [SerializeField] private Vector2 sizeRange = new Vector2(80f, 400f);
         [SerializeField] private LayoutElement layoutElement;
 
+        [Title("Sprite Settings")]
+        [SerializeField] private Sprite fallbackSprite;
+        [SerializeField] private SpriteEntry[] spriteEntries;
+        
         private RectTransform _rectTransform;
         private RectTransform _fillImageRect;
 
@@ -37,12 +52,16 @@ namespace Kaede.Scripts.Animation
 
         [SerializeField, DisplayAsString] private float holdDuration;
         private bool _isHolding;
+        private ComboKey _currentKey = ComboKey.None;
+        private readonly Dictionary<(ComboKey key, KeyState state), Sprite> _spriteLookup = new();
         
         private void Awake()
         {
             iconImage ??= GetComponent<Image>();
             fillImage ??= GetComponentInChildren<Image>();
             labelText ??= GetComponentInChildren<TMP_Text>();
+            
+            InitializeSpriteLookup();
 
             _rectTransform = GetComponent<RectTransform>();
             if (fillImage != null)
@@ -64,7 +83,9 @@ namespace Kaede.Scripts.Animation
         public void Initialize(ComboKeySetting comboSetting, string displayKey, bool isStringKey)
         {
             holdDuration = comboSetting is { type: ComboType.Hold } ? comboSetting.holdTime : 1f;
-
+            _currentKey = comboSetting?.key ?? ComboKey.None;
+            ApplySprite(KeyState.Ideal);
+            
             if (!isStringKey)
             {
                 labelText.alpha = 0f;
@@ -85,6 +106,7 @@ namespace Kaede.Scripts.Animation
         public void SetState(KeyState state, int? index, float? indexFloat)
         {
             _ = index;
+            ApplySprite(state);
 
             switch (state)
             {
@@ -107,14 +129,6 @@ namespace Kaede.Scripts.Animation
             if (iconImage != null)
             {
                 iconImage.color = color;
-            }
-        }
-
-        public void SetSprite(Sprite sprite)
-        {
-            if (iconImage != null)
-            {
-                iconImage.sprite = sprite;
             }
         }
         
@@ -233,6 +247,77 @@ namespace Kaede.Scripts.Animation
             LayoutRebuilder.ForceRebuildLayoutImmediate(_rectTransform);
             Debug.Log($"Final sizes - GameObject: {_rectTransform.sizeDelta.x}, FillImage: {_fillImageRect?.sizeDelta.x}");
         }
-    }
+        
+        private void InitializeSpriteLookup()
+        {
+            _spriteLookup.Clear();
 
+            if (spriteEntries == null)
+            {
+                return;
+            }
+
+            foreach (var entry in spriteEntries)
+            {
+                if (entry == null)
+                {
+                    continue;
+                }
+
+                TryRegisterSprite(entry.key, KeyState.Ideal, entry.idealSprite);
+                TryRegisterSprite(entry.key, KeyState.Prepare, entry.prepareSprite);
+                TryRegisterSprite(entry.key, KeyState.Current, entry.currentSprite);
+                TryRegisterSprite(entry.key, KeyState.Active, entry.activeSprite);
+            }
+        }
+
+        private void TryRegisterSprite(ComboKey key, KeyState state, Sprite sprite)
+        {
+            if (sprite == null)
+            {
+                return;
+            }
+
+            _spriteLookup[(key, state)] = sprite;
+        }
+
+        private void ApplySprite(KeyState state)
+        {
+            if (iconImage == null)
+            {
+                iconImage = GetComponent<Image>();
+            }
+
+            if (iconImage == null)
+            {
+                return;
+            }
+
+            var sprite = ResolveSprite(_currentKey, state);
+            if (sprite != null)
+            {
+                iconImage.sprite = sprite;
+            }
+        }
+
+        private Sprite ResolveSprite(ComboKey key, KeyState state)
+        {
+            if (_spriteLookup.Count == 0)
+            {
+                InitializeSpriteLookup();
+            }
+
+            if (_spriteLookup.TryGetValue((key, state), out var sprite) && sprite != null)
+            {
+                return sprite;
+            }
+
+            if (_spriteLookup.TryGetValue((ComboKey.None, state), out var fallback) && fallback != null)
+            {
+                return fallback;
+            }
+
+            return fallbackSprite;
+        }
+    }
 }

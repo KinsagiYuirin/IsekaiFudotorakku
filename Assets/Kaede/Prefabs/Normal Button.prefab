@@ -115,6 +115,30 @@ MonoBehaviour:
   iconImage: {fileID: 1229565966714630721}
   lightImage: {fileID: 1664120889389112454}
   labelText: {fileID: 3758292827327587621}
+  fallbackSprite: {fileID: 6738171635790624250, guid: d621bf4c0ef0bfc4da4d991ad30d0c32, type: 3}
+  grayBackGroundSprite: {fileID: -3811247053879248456, guid: 4cf3860b58cd8134fa091c17d58f8677, type: 3}
+  lightBackGroundSprite: {fileID: 1806987054987770835, guid: eacb009a87079c24082d48663e012d4e, type: 3}
+  spriteEntries:
+  - key: 1
+    idealSprite: {fileID: 3344348091367185413, guid: 3ba73a178e0a11b4ea302fb91d798daa, type: 3}
+    prepareSprite: {fileID: 3344348091367185413, guid: 3ba73a178e0a11b4ea302fb91d798daa, type: 3}
+    currentSprite: {fileID: 4045532216090286532, guid: 583806187295ef64f86d0dd9dedbb046, type: 3}
+    activeSprite: {fileID: 4045532216090286532, guid: 583806187295ef64f86d0dd9dedbb046, type: 3}
+  - key: 2
+    idealSprite: {fileID: 3322796147474301168, guid: c42d4c3dcb80c11438ade7773aa2f00f, type: 3}
+    prepareSprite: {fileID: 3322796147474301168, guid: c42d4c3dcb80c11438ade7773aa2f00f, type: 3}
+    currentSprite: {fileID: 5121293154447663080, guid: 013ed31346af9024d8a44faabe9714df, type: 3}
+    activeSprite: {fileID: 5121293154447663080, guid: 013ed31346af9024d8a44faabe9714df, type: 3}
+  - key: 3
+    idealSprite: {fileID: 3850214377446538870, guid: e1a40cd36f78ba844a6426abae375a2d, type: 3}
+    prepareSprite: {fileID: 3850214377446538870, guid: e1a40cd36f78ba844a6426abae375a2d, type: 3}
+    currentSprite: {fileID: 6950450136352669481, guid: b14baf097a582d64095bcc96b11a4886, type: 3}
+    activeSprite: {fileID: 6950450136352669481, guid: b14baf097a582d64095bcc96b11a4886, type: 3}
+  - key: 4
+    idealSprite: {fileID: -151260099459723900, guid: 7185b012f5404da4f9de1fee0ec54945, type: 3}
+    prepareSprite: {fileID: -151260099459723900, guid: 7185b012f5404da4f9de1fee0ec54945, type: 3}
+    currentSprite: {fileID: 8288787037889794839, guid: 0e808d4ad2a81454b8829e3f390734d2, type: 3}
+    activeSprite: {fileID: 8288787037889794839, guid: 0e808d4ad2a81454b8829e3f390734d2, type: 3}
 --- !u!1 &1215787788728107017
 GameObject:
   m_ObjectHideFlags: 0

@@ -272,6 +272,28 @@ MonoBehaviour:
   pixelsPerSecond: 50
   sizeRange: {x: 80, y: 600}
   layoutElement: {fileID: 251972248414950566}
+  fallbackSprite: {fileID: 5435592366743510017, guid: 00970c7cc4838fb47968a656b413bc71, type: 3}
+  spriteEntries:
+  - key: 1
+    idealSprite: {fileID: -3665954151616286547, guid: dce7921b495c5834dac51f84bb507dd3, type: 3}
+    prepareSprite: {fileID: -3665954151616286547, guid: dce7921b495c5834dac51f84bb507dd3, type: 3}
+    currentSprite: {fileID: -6562452714548531248, guid: cac05918d4688d74aa6cdf4e5e6b71dc, type: 3}
+    activeSprite: {fileID: -6562452714548531248, guid: cac05918d4688d74aa6cdf4e5e6b71dc, type: 3}
+  - key: 2
+    idealSprite: {fileID: -775605608576098752, guid: 28c8d1e0fd21e2349b1907080a577b19, type: 3}
+    prepareSprite: {fileID: -775605608576098752, guid: 28c8d1e0fd21e2349b1907080a577b19, type: 3}
+    currentSprite: {fileID: 1198633364760859731, guid: 46139533ace6c6f43b6f02dea08a9329, type: 3}
+    activeSprite: {fileID: 1198633364760859731, guid: 46139533ace6c6f43b6f02dea08a9329, type: 3}
+  - key: 3
+    idealSprite: {fileID: 3014304364492222210, guid: 309c048839133c94d9e9acfd228faea8, type: 3}
+    prepareSprite: {fileID: 3014304364492222210, guid: 309c048839133c94d9e9acfd228faea8, type: 3}
+    currentSprite: {fileID: -2173318813443868192, guid: 90933053f6fa9db4abc7df4bacf19dcb, type: 3}
+    activeSprite: {fileID: -2173318813443868192, guid: 90933053f6fa9db4abc7df4bacf19dcb, type: 3}
+  - key: 4
+    idealSprite: {fileID: -6005958826879534344, guid: 1cd4845ae32457d41acb519b556e11f0, type: 3}
+    prepareSprite: {fileID: -6005958826879534344, guid: 1cd4845ae32457d41acb519b556e11f0, type: 3}
+    currentSprite: {fileID: -1848775471284043364, guid: b0ddabacc136c1546b2e42c37498b7fc, type: 3}
+    activeSprite: {fileID: -1848775471284043364, guid: b0ddabacc136c1546b2e42c37498b7fc, type: 3}
   needSmoothFill: 0
   holdDuration: 0
 --- !u!225 &-2631633700790150971

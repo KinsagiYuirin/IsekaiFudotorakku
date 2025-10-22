@@ -9,6 +9,5 @@ namespace Kaede.Scripts.Animation
         void Initialize(ComboKeySetting comboSetting, string displayKey, bool isStringKey);
         void SetState(KeyState state, int? index, float? indexFloat);
         void SetColor(Color color);
-        void SetSprite(Sprite sprite);
     }
 }
