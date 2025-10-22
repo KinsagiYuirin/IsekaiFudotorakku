@@ -71,9 +71,9 @@ namespace Kaede.Scripts.Managers
         }
 
         /// <summary>
-        /// After build Demo, Delete Update method and call CountdownReady in other script.
+        /// Have changed a bit, called in Update of UIManager
         /// </summary>
-        private void Update()
+        public void UpdateReadyCountdown()
         {
             if (readyTime <= 0) return;
             CountdownReady();
