@@ -1,5 +1,7 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
+using Kaede.Scripts.Animation;
 using Sirenix.OdinInspector;
 using UnityEngine;
 
@@ -37,6 +39,20 @@ namespace Kaede.Scripts.Item
         Cooking
     }
     
+    public enum AnimationType
+    {
+        Loop,
+        StepByStep
+    }
+    
+    [Serializable]
+    public class AnimationSetting
+    {
+        public AnimationType type;
+        [ShowIf("type", AnimationType.Loop)] 
+        public float loopDuration = 1.0f;
+    }
+    
     [Serializable]
     public class ComboKeySetting
     {
@@ -60,20 +76,42 @@ namespace Kaede.Scripts.Item
     {
         [Title("Info")]
         [LabelText("Name")] public string displayName;
-
+        
         [EnumToggleButtons, LabelText("Phase")]
         public StepPhase phase; // Preparation / Cooking
         
         [LabelText("Image")]
         public Sprite cookingSprite;
-
+        
+        [LabelText("Use Sequential Animation")]
+        public bool useSequentialAnimation;
+        
+        [HideIf(nameof(useSequentialAnimation))]
         [LabelText("Animation")]
         public AnimationClip comboAnimation;
+        
+        [ShowIf(nameof(useSequentialAnimation))]
+        [LabelText("Sequential Animations"), ListDrawerSettings(Expanded = true, DraggableItems = true)]
+        public List<AnimationClip> comboStepAnimations = new();
         
         [Title("Sequence")]
         [ListDrawerSettings(
             Expanded = true, DraggableItems = true,
             NumberOfItemsPerPage = 6, ShowPaging = true)]
         public List<ComboKeySetting> comboSequence = new();
+        
+        public ComboStepAnimationDefinition ResolveAnimationDefinition()
+        {
+            if (useSequentialAnimation)
+            {
+                var clips = comboStepAnimations?.Where(clip => clip != null).ToList();
+                if (clips != null && clips.Count > 0)
+                {
+                    return ComboStepAnimationDefinition.FromSequence(clips);
+                }
+            }
+
+            return comboAnimation != null ? ComboStepAnimationDefinition.FromSingle(comboAnimation) : ComboStepAnimationDefinition.None;
+        }
     }
 }

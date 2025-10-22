@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Kaede.Scripts.Animation;
 using Sirenix.OdinInspector;
 using UnityEngine;
 
@@ -30,8 +31,8 @@ namespace Kaede.Scripts.Item
                 ? customSequence
                 : preset != null ? preset.comboSequence : new List<ComboKeySetting>();
         
-        public AnimationClip ResolveAnimation()
-            => preset != null ? preset.comboAnimation : null;
+        public ComboStepAnimationDefinition ResolveAnimation()
+            => preset != null ? preset.ResolveAnimationDefinition() : ComboStepAnimationDefinition.None;
     }
 
     [CreateAssetMenu(fileName = "MenuData", menuName = "Kaede/MenuData")]

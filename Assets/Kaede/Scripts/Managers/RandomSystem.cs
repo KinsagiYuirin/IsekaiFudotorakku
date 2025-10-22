@@ -180,7 +180,7 @@ namespace Kaede.Scripts.Managers
             if (_currentServingFoodType.HasValue)
             {
                 var list = GetRandomMenuList(_currentServingFoodType.Value);
-                if (list != null && list.Count > 0)
+                if (list is { Count: > 0 })
                 {
                     return true;
                 }

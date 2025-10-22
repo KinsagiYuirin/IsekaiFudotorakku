@@ -300,10 +300,10 @@ namespace Kaede.Scripts.GamePlay
                     var step = menu.steps[_model.CurrentStepIndex];
                     var sprite = step?.preset != null ? step.preset.cookingSprite : null;
                     _view.SetCookingImage(sprite);
-                    var animationClip = step?.ResolveAnimation();
-                    if (animationClip != null)
+                    var animationDefinition = step?.ResolveAnimation() ?? ComboStepAnimationDefinition.None;
+                    if (animationDefinition.HasAnimation)
                     {
-                        _animationPlayer?.SetAnimation(animationClip);
+                        _animationPlayer?.SetAnimation(animationDefinition);
                     }
                     else
                     {

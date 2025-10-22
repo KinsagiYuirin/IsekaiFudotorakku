@@ -31,12 +31,10 @@ namespace Kaede.Scripts.Model
             if (menuData == null) return;
             
             _inventoryDataList ??= new List<MenuData>();
-            
-            if (!_inventoryDataList.Contains(menuData))
-            {
-                _inventoryDataList.Add(menuData);
-                _inventoryData.Value = _inventoryDataList;
-            }
+
+            if (_inventoryDataList.Contains(menuData)) return;
+            _inventoryDataList.Add(menuData);
+            _inventoryData.Value = _inventoryDataList;
         }
 
         public void RemoveMenu(MenuData menuData)
