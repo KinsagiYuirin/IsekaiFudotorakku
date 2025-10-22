@@ -303,7 +303,7 @@ namespace Kaede.Scripts.GamePlay
                     var animationDefinition = step?.ResolveAnimation() ?? ComboStepAnimationDefinition.None;
                     if (animationDefinition.HasAnimation)
                     {
-                        _animationPlayer?.SetAnimation(animationDefinition);
+                        _animationPlayer?.SetAnimation(animationDefinition, true);
                     }
                     else
                     {

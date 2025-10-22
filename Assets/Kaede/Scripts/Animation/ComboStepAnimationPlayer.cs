@@ -218,6 +218,7 @@ namespace Kaede.Scripts.Animation
 
             _currentPlayable.SetTime(0f);
             _currentPlayable.SetSpeed(1f);
+            _currentPlayable.Play();
 
             if (!_graph.IsPlaying())
             {
@@ -254,6 +255,7 @@ namespace Kaede.Scripts.Animation
             ReplaceCurrentPlayable(clip);
             _currentPlayable.SetTime(0f);
             _currentPlayable.SetSpeed(1f);
+            _currentPlayable.Play();
 
             if (!_graph.IsPlaying())
             {
