@@ -45,11 +45,6 @@ public class VFX_Control : MonoBehaviour
     {
         WaitingCombo();
     }
-
-    void Update()
-    {
-        
-    }
     
     void ScreenVFXSettings()
     {
@@ -96,23 +91,9 @@ public class VFX_Control : MonoBehaviour
         _flashTween.Stop();
     }
     
-    public void SetColor(Color color)
+    public void OnScreenRendererFeature(bool active)
     { 
-        objectSprite.color = color;
-    }
-    
-    public void OnScreenRendererFeature(bool On)
-    {
-        if (On == true)
-        {
-            ScreenRandererFeature.SetActive(true);
-        }
-
-        if (On == false)
-        {
-            ScreenRandererFeature.SetActive(false);
-        }
-        
+        ScreenRandererFeature.SetActive(active);
     }
 
     public void ChangeBGColor(bool failed)
