@@ -23,6 +23,7 @@ namespace Kaede.Scripts.Animation
         private int _sequenceIndex;
         private Coroutine _sequenceRoutine;
         private bool _isSequencePlaying;
+        private AnimationClip _definitionWrongFeedbackClip;
 
         private bool IsSequentialMode => _currentDefinition.Mode == ComboStepAnimationMode.SequentialClips;
 
@@ -80,6 +81,7 @@ namespace Kaede.Scripts.Animation
             }
 
             _currentDefinition = definition;
+            _definitionWrongFeedbackClip = definition.WrongFeedbackClip;
             StopSequenceRoutine();
 
             switch (definition.Mode)

@@ -17,28 +17,30 @@ namespace Kaede.Scripts.Animation
         public ComboStepAnimationMode Mode { get; }
         public AnimationClip SingleClip { get; }
         public IReadOnlyList<AnimationClip> SequentialClips { get; }
+        public AnimationClip WrongFeedbackClip { get; }
 
         public bool HasAnimation => Mode != ComboStepAnimationMode.None;
 
         private ComboStepAnimationDefinition(ComboStepAnimationMode mode, AnimationClip singleClip,
-            IReadOnlyList<AnimationClip> sequentialClips)
+            IReadOnlyList<AnimationClip> sequentialClips, AnimationClip wrongFeedbackClip)
         {
-            Mode             = mode;
-            SingleClip       = singleClip;
-            SequentialClips  = sequentialClips;
+            Mode                = mode;
+            SingleClip          = singleClip;
+            SequentialClips     = sequentialClips;
+            WrongFeedbackClip   = wrongFeedbackClip;
         }
 
-        public static ComboStepAnimationDefinition FromSingle(AnimationClip clip)
+        public static ComboStepAnimationDefinition FromSingle(AnimationClip clip, AnimationClip wrongFeedbackClip = null)
         {
             return clip != null
-                ? new ComboStepAnimationDefinition(ComboStepAnimationMode.SingleClip, clip, null)
+                ? new ComboStepAnimationDefinition(ComboStepAnimationMode.SingleClip, clip, null, wrongFeedbackClip)
                 : None;
         }
 
-        public static ComboStepAnimationDefinition FromSequence(IReadOnlyList<AnimationClip> clips)
+        public static ComboStepAnimationDefinition FromSequence(IReadOnlyList<AnimationClip> clips, AnimationClip wrongFeedbackClip = null)
         {
             return clips != null && clips.Count > 0
-                ? new ComboStepAnimationDefinition(ComboStepAnimationMode.SequentialClips, null, clips)
+                ? new ComboStepAnimationDefinition(ComboStepAnimationMode.SequentialClips, null, clips, wrongFeedbackClip)
                 : None;
         }
     }
