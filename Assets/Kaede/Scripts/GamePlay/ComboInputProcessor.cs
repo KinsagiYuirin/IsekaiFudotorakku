@@ -64,14 +64,14 @@ namespace Kaede.Scripts.GamePlay
                 switch (result)
                 {
                     case ComboInputResult.Progress:
-                        TriggerAnimation();
+                        TriggerAnimation(true);
                         PlaySuccessEmotion();
                         model.ScoreManager.AddPendingStepScore(_scorePerButton);
                         break;
                         
                     case ComboInputResult.Correct:
                         _sfxManager.PlaySuccessSound();
-                        TriggerAnimation();
+                        TriggerAnimation(true);
                         PlaySuccessEmotion();
                         _view.PressCorrectKey(model.CurrentComboIndex);
                         model.ScoreManager.AddPendingStepScore(_scorePerButton);
@@ -82,7 +82,7 @@ namespace Kaede.Scripts.GamePlay
 
                     case ComboInputResult.Wrong:
                         _sfxManager.PlayFailureSound();
-                        TriggerAnimation();
+                        TriggerAnimation(false);
                         PlayFailureEmotion();
                         if (!IsStepComplete)
                         {
@@ -144,12 +144,23 @@ namespace Kaede.Scripts.GamePlay
             _currentComboSetting = null;
         }
 
-        private void TriggerAnimation()
+        private void TriggerAnimation(bool isCorrect)
         {
             if (_animationPlayer == null)
             { return; }
 
-            _animationPlayer.Play();
+            if (isCorrect)
+            {
+                _animationPlayer.Play();
+            }
+            else
+            {
+                var playedWrong = _animationPlayer.PlayWrongFeedback();
+                if (!playedWrong)
+                {
+                    _animationPlayer.Play();
+                }
+            }
         }
         
         private void BeginHoldEmotion()

@@ -24,6 +24,9 @@ namespace Kaede.Scripts.Animation
         private Coroutine _sequenceRoutine;
         private bool _isSequencePlaying;
         private AnimationClip _definitionWrongFeedbackClip;
+        private AnimationClipPlayable _wrongFeedbackPlayable;
+        private Coroutine _wrongFeedbackRoutine;
+        private double _previousPlayableTime;
 
         private bool IsSequentialMode => _currentDefinition.Mode == ComboStepAnimationMode.SequentialClips;
 
@@ -43,6 +46,7 @@ namespace Kaede.Scripts.Animation
         private void OnDisable()
         {
             StopSequenceRoutine();
+            StopWrongFeedbackRoutine();
             if (_graph.IsValid())
             {
                 _graph.Stop();
@@ -52,6 +56,7 @@ namespace Kaede.Scripts.Animation
         private void OnDestroy()
         {
             StopSequenceRoutine();
+            StopWrongFeedbackRoutine();
             if (_graph.IsValid())
             {
                 _graph.Destroy();
@@ -83,6 +88,7 @@ namespace Kaede.Scripts.Animation
             _currentDefinition = definition;
             _definitionWrongFeedbackClip = definition.WrongFeedbackClip;
             StopSequenceRoutine();
+            StopWrongFeedbackRoutine();
 
             switch (definition.Mode)
             {
@@ -122,6 +128,7 @@ namespace Kaede.Scripts.Animation
         public void Stop()
         {
             StopSequenceRoutine();
+            StopWrongFeedbackRoutine();
 
             if (_graph.IsValid() && _graph.IsPlaying())
             {
@@ -144,6 +151,47 @@ namespace Kaede.Scripts.Animation
         {
             SetAnimation(ComboStepAnimationDefinition.None, false);
         }
+        
+        public bool PlayWrongFeedback()
+        {
+            if (!_graph.IsValid())
+            {
+                return false;
+            }
+
+            if (_definitionWrongFeedbackClip == null)
+            {
+                return false;
+            }
+
+            StopSequenceRoutine();
+            StopWrongFeedbackRoutine();
+
+            _previousPlayableTime = _currentPlayable.IsValid() ? _currentPlayable.GetTime() : 0d;
+
+            if (!_animationOutput.IsOutputValid())
+            {
+                return false;
+            }
+
+            _wrongFeedbackPlayable = AnimationClipPlayable.Create(_graph, _definitionWrongFeedbackClip);
+            _wrongFeedbackPlayable.SetApplyFootIK(false);
+            _wrongFeedbackPlayable.SetApplyPlayableIK(false);
+            _wrongFeedbackPlayable.SetTime(0f);
+            _wrongFeedbackPlayable.SetSpeed(1f);
+
+            _animationOutput.SetSourcePlayable(_wrongFeedbackPlayable);
+            _wrongFeedbackPlayable.Play();
+
+            if (!_graph.IsPlaying())
+            {
+                _graph.Play();
+            }
+
+            _wrongFeedbackRoutine = StartCoroutine(RestoreAfterWrong(_definitionWrongFeedbackClip.length));
+            return true;
+        }
+
 
         private void InitializeSingle(AnimationClip clip, bool autoPlay)
         {
@@ -305,6 +353,83 @@ namespace Kaede.Scripts.Animation
             _isSequencePlaying = false;
         }
 
+        private void StopWrongFeedbackRoutine()
+        {
+            var wasPlayingWrong = _wrongFeedbackRoutine != null || _wrongFeedbackPlayable.IsValid();
+
+            if (_wrongFeedbackRoutine != null)
+            {
+                StopCoroutine(_wrongFeedbackRoutine);
+                _wrongFeedbackRoutine = null;
+            }
+
+            if (_wrongFeedbackPlayable.IsValid())
+            {
+                _wrongFeedbackPlayable.Destroy();
+                _wrongFeedbackPlayable = default;
+            }
+
+            var outputValid = _animationOutput.IsOutputValid();
+
+            if (wasPlayingWrong && outputValid)
+            {
+                if (_currentPlayable.IsValid())
+                {
+                    _animationOutput.SetSourcePlayable(_currentPlayable);
+                    ApplyPoseAtTime(_previousPlayableTime);
+                }
+                else
+                {
+                    _animationOutput.SetSourcePlayable(Playable.Null);
+                }
+            }
+
+            _previousPlayableTime = 0d;
+        }
+
+        private IEnumerator RestoreAfterWrong(float duration)
+        {
+            var remaining = Mathf.Max(duration, 0f);
+            while (remaining > 0f)
+            {
+                remaining -= Time.deltaTime;
+                yield return null;
+            }
+
+            if (_wrongFeedbackPlayable.IsValid())
+            {
+                _wrongFeedbackPlayable.Pause();
+            }
+
+            _wrongFeedbackRoutine = null;
+
+            if (_currentPlayable.IsValid() && _animationOutput.IsOutputValid())
+            {
+                _animationOutput.SetSourcePlayable(_currentPlayable);
+                _currentPlayable.SetTime(_previousPlayableTime);
+                _currentPlayable.Pause();
+                ApplyPoseAtTime(_previousPlayableTime);
+            }
+            else if (_animationOutput.IsOutputValid())
+            {
+                _animationOutput.SetSourcePlayable(Playable.Null);
+            }
+
+            if (_wrongFeedbackPlayable.IsValid())
+            {
+                _wrongFeedbackPlayable.Destroy();
+                _wrongFeedbackPlayable = default;
+            }
+
+            if (_graph.IsValid() && _graph.IsPlaying())
+            {
+                _graph.Stop();
+            }
+
+            _previousPlayableTime = 0d;
+        }
+
+        
         private void ApplyPoseAtTime(double time)
         {
             if (!_currentPlayable.IsValid())
@@ -326,6 +451,7 @@ namespace Kaede.Scripts.Animation
 
         private void ClearCurrentPlayable()
         {
+            StopWrongFeedbackRoutine();
             if (_currentPlayable.IsValid())
             {
                 _currentPlayable.Destroy();

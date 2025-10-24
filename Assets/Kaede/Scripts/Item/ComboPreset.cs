@@ -90,6 +90,9 @@ namespace Kaede.Scripts.Item
         [LabelText("Animation")]
         public AnimationClip comboAnimation;
         
+        [LabelText("Wrong Input Animation")]
+        public AnimationClip wrongComboAnimation;
+        
         [ShowIf(nameof(useSequentialAnimation))]
         [LabelText("Sequential Animations"), ListDrawerSettings(Expanded = true, DraggableItems = true)]
         public List<AnimationClip> comboStepAnimations = new();
@@ -107,11 +110,22 @@ namespace Kaede.Scripts.Item
                 var clips = comboStepAnimations?.Where(clip => clip != null).ToList();
                 if (clips != null && clips.Count > 0)
                 {
-                    return ComboStepAnimationDefinition.FromSequence(clips);
+                    return ComboStepAnimationDefinition.FromSequence(clips, wrongComboAnimation);
+                }
+                if (wrongComboAnimation != null)
+                {
+                    return ComboStepAnimationDefinition.FromSingle(null, wrongComboAnimation);
                 }
             }
 
-            return comboAnimation != null ? ComboStepAnimationDefinition.FromSingle(comboAnimation) : ComboStepAnimationDefinition.None;
+            if (comboAnimation != null)
+            {
+                return ComboStepAnimationDefinition.FromSingle(comboAnimation, wrongComboAnimation);
+            }
+
+            return wrongComboAnimation != null
+                ? ComboStepAnimationDefinition.FromSingle(null, wrongComboAnimation)
+                : ComboStepAnimationDefinition.None;
         }
     }
 }

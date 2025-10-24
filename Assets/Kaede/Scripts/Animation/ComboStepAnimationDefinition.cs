@@ -32,15 +32,20 @@ namespace Kaede.Scripts.Animation
 
         public static ComboStepAnimationDefinition FromSingle(AnimationClip clip, AnimationClip wrongFeedbackClip = null)
         {
-            return clip != null
+            return clip != null || wrongFeedbackClip != null
                 ? new ComboStepAnimationDefinition(ComboStepAnimationMode.SingleClip, clip, null, wrongFeedbackClip)
                 : None;
         }
 
         public static ComboStepAnimationDefinition FromSequence(IReadOnlyList<AnimationClip> clips, AnimationClip wrongFeedbackClip = null)
         {
-            return clips != null && clips.Count > 0
-                ? new ComboStepAnimationDefinition(ComboStepAnimationMode.SequentialClips, null, clips, wrongFeedbackClip)
+            if (clips != null && clips.Count > 0)
+            {
+                return new ComboStepAnimationDefinition(ComboStepAnimationMode.SequentialClips, null, clips, wrongFeedbackClip);
+            }
+
+            return wrongFeedbackClip != null
+                ? FromSingle(null, wrongFeedbackClip)
                 : None;
         }
     }
