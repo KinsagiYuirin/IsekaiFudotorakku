@@ -1,5 +1,7 @@
-using System.Collections;
+using System;
 using System.Collections.Generic;
+using System.Threading;
+using Cysharp.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.Animations;
 using UnityEngine.Playables;
@@ -21,11 +23,11 @@ namespace Kaede.Scripts.Animation
         private ComboStepAnimationDefinition _currentDefinition;
         private List<AnimationClip> _sequenceClips;
         private int _sequenceIndex;
-        private Coroutine _sequenceRoutine;
+        private CancellationTokenSource _sequenceCancellation;
         private bool _isSequencePlaying;
         private AnimationClip _definitionWrongFeedbackClip;
         private AnimationClipPlayable _wrongFeedbackPlayable;
-        private Coroutine _wrongFeedbackRoutine;
+        private CancellationTokenSource _wrongFeedbackCancellation;
         private double _previousPlayableTime;
 
         private bool IsSequentialMode => _currentDefinition.Mode == ComboStepAnimationMode.SequentialClips;
@@ -188,7 +190,8 @@ namespace Kaede.Scripts.Animation
                 _graph.Play();
             }
 
-            _wrongFeedbackRoutine = StartCoroutine(RestoreAfterWrong(_definitionWrongFeedbackClip.length));
+            _wrongFeedbackCancellation = new CancellationTokenSource();
+            RestoreAfterWrongAsync(_definitionWrongFeedbackClip.length, _wrongFeedbackCancellation).Forget();
             return true;
         }
 
@@ -313,41 +316,18 @@ namespace Kaede.Scripts.Animation
             }
 
             StopSequenceRoutine();
-            _sequenceRoutine = StartCoroutine(PauseAtEnd(clip.length));
+            _sequenceCancellation = new CancellationTokenSource();
             _isSequencePlaying = true;
-        }
-
-        private IEnumerator PauseAtEnd(float duration)
-        {
-            var remaining = Mathf.Max(duration, 0f);
-            while (remaining > 0f)
-            {
-                remaining -= Time.deltaTime;
-                yield return null;
-            }
-
-            if (_currentPlayable.IsValid())
-            {
-                var finalTime = _currentClip != null ? _currentClip.length : 0f;
-                _currentPlayable.SetTime(finalTime);
-                _currentPlayable.Pause();
-            }
-
-            if (_graph.IsValid() && _graph.IsPlaying())
-            {
-                _graph.Stop();
-            }
-
-            _sequenceRoutine = null;
-            _isSequencePlaying = false;
+            PauseAtEndAsync(clip.length, _sequenceCancellation).Forget();
         }
 
         private void StopSequenceRoutine()
         {
-            if (_sequenceRoutine != null)
+            if (_sequenceCancellation != null)
             {
-                StopCoroutine(_sequenceRoutine);
-                _sequenceRoutine = null;
+                _sequenceCancellation.Cancel();
+                _sequenceCancellation.Dispose();
+                _sequenceCancellation = null;
             }
 
             _isSequencePlaying = false;
@@ -355,12 +335,13 @@ namespace Kaede.Scripts.Animation
 
         private void StopWrongFeedbackRoutine()
         {
-            var wasPlayingWrong = _wrongFeedbackRoutine != null || _wrongFeedbackPlayable.IsValid();
+            var wasPlayingWrong = _wrongFeedbackCancellation != null || _wrongFeedbackPlayable.IsValid();
 
-            if (_wrongFeedbackRoutine != null)
+            if (_wrongFeedbackCancellation != null)
             {
-                StopCoroutine(_wrongFeedbackRoutine);
-                _wrongFeedbackRoutine = null;
+                _wrongFeedbackCancellation.Cancel();
+                _wrongFeedbackCancellation.Dispose();
+                _wrongFeedbackCancellation = null;
             }
 
             if (_wrongFeedbackPlayable.IsValid())
@@ -387,49 +368,105 @@ namespace Kaede.Scripts.Animation
             _previousPlayableTime = 0d;
         }
 
-        private IEnumerator RestoreAfterWrong(float duration)
+        private async UniTask PauseAtEndAsync(float duration, CancellationTokenSource cancellation)
         {
-            var remaining = Mathf.Max(duration, 0f);
-            while (remaining > 0f)
+            try
             {
-                remaining -= Time.deltaTime;
-                yield return null;
-            }
+                var seconds = Mathf.Max(duration, 0f);
+                if (seconds > 0f)
+                {
+                    await UniTask.Delay(TimeSpan.FromSeconds(seconds), DelayType.DeltaTime, PlayerLoopTiming.Update, cancellation.Token);
+                }
 
-            if (_wrongFeedbackPlayable.IsValid())
+                if (_currentPlayable.IsValid())
+                {
+                    var finalTime = _currentClip != null ? _currentClip.length : 0f;
+                    _currentPlayable.SetTime(finalTime);
+                    _currentPlayable.Pause();
+                }
+
+                if (_graph.IsValid() && _graph.IsPlaying())
+                {
+                    _graph.Stop();
+                }
+            }
+            catch (OperationCanceledException)
             {
-                _wrongFeedbackPlayable.Pause();
+                // Routine cancelled; nothing to do.
             }
-
-            _wrongFeedbackRoutine = null;
-
-            if (_currentPlayable.IsValid() && _animationOutput.IsOutputValid())
+            finally
             {
-                _animationOutput.SetSourcePlayable(_currentPlayable);
-                _currentPlayable.SetTime(_previousPlayableTime);
-                _currentPlayable.Pause();
-                ApplyPoseAtTime(_previousPlayableTime);
+                if (_sequenceCancellation == cancellation)
+                {
+                    _sequenceCancellation.Dispose();
+                    _sequenceCancellation = null;
+                    _isSequencePlaying = false;
+                }
+                else
+                {
+                    cancellation.Dispose();
+                }
             }
-            else if (_animationOutput.IsOutputValid())
-            {
-                _animationOutput.SetSourcePlayable(Playable.Null);
-            }
-
-            if (_wrongFeedbackPlayable.IsValid())
-            {
-                _wrongFeedbackPlayable.Destroy();
-                _wrongFeedbackPlayable = default;
-            }
-
-            if (_graph.IsValid() && _graph.IsPlaying())
-            {
-                _graph.Stop();
-            }
-
-            _previousPlayableTime = 0d;
         }
 
-        
+        private async UniTask RestoreAfterWrongAsync(float duration, CancellationTokenSource cancellation)
+        {
+            try
+            {
+                var seconds = Mathf.Max(duration, 0f);
+                if (seconds > 0f)
+                {
+                    await UniTask.Delay(TimeSpan.FromSeconds(seconds), DelayType.DeltaTime, PlayerLoopTiming.Update, cancellation.Token);
+                }
+
+                if (_wrongFeedbackPlayable.IsValid())
+                {
+                    _wrongFeedbackPlayable.Pause();
+                }
+
+                if (_currentPlayable.IsValid() && _animationOutput.IsOutputValid())
+                {
+                    _animationOutput.SetSourcePlayable(_currentPlayable);
+                    _currentPlayable.SetTime(_previousPlayableTime);
+                    _currentPlayable.Pause();
+                    ApplyPoseAtTime(_previousPlayableTime);
+                }
+                else if (_animationOutput.IsOutputValid())
+                {
+                    _animationOutput.SetSourcePlayable(Playable.Null);
+                }
+
+                if (_wrongFeedbackPlayable.IsValid())
+                {
+                    _wrongFeedbackPlayable.Destroy();
+                    _wrongFeedbackPlayable = default;
+                }
+
+                if (_graph.IsValid() && _graph.IsPlaying())
+                {
+                    _graph.Stop();
+                }
+
+                _previousPlayableTime = 0d;
+            }
+            catch (OperationCanceledException)
+            {
+                // Routine cancelled; nothing to do.
+            }
+            finally
+            {
+                if (_wrongFeedbackCancellation == cancellation)
+                {
+                    _wrongFeedbackCancellation.Dispose();
+                    _wrongFeedbackCancellation = null;
+                }
+                else
+                {
+                    cancellation.Dispose();
+                }
+            }
+        }
+
         private void ApplyPoseAtTime(double time)
         {
             if (!_currentPlayable.IsValid())
