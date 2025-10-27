@@ -45,29 +45,16 @@ namespace Kaede.Scripts.Managers
             base.Awake();
             _inputHandler = FindObjectOfType<PlayerInputHandler>();
 
-            if (pauseMenuUI != null)
-                pauseMenuUI.SetActive(false);
-            if (resultUI != null)
-                resultUI.gameObject.SetActive(false);
+            SetPauseMenuVisibility(false);
+            SetResultUIVisibility(false);
         }
         
         private void Start()
         {
             SubscribeToInput();
-            if (tutorialDemo && !test)
-            {
-                PauseGame();
-                tutorialCompleted = false;
-
-                if (tutorialDemo != null)
-                    tutorialDemo.gameObject.SetActive(true);
-            }
-            
-            if (readyText != null)
-                readyText.gameObject.SetActive(false);
-            
-            if (pauseMenuUI != null)
-                pauseMenuUI.SetActive(false);
+            InitializeTutorial();
+            InitializeReadyText();
+            SetPauseMenuVisibility(false);
         }
 
         /// <summary>
@@ -86,7 +73,7 @@ namespace Kaede.Scripts.Managers
         
         private void CountdownReady()
         {
-            if (!tutorialCompleted) return;
+            if (!tutorialCompleted || readyText == null) return;
             readyText.gameObject.SetActive(true);
             readyTime -= Time.unscaledDeltaTime;
             readyText.text = readyTime.ToString("N0");
@@ -116,19 +103,16 @@ namespace Kaede.Scripts.Managers
 
         private void TogglePause()
         {
-            if (!tutorialCompleted) return;
-            if (readyTime > 0) return;
+            if (!tutorialCompleted || readyTime > 0) return;
             if (isPaused)
             {
                 ResumeGame();
-                if (pauseMenuUI != null)
-                    pauseMenuUI.SetActive(false);
+                SetPauseMenuVisibility(false);
             }
             else
             {
                 PauseGame();
-                if (pauseMenuUI != null)
-                    pauseMenuUI.SetActive(true);
+                SetPauseMenuVisibility(true);
             }
         }
 
@@ -149,10 +133,8 @@ namespace Kaede.Scripts.Managers
             isPaused = true;
             Time.timeScale = 0f;
             
-            if (resultUI != null)
-                resultUI.gameObject.SetActive(true);
-            
-            resultUI.SetResultScore(index);
+            SetResultUIVisibility(true);
+            resultUI?.SetResultScore(index);
         }
         
         public void QuitGame()
@@ -163,6 +145,40 @@ namespace Kaede.Scripts.Managers
         public void RestartGame()
         {
             SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+        }
+        
+        private void InitializeTutorial()
+        {
+            if (tutorialDemo == null || test)
+                return;
+
+            PauseGame();
+            tutorialCompleted = false;
+            tutorialDemo.gameObject.SetActive(true);
+        }
+
+        private void InitializeReadyText()
+        {
+            if (readyText == null)
+                return;
+
+            readyText.gameObject.SetActive(false);
+        }
+
+        private void SetPauseMenuVisibility(bool isVisible)
+        {
+            if (pauseMenuUI == null)
+                return;
+
+            pauseMenuUI.SetActive(isVisible);
+        }
+
+        private void SetResultUIVisibility(bool isVisible)
+        {
+            if (resultUI == null)
+                return;
+
+            resultUI.gameObject.SetActive(isVisible);
         }
     }
 }
