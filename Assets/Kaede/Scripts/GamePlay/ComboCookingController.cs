@@ -28,6 +28,7 @@ namespace Kaede.Scripts.GamePlay
     {
         [Title("Game Settings")]
         [SerializeField] private ComboTimerService timer = new ComboTimerService();
+        [SerializeField] private float failedDelay;
         
         [Title("Combo Settings")]
         [field: SerializeField] public List<MenuData> MenuDatasList { get; private set; }
@@ -49,7 +50,8 @@ namespace Kaede.Scripts.GamePlay
         private ComboInputProcessor _inputProcessor;
         private ComboMenuManager    _menuManager;
         private PlayerInputHandler  _inputHandler;
-        private VFXControl _VFX;
+        private VFXControl _vfxControl;
+        
         [SerializeField] private ComboStepAnimationPlayer _animationPlayer;
         [SerializeField] private ComboCharacterEmotionPlayer _characterEmotionPlayer;
         [SerializeField] private SfxManagerDemo _sfxManager;
@@ -113,9 +115,9 @@ namespace Kaede.Scripts.GamePlay
             _characterEmotionPlayer ??= GetComponentInChildren<ComboCharacterEmotionPlayer>();
             
             _inventoryController = GetComponent<InventoryController>();
+            _vfxControl =  GetComponent<VFXControl>();
             
             _model.ScoreManager.SetPendingStepScore(0);
-            _VFX = GetComponent<VFXControl>();
             if (_inputHandler == null)
             {
                 _inputHandler = FindObjectOfType<PlayerInputHandler>();
@@ -349,6 +351,23 @@ namespace Kaede.Scripts.GamePlay
             _animationPlayer?.Stop();
             ShowCurrentCombo();
             _characterEmotionPlayer?.ResetToIdle();
+        }
+        
+        private void FeverMode()
+        {
+            _vfxControl.Fevering();
+        }
+
+        private void NormalMode()
+        {
+            _vfxControl.Comboing();
+        }
+
+        private async UniTask FailMode()
+        {
+            _vfxControl.Failing();
+            await UniTask.WaitForSeconds(failedDelay);
+            NormalMode();
         }
         #endregion
     }
