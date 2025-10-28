@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using Cysharp.Threading.Tasks;
+using Kaede.Art.TA_Works.Scripts;
 using Kaede.Scripts.Animation;
 using Kaede.Scripts.Audios;
 using Kaede.Scripts.Item;
@@ -48,7 +49,7 @@ namespace Kaede.Scripts.GamePlay
         private ComboInputProcessor _inputProcessor;
         private ComboMenuManager    _menuManager;
         private PlayerInputHandler  _inputHandler;
-        private VFX_Control _VFX;
+        private VFXControl _VFX;
         [SerializeField] private ComboStepAnimationPlayer _animationPlayer;
         [SerializeField] private ComboCharacterEmotionPlayer _characterEmotionPlayer;
         [SerializeField] private SfxManagerDemo _sfxManager;
@@ -114,7 +115,7 @@ namespace Kaede.Scripts.GamePlay
             _inventoryController = GetComponent<InventoryController>();
             
             _model.ScoreManager.SetPendingStepScore(0);
-            _VFX = GetComponent<VFX_Control>();
+            _VFX = GetComponent<VFXControl>();
             if (_inputHandler == null)
             {
                 _inputHandler = FindObjectOfType<PlayerInputHandler>();
