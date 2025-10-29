@@ -123,6 +123,10 @@ namespace Kaede.Art.TA_Works.Scripts
         
         }
 
+    public void OnScreenRendererFeature(bool active)
+    { 
+        ScreenRandererFeature.SetActive(active);
+    }
         /// <summary>
         /// Default VFX
         /// </summary>
