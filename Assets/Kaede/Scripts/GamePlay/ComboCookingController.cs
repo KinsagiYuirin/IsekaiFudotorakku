@@ -28,7 +28,6 @@ namespace Kaede.Scripts.GamePlay
     {
         [Title("Game Settings")]
         [SerializeField] private ComboTimerService timer = new ComboTimerService();
-        [SerializeField] private float failedDelay;
         
         [Title("Combo Settings")]
         [field: SerializeField] public List<MenuData> MenuDatasList { get; private set; }
@@ -351,23 +350,6 @@ namespace Kaede.Scripts.GamePlay
             _animationPlayer?.Stop();
             ShowCurrentCombo();
             _characterEmotionPlayer?.ResetToIdle();
-        }
-        
-        private void FeverMode()
-        {
-            _vfxControl.Fevering();
-        }
-
-        private void NormalMode()
-        {
-            _vfxControl.Comboing();
-        }
-
-        private async UniTask FailMode()
-        {
-            _vfxControl.Failing();
-            await UniTask.WaitForSeconds(failedDelay);
-            NormalMode();
         }
         #endregion
     }
