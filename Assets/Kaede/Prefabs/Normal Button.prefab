@@ -115,8 +115,10 @@ MonoBehaviour:
   iconImage: {fileID: 1229565966714630721}
   lightImage: {fileID: 1664120889389112454}
   labelText: {fileID: 3758292827327587621}
+  scaleUp: 1.5
   scaleDown: 0.5
-  duration: 1
+  durationPhase1: 0.3
+  durationPhase2: 0.8
   fallbackSprite: {fileID: 6738171635790624250, guid: d621bf4c0ef0bfc4da4d991ad30d0c32, type: 3}
   grayBackGroundSprite: {fileID: -3811247053879248456, guid: 4cf3860b58cd8134fa091c17d58f8677, type: 3}
   lightBackGroundSprite: {fileID: 1806987054987770835, guid: eacb009a87079c24082d48663e012d4e, type: 3}

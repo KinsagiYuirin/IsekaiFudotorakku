@@ -29,8 +29,10 @@ namespace Kaede.Scripts.Animation
         [SerializeField] private TMP_Text labelText;
 
         [Title("Animation Setting")] 
+        [SerializeField] private float scaleUp;
         [SerializeField] private float scaleDown;
-        [SerializeField] private float duration;
+        [SerializeField] private float durationPhase1;
+        [SerializeField] private float durationPhase2;
         
         [Title("Sprite Settings")]
         [SerializeField] private Sprite fallbackSprite;
@@ -39,6 +41,7 @@ namespace Kaede.Scripts.Animation
         [SerializeField] private SpriteEntry[] spriteEntries;
 
         private Tween scaleTween;
+        private Sequence pressSequence;
         private Vector3 originalScale;
         private readonly Dictionary<(ComboKey key, KeyState state), Sprite> _spriteLookup = new();
         private ComboKey _currentKey = ComboKey.None;
@@ -191,7 +194,11 @@ namespace Kaede.Scripts.Animation
 
         private void OnPointDownAnimation()
         {
-            scaleTween = Tween.LocalScale(iconImage.rectTransform, originalScale, originalScale * scaleDown, duration);
+            
+            
+            pressSequence = Sequence.Create();
+            pressSequence.Chain(Tween.LocalScale(iconImage.rectTransform, originalScale, originalScale * scaleUp, durationPhase1));
+            pressSequence.Chain(Tween.LocalScale(iconImage.rectTransform, originalScale * scaleUp, originalScale * scaleDown, durationPhase2));
         }
     }
 }
