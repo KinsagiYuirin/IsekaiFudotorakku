@@ -213,7 +213,7 @@ namespace Kaede.Scripts.GamePlay
         #endregion
 
         #region Combo Features
-        private void NextStep()
+        private async UniTask NextStep()
         {
             if (_model is { GameState: CookingState.Resting }) return;
             if (_inputProcessor == null || !_inputProcessor.IsStepComplete) return;
@@ -223,7 +223,9 @@ namespace Kaede.Scripts.GamePlay
             var hasNext = _model.NextStep();
             if (!hasNext)
             {
-                NextMenu();
+                sendFood.SetToStartPosition(_model.MenuDatas[_model.CurrentMenuIndex].menuSprite);
+                await timer.PauseTimerForSeconds(timer.DelayAfterFinishMenu);
+                NextMenu().Forget();;
                 return;
             }
 
@@ -234,11 +236,8 @@ namespace Kaede.Scripts.GamePlay
             Debug.Log("Next Step");
         }
         
-        private async void NextMenu()
+        private async UniTask NextMenu()
         {
-            sendFood.SetToStartPosition(_model.MenuDatas[_model.CurrentMenuIndex].menuSprite);
-            timer.PauseTimerForSeconds(timer.DelayAfterFinishMenu);
-            await UniTask.Delay(TimeSpan.FromSeconds(timer.DelayAfterFinishMenu));
             _inputProcessor?.ResetState();
 
             var multiplier = MathF.Round(timer.DividerTimeToMultiply(), 1);
@@ -253,7 +252,7 @@ namespace Kaede.Scripts.GamePlay
 
                 if (!TryAdvanceMenuType())
                 {
-                    await UniTask.Delay(TimeSpan.FromSeconds(timer.DelayBeforeGameOver));
+                    await timer.PauseTimerForSeconds(timer.DelayBeforeGameOver);
                     GameManager.Instance.GameOver(_model.ScoreManager.GrandTotalScore);
                     return;
                 }
@@ -305,7 +304,7 @@ namespace Kaede.Scripts.GamePlay
                     var animationDefinition = step?.ResolveAnimation() ?? ComboStepAnimationDefinition.None;
                     if (animationDefinition.HasAnimation)
                     {
-                        _animationPlayer?.SetAnimation(animationDefinition, true);
+                        _animationPlayer?.SetAnimation(animationDefinition, false);
                     }
                     else
                     {
@@ -315,7 +314,7 @@ namespace Kaede.Scripts.GamePlay
                 else
                 {
                     _animationPlayer?.ClearAnimation();
-                }
+                }   
             }
         }
         #endregion

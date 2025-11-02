@@ -15,7 +15,13 @@ MonoBehaviour:
   displayName: 
   phase: 0
   cookingSprite: {fileID: 0}
-  comboAnimation: {fileID: 7400000, guid: c36074c44c3c02c44b9f5751ed23f351, type: 2}
+  useSequentialAnimation: 1
+  comboAnimation: {fileID: 0}
+  wrongComboAnimation: {fileID: 0}
+  comboStepAnimations:
+  - {fileID: 7400000, guid: 6b6f60affc28b9d45ae9d21db40b1dfb, type: 2}
+  - {fileID: 7400000, guid: 1d23cf77b22095a4689a5796aa9c5408, type: 2}
+  - {fileID: 7400000, guid: fd85285a2c831664b82ef4586c18cfec, type: 2}
   comboSequence:
   - key: 3
     type: 0

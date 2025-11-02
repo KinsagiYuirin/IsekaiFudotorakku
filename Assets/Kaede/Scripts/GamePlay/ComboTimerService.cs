@@ -65,7 +65,7 @@ namespace Kaede.Scripts.GamePlay
             }
         }
 
-        public async void PauseTimerForSeconds(float seconds)
+        public async UniTask PauseTimerForSeconds(float seconds)
         {
             SetPaused();
             await UniTask.Delay(TimeSpan.FromSeconds(seconds));

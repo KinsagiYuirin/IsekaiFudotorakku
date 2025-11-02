@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using Kaede.Scripts.GamePlay;
 using Kaede.Scripts.Item;
 using Kaede.Scripts.Utils;
+using PrimeTween;
 using Sirenix.OdinInspector;
 using TMPro;
 using UnityEngine;
@@ -27,12 +28,18 @@ namespace Kaede.Scripts.Animation
         [SerializeField] private Image lightImage;
         [SerializeField] private TMP_Text labelText;
 
+        [Title("Animation Setting")] 
+        [SerializeField] private float scaleDown;
+        [SerializeField] private float duration;
+        
         [Title("Sprite Settings")]
         [SerializeField] private Sprite fallbackSprite;
         [SerializeField] private Sprite grayBackGroundSprite;
         [SerializeField] private Sprite lightBackGroundSprite;
         [SerializeField] private SpriteEntry[] spriteEntries;
 
+        private Tween scaleTween;
+        private Vector3 originalScale;
         private readonly Dictionary<(ComboKey key, KeyState state), Sprite> _spriteLookup = new();
         private ComboKey _currentKey = ComboKey.None;
         
@@ -40,6 +47,7 @@ namespace Kaede.Scripts.Animation
         {
             iconImage ??= GetComponent<Image>();
             labelText ??= GetComponentInChildren<TMP_Text>();
+            originalScale =  iconImage.transform.localScale;
             InitializeSpriteLookup();
         }
 
@@ -81,8 +89,11 @@ namespace Kaede.Scripts.Animation
                     break;
                 
                 case KeyState.Ideal: 
+                    UpdateLightAlpha(0f);
+                    break;
                 case KeyState.Active:
                     UpdateLightAlpha(0f);
+                    OnPointDownAnimation();
                     break;
             }
         }
@@ -176,6 +187,11 @@ namespace Kaede.Scripts.Animation
             }
 
             return fallbackSprite;
+        }
+
+        private void OnPointDownAnimation()
+        {
+            scaleTween = Tween.LocalScale(iconImage.rectTransform, originalScale, originalScale * scaleDown, duration);
         }
     }
 }

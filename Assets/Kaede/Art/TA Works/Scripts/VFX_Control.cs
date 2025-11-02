@@ -95,20 +95,6 @@ namespace Kaede.Art.TA_Works.Scripts
         { 
             objectSprite.color = color;
         }
-    
-        public void OnScreenRendererFeature(bool On)
-        {
-            if (On == true)
-            {
-                ScreenRandererFeature.SetActive(true);
-            }
-
-            if (On == false)
-            {
-                ScreenRandererFeature.SetActive(false);
-            }
-        
-        }
 
         public void ChangeBGColor(bool failed)
         {
