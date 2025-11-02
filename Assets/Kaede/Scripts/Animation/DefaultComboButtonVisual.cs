@@ -95,7 +95,7 @@ namespace Kaede.Scripts.Animation
                     UpdateLightAlpha(0f);
                     break;
                 case KeyState.Active:
-                    UpdateLightAlpha(0f);
+                    UpdateLightAlpha(0f, active: false);
                     OnPointDownAnimation();
                     break;
             }
@@ -109,14 +109,21 @@ namespace Kaede.Scripts.Animation
             }
         }
         
-        private void UpdateLightAlpha(float alpha, Sprite sprite = null)
+        private void UpdateLightAlpha(float alpha, Sprite sprite = null, bool active = true)
         {
-            lightImage.sprite = sprite ?? lightBackGroundSprite;
-            if (lightImage != null)
+            if (active)
             {
-                Color color = lightImage.color;
-                color.a = alpha;
-                lightImage.color = color;
+                lightImage.sprite = sprite ?? lightBackGroundSprite;
+                if (lightImage != null)
+                {
+                    Color color = lightImage.color;
+                    color.a = alpha;
+                    lightImage.color = color;
+                }
+            }
+            else
+            {
+                lightImage.gameObject.SetActive(false);
             }
         }
         
@@ -194,8 +201,6 @@ namespace Kaede.Scripts.Animation
 
         private void OnPointDownAnimation()
         {
-            
-            
             pressSequence = Sequence.Create();
             pressSequence.Chain(Tween.LocalScale(iconImage.rectTransform, originalScale, originalScale * scaleUp, durationPhase1));
             pressSequence.Chain(Tween.LocalScale(iconImage.rectTransform, originalScale * scaleUp, originalScale * scaleDown, durationPhase2));
