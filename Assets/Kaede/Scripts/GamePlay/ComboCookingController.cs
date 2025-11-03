@@ -110,6 +110,11 @@ namespace Kaede.Scripts.GamePlay
             
             _animationPlayer ??= GetComponent<ComboStepAnimationPlayer>();
             _animationPlayer ??= GetComponentInChildren<ComboStepAnimationPlayer>();
+
+            if (_animationPlayer != null)
+            {
+                _animationPlayer.SetPlayOnAssign(false);
+            }
             
             _characterEmotionPlayer ??= GetComponent<ComboCharacterEmotionPlayer>();
             _characterEmotionPlayer ??= GetComponentInChildren<ComboCharacterEmotionPlayer>();
@@ -304,19 +309,38 @@ namespace Kaede.Scripts.GamePlay
                     var sprite = step?.preset != null ? step.preset.cookingSprite : null;
                     _view.SetCookingImage(sprite);
                     var animationDefinition = step?.ResolveAnimation() ?? ComboStepAnimationDefinition.None;
-                    if (animationDefinition.HasAnimation)
+                    if (_inputProcessor != null)
                     {
-                        _animationPlayer?.SetAnimation(animationDefinition, false);
+                        _inputProcessor.PrepareStepAnimation(animationDefinition);
                     }
-                    else
+                    else if (_animationPlayer != null)
                     {
-                        _animationPlayer?.ClearAnimation();
+                        if (animationDefinition.HasAnimation)
+                        {
+                            _animationPlayer.SetAnimation(animationDefinition);
+                        }
+                        else
+                        {
+                            _animationPlayer.ClearAnimation();
+                        }
                     }
                 }
                 else
                 {
+                    if (_inputProcessor != null)
+                    {
+                        _inputProcessor.PrepareStepAnimation(ComboStepAnimationDefinition.None);
+                    }
                     _animationPlayer?.ClearAnimation();
-                }   
+                }
+            }
+            else
+            {
+                if (_inputProcessor != null)
+                {
+                    _inputProcessor.PrepareStepAnimation(ComboStepAnimationDefinition.None);
+                }
+                _animationPlayer?.ClearAnimation();
             }
         }
         #endregion

@@ -17,11 +17,13 @@ namespace Kaede.Scripts.GamePlay
         private readonly ComboStepAnimationPlayer _animationPlayer;
         private readonly ComboCharacterEmotionPlayer _emotionPlayer;
         private readonly SfxManagerDemo _sfxManager;
-        
+
         private IComboHandler _currentHandler;
         private ComboKeySetting _currentComboSetting;
         private CancellationTokenSource _inputCts;
         private bool _checking;
+        private ComboStepAnimationDefinition _currentStepAnimationDefinition = ComboStepAnimationDefinition.None;
+        private bool _hasPreparedStepAnimation;
 
         public ComboInputProcessor(PlayerInputHandler inputHandler, ComboCookingView view, float scorePerButton, 
             ComboStepAnimationPlayer animationPlayer, ComboCharacterEmotionPlayer emotionPlayer, SfxManagerDemo sfxManager)
@@ -114,6 +116,8 @@ namespace Kaede.Scripts.GamePlay
             ResetHandler();
             ResetHoldEmotion();
             _emotionPlayer?.ResetToIdle();
+            _currentStepAnimationDefinition = ComboStepAnimationDefinition.None;
+            _hasPreparedStepAnimation      = false;
         }
 
         public void ResetStateWithCombo(ComboCookingModel model)
@@ -150,6 +154,8 @@ namespace Kaede.Scripts.GamePlay
             if (_animationPlayer == null)
             { return; }
 
+            EnsureStepAnimationPrepared();
+
             if (isCorrect)
             {
                 _animationPlayer.Play();
@@ -162,6 +168,36 @@ namespace Kaede.Scripts.GamePlay
                     _animationPlayer.Play();
                 }
             }
+        }
+
+        public void PrepareStepAnimation(ComboStepAnimationDefinition definition)
+        {
+            _currentStepAnimationDefinition = definition;
+            _hasPreparedStepAnimation       = false;
+
+            if (_animationPlayer == null)
+            { return; }
+
+            if (!definition.HasAnimation && definition.WrongFeedbackClip == null)
+            {
+                _animationPlayer.ClearAnimation();
+            }
+        }
+
+        private void EnsureStepAnimationPrepared()
+        {
+            if (_animationPlayer == null)
+            { return; }
+
+            if (_hasPreparedStepAnimation)
+            { return; }
+
+            var definition = _currentStepAnimationDefinition;
+            if (!definition.HasAnimation && definition.WrongFeedbackClip == null)
+            { return; }
+
+            _animationPlayer.SetAnimation(definition, false);
+            _hasPreparedStepAnimation = true;
         }
         
         private void BeginHoldEmotion()
