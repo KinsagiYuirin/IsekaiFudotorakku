@@ -28,6 +28,7 @@ namespace Kaede.Scripts.GamePlay
     {
         [Title("Game Settings")]
         [SerializeField] private ComboTimerService timer = new ComboTimerService();
+        [SerializeField] private bool needSpacebar;
         
         [Title("Combo Settings")]
         [field: SerializeField] public List<MenuData> MenuDatasList { get; private set; }
@@ -146,9 +147,10 @@ namespace Kaede.Scripts.GamePlay
         {
             _confirmSubscription = _inputHandler.ConfirmButton.Subscribe(button =>
             {
+                if (!needSpacebar) return;
                 if (button.isDown)
                 {
-                    NextStep();
+                    NextStep().Forget();
                 }
             });
             
