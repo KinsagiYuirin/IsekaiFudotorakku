@@ -29,6 +29,7 @@ namespace Kaede.Scripts.GamePlay
         [Title("Game Settings")]
         [SerializeField] private ComboTimerService timer = new ComboTimerService();
         [SerializeField] private bool needSpacebar;
+        [SerializeField] private bool autoPlay; 
         
         [Title("Combo Settings")]
         [field: SerializeField] public List<MenuData> MenuDatasList { get; private set; }
@@ -131,6 +132,7 @@ namespace Kaede.Scripts.GamePlay
             {
                 _inputProcessor = new ComboInputProcessor(_inputHandler, _view, scorePerButton, 
                     _animationPlayer, _characterEmotionPlayer, _sfxManager);
+                _inputProcessor.StepCompleted += HandleStepCompleted;
             }
             
             timer.Initialize(_view);
@@ -215,6 +217,17 @@ namespace Kaede.Scripts.GamePlay
         #endregion
 
         #region Combo Features
+        
+        private void HandleStepCompleted()
+        {
+            if (needSpacebar)
+            {
+                return;
+            }
+
+            NextStep().Forget();
+        }
+        
         private async UniTask NextStep()
         {
             if (_model is { GameState: CookingState.Resting }) return;
@@ -306,7 +319,7 @@ namespace Kaede.Scripts.GamePlay
                     var animationDefinition = step?.ResolveAnimation() ?? ComboStepAnimationDefinition.None;
                     if (animationDefinition.HasAnimation)
                     {
-                        _animationPlayer?.SetAnimation(animationDefinition, false);
+                        _animationPlayer?.SetAnimation(animationDefinition, autoPlay);
                     }
                     else
                     {
@@ -314,7 +327,7 @@ namespace Kaede.Scripts.GamePlay
                     }
                 }
                 else
-                {
+                { 
                     _animationPlayer?.ClearAnimation();
                 }   
             }

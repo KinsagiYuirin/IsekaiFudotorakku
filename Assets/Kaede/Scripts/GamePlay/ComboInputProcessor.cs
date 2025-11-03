@@ -33,6 +33,8 @@ namespace Kaede.Scripts.GamePlay
             _emotionPlayer   = emotionPlayer;
             _sfxManager      = sfxManager;
         }
+        
+        public event Action StepCompleted;
 
         public bool IsStepComplete { get; private set; }
         private bool _holdAnimationActive;
@@ -132,6 +134,7 @@ namespace Kaede.Scripts.GamePlay
                 ResetHandler();
                 CancelInputLoop();
                 ResetHoldEmotion();
+                StepCompleted?.Invoke();
                 return;
             }
 

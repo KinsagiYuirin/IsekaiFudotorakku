@@ -14,6 +14,7 @@ namespace Kaede.Scripts.Animation
         [SerializeField] private Animator animator;
         [SerializeField] private bool playOnAssign;
         [SerializeField] private bool loopAnimation = false;
+        [SerializeField] private bool stopGraph  = false;
 
         private PlayableGraph _graph;
         private AnimationPlayableOutput _animationOutput;
@@ -218,7 +219,7 @@ namespace Kaede.Scripts.Animation
             }
             else
             {
-                ApplyPoseAtTime(0f);
+                ApplyPoseAtTime(0f, stopGraph);
             }
         }
 
@@ -467,7 +468,7 @@ namespace Kaede.Scripts.Animation
             }
         }
 
-        private void ApplyPoseAtTime(double time)
+        private void ApplyPoseAtTime(double time, bool stopGraph = true)
         {
             if (!_currentPlayable.IsValid())
             {
@@ -476,11 +477,11 @@ namespace Kaede.Scripts.Animation
 
             _currentPlayable.SetTime(time);
             _currentPlayable.Pause();
-            if (_graph.IsValid() && _graph.IsPlaying())
+            if (stopGraph && _graph.IsValid() && _graph.IsPlaying())
             {
                 _graph.Stop();
             }
-            if (_graph.IsValid())
+            if (_graph.IsValid() && (stopGraph || !_graph.IsPlaying()))
             {
                 _graph.Evaluate(0f);
             }
