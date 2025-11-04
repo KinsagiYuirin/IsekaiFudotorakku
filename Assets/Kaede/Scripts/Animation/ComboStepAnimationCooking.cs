@@ -9,7 +9,7 @@ using UnityEngine.Playables;
 namespace Kaede.Scripts.Animation
 {
     [DisallowMultipleComponent]
-    public class ComboStepAnimationPlayer : MonoBehaviour
+    public class ComboStepAnimationCooking : MonoBehaviour
     {
         [SerializeField] private Animator animator;
         [SerializeField] private bool playOnAssign;
@@ -389,6 +389,14 @@ namespace Kaede.Scripts.Animation
                 if (_graph.IsValid() && _graph.IsPlaying())
                 {
                     _graph.Stop();
+                }
+                
+                if (!cancellation.IsCancellationRequested &&
+                    _sequenceClips != null &&
+                    _sequenceClips.Count > 0 &&
+                    _sequenceIndex >= _sequenceClips.Count)
+                {
+                    _sequenceIndex = 0;
                 }
             }
             catch (OperationCanceledException)

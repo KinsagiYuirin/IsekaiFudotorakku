@@ -6977,11 +6977,13 @@ MonoBehaviour:
     dividerTimeScore: 0
     delayAfterFinishMenu: 1.6
     delayBeforeGameOver: 0.5
+  needSpacebar: 0
+  autoPlay: 0
   <MenuDatasList>k__BackingField: []
   <TimeBetweenCombos>k__BackingField: 1
   scorePerButton: 10
   completedMenus: []
-  _animationPlayer: {fileID: 1897282216}
+  animationCooking: {fileID: 0}
   _characterEmotionPlayer: {fileID: 1848500657}
   _sfxManager: {fileID: 2084663521}
   sendFood: {fileID: 2118260111}
@@ -7599,6 +7601,7 @@ MonoBehaviour:
   animator: {fileID: 878576955}
   playOnAssign: 0
   loopAnimation: 0
+  stopGraph: 0
 --- !u!4 &1897282217
 Transform:
   m_ObjectHideFlags: 0

@@ -53,7 +53,7 @@ namespace Kaede.Scripts.GamePlay
         private PlayerInputHandler  _inputHandler;
         private VFXControl _vfxControl;
         
-        [SerializeField] private ComboStepAnimationPlayer _animationPlayer;
+        [SerializeField] private ComboStepAnimationCooking animationCooking;
         [SerializeField] private ComboCharacterEmotionPlayer _characterEmotionPlayer;
         [SerializeField] private SfxManagerDemo _sfxManager;
         [SerializeField] private SendFood sendFood;
@@ -109,8 +109,8 @@ namespace Kaede.Scripts.GamePlay
             _model = new ComboCookingModel(MenuDatasList, timer.MaxTimePerCombo);
             _view  = GetComponent<ComboCookingView>();
             
-            _animationPlayer ??= GetComponent<ComboStepAnimationPlayer>();
-            _animationPlayer ??= GetComponentInChildren<ComboStepAnimationPlayer>();
+            animationCooking ??= GetComponent<ComboStepAnimationCooking>();
+            animationCooking ??= GetComponentInChildren<ComboStepAnimationCooking>();
             
             _characterEmotionPlayer ??= GetComponent<ComboCharacterEmotionPlayer>();
             _characterEmotionPlayer ??= GetComponentInChildren<ComboCharacterEmotionPlayer>();
@@ -131,7 +131,7 @@ namespace Kaede.Scripts.GamePlay
             else
             {
                 _inputProcessor = new ComboInputProcessor(_inputHandler, _view, scorePerButton, 
-                    _animationPlayer, _characterEmotionPlayer, _sfxManager);
+                    animationCooking, _characterEmotionPlayer, _sfxManager);
                 _inputProcessor.StepCompleted += HandleStepCompleted;
             }
             
@@ -319,16 +319,16 @@ namespace Kaede.Scripts.GamePlay
                     var animationDefinition = step?.ResolveAnimation() ?? ComboStepAnimationDefinition.None;
                     if (animationDefinition.HasAnimation)
                     {
-                        _animationPlayer?.SetAnimation(animationDefinition, autoPlay);
+                        animationCooking?.SetAnimation(animationDefinition, autoPlay);
                     }
                     else
                     {
-                        _animationPlayer?.ClearAnimation();
+                        animationCooking?.ClearAnimation();
                     }
                 }
                 else
                 { 
-                    _animationPlayer?.ClearAnimation();
+                    animationCooking?.ClearAnimation();
                 }   
             }
         }
@@ -342,7 +342,7 @@ namespace Kaede.Scripts.GamePlay
             NextMenu();
             _model.ScoreManager.ResetPendingStepScore();
             _inputProcessor?.ResetState();
-            _animationPlayer?.Stop();
+            animationCooking?.Stop();
             _characterEmotionPlayer?.ResetToIdle();
         }
 
@@ -351,7 +351,7 @@ namespace Kaede.Scripts.GamePlay
             _inventoryController?.SetVisible(false);
             _model.ResetCombo();
             _view.ResetCombo();
-            _animationPlayer?.Stop();
+            animationCooking?.Stop();
             _inputProcessor?.ResetState();
             _characterEmotionPlayer?.ResetToIdle();
         }
@@ -361,7 +361,7 @@ namespace Kaede.Scripts.GamePlay
             _inventoryController?.SetVisible(true);
             _model.ResetCombo();
             _view.ResetCombo();
-            _animationPlayer?.Stop();
+            animationCooking?.Stop();
             ShowCurrentCombo();
             _characterEmotionPlayer?.ResetToIdle();
         }

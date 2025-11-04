@@ -14,7 +14,7 @@ namespace Kaede.Scripts.GamePlay
         private readonly PlayerInputHandler _inputHandler;
         private readonly ComboCookingView   _view;
         private readonly float              _scorePerButton;
-        private readonly ComboStepAnimationPlayer _animationPlayer;
+        private readonly ComboStepAnimationCooking _animationCooking;
         private readonly ComboCharacterEmotionPlayer _emotionPlayer;
         private readonly SfxManagerDemo _sfxManager;
         
@@ -24,12 +24,12 @@ namespace Kaede.Scripts.GamePlay
         private bool _checking;
 
         public ComboInputProcessor(PlayerInputHandler inputHandler, ComboCookingView view, float scorePerButton, 
-            ComboStepAnimationPlayer animationPlayer, ComboCharacterEmotionPlayer emotionPlayer, SfxManagerDemo sfxManager)
+            ComboStepAnimationCooking animationCooking, ComboCharacterEmotionPlayer emotionPlayer, SfxManagerDemo sfxManager)
         {
             _inputHandler    = inputHandler;
             _view            = view;
             _scorePerButton  = scorePerButton;
-            _animationPlayer = animationPlayer;
+            _animationCooking = animationCooking;
             _emotionPlayer   = emotionPlayer;
             _sfxManager      = sfxManager;
         }
@@ -150,19 +150,19 @@ namespace Kaede.Scripts.GamePlay
 
         private void TriggerAnimation(bool isCorrect)
         {
-            if (_animationPlayer == null)
+            if (_animationCooking == null)
             { return; }
 
             if (isCorrect)
             {
-                _animationPlayer.Play();
+                _animationCooking.Play();
             }
             else
             {
-                var playedWrong = _animationPlayer.PlayWrongFeedback();
+                var playedWrong = _animationCooking.PlayWrongFeedback();
                 if (!playedWrong)
                 {
-                    _animationPlayer.Play();
+                    _animationCooking.Play();
                 }
             }
         }

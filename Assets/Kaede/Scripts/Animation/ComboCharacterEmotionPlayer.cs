@@ -97,10 +97,17 @@ namespace Kaede.Scripts.Animation
 
         public void PlayHoldLoop()
         {
-            if (!PlayClip(holdLoopAnimation != null ? holdLoopAnimation : idleAnimation, true, false) && holdLoopAnimation == null)
+            var clipToPlay = holdLoopAnimation != null ? holdLoopAnimation : idleAnimation;
+
+            if (clipToPlay == null)
             {
-                PlayIdle();
+                Debug.LogWarning(
+                    "ComboCharacterEmotionPlayer cannot play the hold loop because neither holdLoopAnimation nor idleAnimation clips are assigned.",
+                    this);
+                return;
             }
+            
+            PlayClip(clipToPlay, true, false);
         }
 
         public void ResetToIdle()
