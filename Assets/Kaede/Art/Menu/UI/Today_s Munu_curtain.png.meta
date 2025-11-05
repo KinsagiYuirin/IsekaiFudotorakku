@@ -159,7 +159,9 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      Today_s Munu_curtain_0: -6636174471579499582
+      Today_s Munu_curtain_1: 3525958351110029851
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
