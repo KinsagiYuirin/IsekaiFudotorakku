@@ -308,7 +308,7 @@ namespace Kaede.Scripts.GamePlay
             if (_model.TryGetCurrentComboSettings(out var combos))
             {
                 _view.ShowCombo(combos);
-                _characterEmotionPlayer?.ResetToIdle();
+                // _characterEmotionPlayer?.ResetToIdle(true);
 
                 var menu = _model.MenuDatas[_model.CurrentMenuIndex];
                 if (menu?.steps != null && _model.CurrentStepIndex < menu.steps.Count)
@@ -343,7 +343,7 @@ namespace Kaede.Scripts.GamePlay
             _model.ScoreManager.ResetPendingStepScore();
             _inputProcessor?.ResetState();
             animationCooking?.Stop();
-            _characterEmotionPlayer?.ResetToIdle();
+            _characterEmotionPlayer?.ResetToIdle(true);
         }
 
         private void HandleRestEntered()
@@ -353,7 +353,7 @@ namespace Kaede.Scripts.GamePlay
             _view.ResetCombo();
             animationCooking?.Stop();
             _inputProcessor?.ResetState();
-            _characterEmotionPlayer?.ResetToIdle();
+            _characterEmotionPlayer?.ResetToIdle(true);
         }
         
         private void HandleRestFinished()
@@ -363,7 +363,7 @@ namespace Kaede.Scripts.GamePlay
             _view.ResetCombo();
             animationCooking?.Stop();
             ShowCurrentCombo();
-            _characterEmotionPlayer?.ResetToIdle();
+            _characterEmotionPlayer?.ResetToIdle(true);
         }
         #endregion
     }

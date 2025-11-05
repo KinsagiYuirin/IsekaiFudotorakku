@@ -110,7 +110,7 @@ namespace Kaede.Scripts.Animation
             PlayClip(clipToPlay, true, false);
         }
 
-        public void ResetToIdle()
+        public void ResetToIdle(bool playIdleClip)
         {
             if (_returnToIdleRoutine != null)
             {
@@ -118,7 +118,17 @@ namespace Kaede.Scripts.Animation
                 _returnToIdleRoutine = null;
             }
 
-            PlayIdle();
+            if (_graph.IsValid() && _graph.IsPlaying())
+            {
+                _graph.Stop();
+            }
+
+            StopCurrentPlayable();
+
+            if (playIdleClip)
+            {
+                PlayIdle();
+            }
         }
 
         private bool PlayClip(AnimationClip clip, bool loop, bool forceRestart)
@@ -195,7 +205,7 @@ namespace Kaede.Scripts.Animation
                 _currentPlayable.Destroy();
                 _currentPlayable = default;
             }
-
+            
             _currentClip = null;
         }
 

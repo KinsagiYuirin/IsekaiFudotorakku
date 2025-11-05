@@ -115,7 +115,7 @@ namespace Kaede.Scripts.GamePlay
             IsStepComplete = false;
             ResetHandler();
             ResetHoldEmotion();
-            _emotionPlayer?.ResetToIdle();
+            //_emotionPlayer?.ResetToIdle(true);
         }
 
         public void ResetStateWithCombo(ComboCookingModel model)
@@ -213,7 +213,7 @@ namespace Kaede.Scripts.GamePlay
         {
             CancelInputLoop();
             ResetHoldEmotion();
-            _emotionPlayer?.ResetToIdle();
+            _emotionPlayer?.ResetToIdle(true);
         }
     }
 }
