@@ -30,7 +30,7 @@ namespace Kaede.Scripts.UI.TodayMenu
             SetFood();
             WaitForAnyPress(true).Forget();
         }
-
+        
         private void SetFood()
         {
             foreach (var m in _activeMenus)
@@ -56,7 +56,7 @@ namespace Kaede.Scripts.UI.TodayMenu
                 Input.GetMouseButtonDown(2));
 
             Debug.Log("Press detected!");
-
+            
             if (activeAnimation)
             {
                 await TodayMenuAnimation();
@@ -71,6 +71,8 @@ namespace Kaede.Scripts.UI.TodayMenu
 
                 fadeFromRight.FadeOut(timeFadeOut);
                 await UniTask.Delay(TimeSpan.FromSeconds(timeFadeOut));
+                
+                GameManager.Instance.ResumeGame();
             }
         }
 

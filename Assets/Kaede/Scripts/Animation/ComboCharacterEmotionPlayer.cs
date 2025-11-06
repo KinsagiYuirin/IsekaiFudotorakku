@@ -75,7 +75,16 @@ namespace Kaede.Scripts.Animation
 
         private void AIAnimation()
         {
-            
+            var randomInt = Random.Range(0, 1);
+            switch (randomInt)
+            {
+                case 0:
+                    PlaySuccess();
+                    break;
+                case 1:
+                    PlayFailure();
+                    break;
+            }
         }
         
         public void PlayIdle()

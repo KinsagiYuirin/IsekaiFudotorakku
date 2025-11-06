@@ -58,6 +58,7 @@ namespace Kaede.Scripts.Managers
             SubscribeToInput();
             InitializeReadyText();
             SetPauseMenuVisibility(false);
+            PauseGame();
         }
 
         /// <summary>

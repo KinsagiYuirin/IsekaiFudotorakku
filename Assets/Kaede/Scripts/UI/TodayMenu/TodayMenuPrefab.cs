@@ -26,6 +26,7 @@ namespace Kaede.Scripts.UI.TodayMenu
 
         private void Start()
         {
+            coverAnimator.speed = 0f;
             PrepareAnimation();
         }
 
