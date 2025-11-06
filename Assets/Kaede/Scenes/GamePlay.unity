@@ -1619,9 +1619,7 @@ RectTransform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 0, y: 0, z: 0}
   m_ConstrainProportionsScale: 0
-  m_Children:
-  - {fileID: 2109660078}
-  - {fileID: 762913538}
+  m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
@@ -1846,6 +1844,8 @@ RectTransform:
   - {fileID: 1952637158}
   - {fileID: 1593304801}
   - {fileID: 1203022327}
+  - {fileID: 2109660078}
+  - {fileID: 762913538}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
@@ -2559,12 +2559,12 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 762913537}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 331176863}
+  m_Father: {fileID: 382246677}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
@@ -7777,9 +7777,9 @@ MonoBehaviour:
   <TimeBetweenCombos>k__BackingField: 1
   scorePerButton: 10
   completedMenus: []
-  animationCooking: {fileID: 0}
-  characterEmotionPlayer: {fileID: 0}
-  sfxManager: {fileID: 0}
+  animationCooking: {fileID: 1897282216}
+  characterEmotionPlayer: {fileID: 1848500657}
+  sfxManager: {fileID: 2084663521}
   sendFood: {fileID: 2118260111}
 --- !u!4 &1835431552
 Transform:
@@ -7898,7 +7898,7 @@ MonoBehaviour:
   test: 0
   readyTime: 3
   readyText: {fileID: 319754073}
-  todayManuUI: {fileID: 0}
+  todayManuUI: {fileID: 2109660079}
   pauseMenuUI: {fileID: 1952637157}
   isPaused: 0
   resultUI: {fileID: 1593304802}
@@ -9538,7 +9538,7 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2109660077}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -9547,7 +9547,7 @@ RectTransform:
   - {fileID: 814680313}
   - {fileID: 870047752}
   - {fileID: 860200193}
-  m_Father: {fileID: 331176863}
+  m_Father: {fileID: 382246677}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -9807,8 +9807,8 @@ SceneRoots:
   - {fileID: 1049526166}
   - {fileID: 2047785684}
   - {fileID: 1849240493}
-  - {fileID: 331176863}
   - {fileID: 382246677}
+  - {fileID: 331176863}
   - {fileID: 200788832}
   - {fileID: 1379201816}
   - {fileID: 1338201445}
