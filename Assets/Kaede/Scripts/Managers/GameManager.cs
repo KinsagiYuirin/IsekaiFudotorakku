@@ -18,7 +18,7 @@ namespace Kaede.Scripts.Managers
         
         [Title("Game Settings")]
         [SerializeField] private float readyTime = 3f;
-        public float ReadyTime => readyTime;
+        public float ReadyTime => _isReadyCountdownActive ? _readyTimer : 0f;
         [SerializeField] private TMP_Text readyText;
         
         //[Title("Tutorial")]
@@ -34,9 +34,11 @@ namespace Kaede.Scripts.Managers
         
         [Title("ResultUI")]
         [SerializeField] private ResultUI resultUI;
-        
+
         private PlayerInputHandler _inputHandler;
         private IDisposable _pauseButtonSubscription;
+        private float _readyTimer;
+        private bool  _isReadyCountdownActive;
         
         public bool IsPaused
         {
@@ -48,6 +50,9 @@ namespace Kaede.Scripts.Managers
         {
             base.Awake();
             _inputHandler = FindObjectOfType<PlayerInputHandler>();
+
+            _readyTimer = 0f;
+            _isReadyCountdownActive = false;
 
             SetPauseMenuVisibility(false);
             SetResultUIVisibility(false);
@@ -66,7 +71,7 @@ namespace Kaede.Scripts.Managers
         /// </summary>
         public void UpdateReadyCountdown()
         {
-            if (readyTime <= 0) return;
+            if (!_isReadyCountdownActive) return;
             CountdownReady();
         }
 
@@ -77,13 +82,55 @@ namespace Kaede.Scripts.Managers
         
         private void CountdownReady()
         {
-            if (readyText == null) return;
-            readyText.gameObject.SetActive(true);
-            readyTime -= Time.unscaledDeltaTime;
-            readyText.text = readyTime.ToString("N0");
-            
-            if (!(readyTime <= 0f)) return;
-            readyText.gameObject.SetActive(false);
+            _readyTimer -= Time.unscaledDeltaTime;
+
+            if (readyText != null)
+            {
+                readyText.gameObject.SetActive(true);
+                readyText.text = Mathf.CeilToInt(Mathf.Max(_readyTimer, 0f)).ToString();
+            }
+
+            if (_readyTimer > 0f) return;
+
+            CompleteReadyCountdown();
+        }
+
+        public void StartReadyCountdown()
+        {
+            if (_isReadyCountdownActive) return;
+
+            _readyTimer = readyTime;
+
+            if (_readyTimer <= 0f)
+            {
+                if (readyText != null)
+                {
+                    readyText.gameObject.SetActive(false);
+                }
+
+                ResumeGame();
+                return;
+            }
+
+            PauseGame();
+            _isReadyCountdownActive = true;
+
+            if (readyText != null)
+            {
+                readyText.text = Mathf.CeilToInt(_readyTimer).ToString();
+                readyText.gameObject.SetActive(true);
+            }
+        }
+
+        private void CompleteReadyCountdown()
+        {
+            _isReadyCountdownActive = false;
+
+            if (readyText != null)
+            {
+                readyText.gameObject.SetActive(false);
+            }
+
             ResumeGame();
         }
         
@@ -107,7 +154,7 @@ namespace Kaede.Scripts.Managers
 
         private void TogglePause()
         {
-            if (readyTime > 0) return;
+            if (ReadyTime > 0f) return;
             if (isPaused)
             {
                 ResumeGame();
@@ -125,9 +172,17 @@ namespace Kaede.Scripts.Managers
             isPaused = true;
             Time.timeScale = 0f;
         }
-        
+
         public void ResumeGame()
         {
+            _isReadyCountdownActive = false;
+            _readyTimer = 0f;
+
+            if (readyText != null)
+            {
+                readyText.gameObject.SetActive(false);
+            }
+
             isPaused = false;
             Time.timeScale = 1f;
         }
