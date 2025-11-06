@@ -3,6 +3,7 @@ using R3;
 using System;
 using Kaede.Scripts.GamePlay;
 using Kaede.Scripts.UI;
+using Kaede.Scripts.UI.TodayMenu;
 using Sirenix.OdinInspector;
 using TMPro;
 using UnityCommunity.UnitySingleton;
@@ -23,6 +24,9 @@ namespace Kaede.Scripts.Managers
         [Title("Tutorial")]
         [SerializeField] private TutorialDemo tutorialDemo;
         public bool tutorialCompleted = false;
+        
+        [Title("Today Menu")]
+        [SerializeField] private TodayManuUI todayManuUI;
         
         [Title("Pause Settings")]
         [SerializeField] private GameObject pauseMenuUI;
@@ -52,7 +56,7 @@ namespace Kaede.Scripts.Managers
         private void Start()
         {
             SubscribeToInput();
-            InitializeTutorial();
+            InitializePageBeforeGameplay();
             InitializeReadyText();
             SetPauseMenuVisibility(false);
         }
@@ -147,7 +151,7 @@ namespace Kaede.Scripts.Managers
             SceneManager.LoadScene(SceneManager.GetActiveScene().name);
         }
         
-        private void InitializeTutorial()
+        private void InitializePageBeforeGameplay()
         {
             if (tutorialDemo == null || test)
                 return;

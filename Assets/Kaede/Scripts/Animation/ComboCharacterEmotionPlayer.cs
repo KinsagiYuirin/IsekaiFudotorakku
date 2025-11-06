@@ -10,8 +10,8 @@ namespace Kaede.Scripts.Animation
     {
         [SerializeField] private Animator animator;
         [SerializeField] private AnimationClip idleAnimation;
-        [SerializeField] private AnimationClip successAnimation;
-        [SerializeField] private AnimationClip failureAnimation;
+        [SerializeField] private AnimationClip[] successAnimation;
+        [SerializeField] private AnimationClip[] failureAnimation;
         [SerializeField] private AnimationClip holdLoopAnimation;
         [SerializeField] private bool playIdleOnEnable = true;
 
@@ -79,16 +79,17 @@ namespace Kaede.Scripts.Animation
 
         public void PlaySuccess()
         {
-            if (!PlayClip(successAnimation != null ? successAnimation : idleAnimation, false, true) && successAnimation == null)
+            var animationClip = successAnimation[Random.Range(0, successAnimation.Length)];
+            if (!PlayClip(animationClip != null ? animationClip : idleAnimation, false, true) && successAnimation == null)
             {
-                // Fallback to idle when there is no success animation clip.
                 PlayIdle();
             }
         }
 
         public void PlayFailure()
         {
-            if (!PlayClip(failureAnimation != null ? failureAnimation : idleAnimation, false, true) && failureAnimation == null)
+            var animationClip = failureAnimation[Random.Range(0, failureAnimation.Length)];
+            if (!PlayClip(animationClip != null ? animationClip : idleAnimation, false, true) && failureAnimation == null)
             {
                 // Fallback to idle when there is no failure animation clip.
                 PlayIdle();
