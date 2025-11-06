@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using Kaede.Scripts.Animation;
+using Kaede.Scripts.Utils;
 using Sirenix.OdinInspector;
 using UnityEngine;
 
@@ -8,9 +9,9 @@ namespace Kaede.Scripts.Item
 {
     public enum FoodType
     {
-        Appetizer,
-        MainCourse,
-        Dessert
+        [InspectorName("Appetizer")]  Appetizer,
+        [InspectorName("Main Course")] MainCourse,
+        [InspectorName("Dessert")] Dessert
     }
     
     [System.Serializable]
@@ -41,6 +42,7 @@ namespace Kaede.Scripts.Item
         [Title("Settings")]
         [LabelText("Menu Name")] public string menuName;
         public FoodType foodType;
+        public string FoodTypeString => foodType.ToNiceString();
         public MenuLevel menuLevel;
 
         [Title("Steps (Select Preset or Override Sequence)")]

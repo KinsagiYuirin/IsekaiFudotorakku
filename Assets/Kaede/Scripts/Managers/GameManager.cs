@@ -21,9 +21,9 @@ namespace Kaede.Scripts.Managers
         public float ReadyTime => readyTime;
         [SerializeField] private TMP_Text readyText;
         
-        [Title("Tutorial")]
-        [SerializeField] private TutorialDemo tutorialDemo;
-        public bool tutorialCompleted = false;
+        //[Title("Tutorial")]
+        //[SerializeField] private TutorialDemo tutorialDemo;
+        //public bool tutorialCompleted = false;
         
         [Title("Today Menu")]
         [SerializeField] private TodayManuUI todayManuUI;
@@ -56,7 +56,6 @@ namespace Kaede.Scripts.Managers
         private void Start()
         {
             SubscribeToInput();
-            InitializePageBeforeGameplay();
             InitializeReadyText();
             SetPauseMenuVisibility(false);
         }
@@ -77,7 +76,7 @@ namespace Kaede.Scripts.Managers
         
         private void CountdownReady()
         {
-            if (!tutorialCompleted || readyText == null) return;
+            if (readyText == null) return;
             readyText.gameObject.SetActive(true);
             readyTime -= Time.unscaledDeltaTime;
             readyText.text = readyTime.ToString("N0");
@@ -107,7 +106,7 @@ namespace Kaede.Scripts.Managers
 
         private void TogglePause()
         {
-            if (!tutorialCompleted || readyTime > 0) return;
+            if (readyTime > 0) return;
             if (isPaused)
             {
                 ResumeGame();
@@ -151,16 +150,6 @@ namespace Kaede.Scripts.Managers
             SceneManager.LoadScene(SceneManager.GetActiveScene().name);
         }
         
-        private void InitializePageBeforeGameplay()
-        {
-            if (tutorialDemo == null || test)
-                return;
-
-            PauseGame();
-            tutorialCompleted = false;
-            tutorialDemo.gameObject.SetActive(true);
-        }
-
         private void InitializeReadyText()
         {
             if (readyText == null)

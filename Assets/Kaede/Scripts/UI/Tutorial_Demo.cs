@@ -90,7 +90,6 @@ namespace Kaede.Scripts.UI
         private void CloseTutorial()
         {
             gameObject.SetActive(false);
-            GameManager.Instance.tutorialCompleted = true;
         }
     }
 }

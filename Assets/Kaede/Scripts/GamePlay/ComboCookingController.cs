@@ -54,8 +54,8 @@ namespace Kaede.Scripts.GamePlay
         private VFXControl _vfxControl;
         
         [SerializeField] private ComboStepAnimationCooking animationCooking;
-        [SerializeField] private ComboCharacterEmotionPlayer _characterEmotionPlayer;
-        [SerializeField] private SfxManagerDemo _sfxManager;
+        [SerializeField] private ComboCharacterEmotionPlayer characterEmotionPlayer;
+        [SerializeField] private SfxManagerDemo sfxManager;
         [SerializeField] private SendFood sendFood;
         
         #region Awake, Start, Update
@@ -112,8 +112,8 @@ namespace Kaede.Scripts.GamePlay
             animationCooking ??= GetComponent<ComboStepAnimationCooking>();
             animationCooking ??= GetComponentInChildren<ComboStepAnimationCooking>();
             
-            _characterEmotionPlayer ??= GetComponent<ComboCharacterEmotionPlayer>();
-            _characterEmotionPlayer ??= GetComponentInChildren<ComboCharacterEmotionPlayer>();
+            characterEmotionPlayer ??= GetComponent<ComboCharacterEmotionPlayer>();
+            characterEmotionPlayer ??= GetComponentInChildren<ComboCharacterEmotionPlayer>();
             
             _inventoryController = GetComponent<InventoryController>();
             _vfxControl =  GetComponent<VFXControl>();
@@ -131,7 +131,7 @@ namespace Kaede.Scripts.GamePlay
             else
             {
                 _inputProcessor = new ComboInputProcessor(_inputHandler, _view, scorePerButton, 
-                    animationCooking, _characterEmotionPlayer, _sfxManager);
+                    animationCooking, characterEmotionPlayer, sfxManager);
                 _inputProcessor.StepCompleted += HandleStepCompleted;
             }
             
@@ -343,7 +343,7 @@ namespace Kaede.Scripts.GamePlay
             _model.ScoreManager.ResetPendingStepScore();
             _inputProcessor?.ResetState();
             animationCooking?.Stop();
-            _characterEmotionPlayer?.ResetToIdle(true);
+            characterEmotionPlayer?.ResetToIdle(true);
         }
 
         private void HandleRestEntered()
@@ -353,7 +353,7 @@ namespace Kaede.Scripts.GamePlay
             _view.ResetCombo();
             animationCooking?.Stop();
             _inputProcessor?.ResetState();
-            _characterEmotionPlayer?.ResetToIdle(true);
+            characterEmotionPlayer?.ResetToIdle(true);
         }
         
         private void HandleRestFinished()
@@ -363,7 +363,7 @@ namespace Kaede.Scripts.GamePlay
             _view.ResetCombo();
             animationCooking?.Stop();
             ShowCurrentCombo();
-            _characterEmotionPlayer?.ResetToIdle(true);
+            characterEmotionPlayer?.ResetToIdle(true);
         }
         #endregion
     }

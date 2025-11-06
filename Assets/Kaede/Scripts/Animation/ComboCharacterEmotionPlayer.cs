@@ -14,6 +14,7 @@ namespace Kaede.Scripts.Animation
         [SerializeField] private AnimationClip[] failureAnimation;
         [SerializeField] private AnimationClip holdLoopAnimation;
         [SerializeField] private bool playIdleOnEnable = true;
+        [SerializeField] private bool aiAnimation = false;
 
         private PlayableGraph _graph;
         private AnimationPlayableOutput _animationOutput;
@@ -72,6 +73,11 @@ namespace Kaede.Scripts.Animation
             }
         }
 
+        private void AIAnimation()
+        {
+            
+        }
+        
         public void PlayIdle()
         {
             PlayClip(idleAnimation, true, false);

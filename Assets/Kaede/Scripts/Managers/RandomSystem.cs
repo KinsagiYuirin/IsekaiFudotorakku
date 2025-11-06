@@ -13,7 +13,7 @@ namespace Kaede.Scripts.Managers
     public class RandomSystem : MonoSingleton<RandomSystem>
     {
         [Title("Menu Settings")]
-        [SerializeField] private List<MenuData> allMenuInLevel;
+        [field: SerializeField] public List<MenuData> AllMenuInLevel { get; private set; }
         [SerializeField] private int appetizerRandomMenuCount;
         [SerializeField] private int mainCourseRandomMenuCount;
         [SerializeField] private int dessertRandomMenuCount;
@@ -107,14 +107,14 @@ namespace Kaede.Scripts.Managers
             mainCourseRandomMenu.Clear();
             dessertRandomMenu.Clear();
 
-            if (allMenuInLevel == null || allMenuInLevel.Count == 0)
+            if (AllMenuInLevel == null || AllMenuInLevel.Count == 0)
             {
                 return;
             }
 
             foreach (FoodType foodType in Enum.GetValues(typeof(FoodType)))
             {
-                var menusOfType = allMenuInLevel
+                var menusOfType = AllMenuInLevel
                     .Where(menu => menu != null && menu.foodType == foodType)
                     .ToList();
 
