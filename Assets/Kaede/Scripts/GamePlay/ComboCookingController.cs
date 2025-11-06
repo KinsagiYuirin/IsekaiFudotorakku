@@ -91,8 +91,7 @@ namespace Kaede.Scripts.GamePlay
             var gameManager = GameManager.Instance;
             if (gameManager != null)
             {
-                gameManager.UpdateReadyCountdown();
-                if (gameManager.ReadyTime > 0) return;
+                if (gameManager.ReadyTime > 0f || gameManager.IsPaused) return;
             }
             timer.Tick(Time.deltaTime);
             if (_model.GameState == CookingState.Resting) return;

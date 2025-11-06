@@ -69,7 +69,7 @@ namespace Kaede.Scripts.Managers
         /// <summary>
         /// Have changed a bit, called in Update of UIManager
         /// </summary>
-        public void UpdateReadyCountdown()
+        public void Update()
         {
             if (!_isReadyCountdownActive) return;
             CountdownReady();
