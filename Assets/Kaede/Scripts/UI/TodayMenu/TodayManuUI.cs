@@ -25,9 +25,10 @@ namespace Kaede.Scripts.UI.TodayMenu
 
         private readonly List<TodayMenuPrefab> _activeMenus = new();
 
-        private void Start()
+        private void OnEnable()
         {
             SetFood();
+            GameManager.Instance?.PauseGame();
             WaitForAnyPress(true).Forget();
         }
         
@@ -65,14 +66,14 @@ namespace Kaede.Scripts.UI.TodayMenu
             else
             {
                 fadeFromRight.StartFade(timeFadeIn);
-                await UniTask.Delay(TimeSpan.FromSeconds(timeFadeIn));
-                
+                await UniTask.Delay(TimeSpan.FromSeconds(timeFadeIn), DelayType.UnscaledDeltaTime);
+
                 gameObject.SetActive(false);
 
                 fadeFromRight.FadeOut(timeFadeOut);
-                await UniTask.Delay(TimeSpan.FromSeconds(timeFadeOut));
-                
-                GameManager.Instance.ResumeGame();
+                await UniTask.Delay(TimeSpan.FromSeconds(timeFadeOut), DelayType.UnscaledDeltaTime);
+
+                GameManager.Instance?.StartReadyCountdown();
             }
         }
 
@@ -83,7 +84,7 @@ namespace Kaede.Scripts.UI.TodayMenu
                 if (menu) menu.PlayCoverAnimation();
             }
 
-            await UniTask.Delay(TimeSpan.FromSeconds(0.5f));
+            await UniTask.Delay(TimeSpan.FromSeconds(0.5f), DelayType.UnscaledDeltaTime);
         }
     }
 }
