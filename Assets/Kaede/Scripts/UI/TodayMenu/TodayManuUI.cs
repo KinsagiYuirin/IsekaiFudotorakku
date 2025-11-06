@@ -65,12 +65,12 @@ namespace Kaede.Scripts.UI.TodayMenu
             }
             else
             {
-                fadeFromRight.StartFade(timeFadeIn);
+                fadeFromRight.StartFade();
                 await UniTask.Delay(TimeSpan.FromSeconds(timeFadeIn), DelayType.UnscaledDeltaTime);
 
                 gameObject.SetActive(false);
 
-                fadeFromRight.FadeOut(timeFadeOut);
+                fadeFromRight.FadeOut();
                 await UniTask.Delay(TimeSpan.FromSeconds(timeFadeOut), DelayType.UnscaledDeltaTime);
 
                 GameManager.Instance?.StartReadyCountdown();
