@@ -15,6 +15,11 @@ namespace Kaede.Scripts.UI
         {
             fadeMat.SetFloat("_Fade", 0f);
         }
+
+        public void SetActive(bool active)
+        {
+            gameObject.SetActive(active);
+        }
         
         public void StartFade()
         {

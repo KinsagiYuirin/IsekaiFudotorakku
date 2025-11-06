@@ -26,13 +26,13 @@ namespace Kaede.Scripts.UI
         
         private void SetupButtons()
         {
-            if (restartButton != null)
+            //if (restartButton != null)
                 restartButton.onClick.AddListener(RestartGame);
                 
-            if (mainMenuButton != null)
+            //if (mainMenuButton != null)
                 mainMenuButton.onClick.AddListener(GoToMainMenu);
                 
-            if (quitButton != null)
+            //if (quitButton != null)
                 quitButton.onClick.AddListener(QuitGame);
         }
 

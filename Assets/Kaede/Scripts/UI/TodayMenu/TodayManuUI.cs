@@ -27,6 +27,7 @@ namespace Kaede.Scripts.UI.TodayMenu
 
         private void OnEnable()
         {
+            fadeFromRight.SetActive(true);
             SetFood();
             GameManager.Instance?.PauseGame();
             WaitForAnyPress(true).Forget();
@@ -72,7 +73,8 @@ namespace Kaede.Scripts.UI.TodayMenu
 
                 fadeFromRight.FadeOut();
                 await UniTask.Delay(TimeSpan.FromSeconds(timeFadeOut), DelayType.UnscaledDeltaTime);
-
+                
+                fadeFromRight.SetActive(false);
                 GameManager.Instance?.StartReadyCountdown();
             }
         }
