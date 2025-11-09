@@ -6,537 +6,410 @@ using UnityEngine;
 using UnityEngine.Animations;
 using UnityEngine.Playables;
 
-namespace Kaede.Scripts.Animation
-{
+namespace Kaede.Scripts.Animation {
+    /// <summary>
+    /// เล่นแอนิเมชันแบบ Step-by-step: กดครั้งละชิ้น → เล่นคลิปสั้น → ค้างท่าปลายทาง
+    /// - ใช้ Playables + AnimationMixerPlayable ทำ crossfade เนียน ๆ
+    /// - รองรับ Animation Events: AE_InsertStart(), AE_StepLock(int slotIndex), AE_InsertEnd()
+    /// - เลือกค้างเฟรมสุดท้ายหรือรีเซ็ตหลังจบลิสต์ได้
+    /// - มี IsBusy กันกดรัว และโหมด Scaled/Unscaled time
+    /// </summary>
     [DisallowMultipleComponent]
-    public class ComboStepAnimationCooking : MonoBehaviour
-    {
+    public class ComboStepAnimationCooking : MonoBehaviour {
+        [Header("Animator / Output")]
         [SerializeField] private Animator animator;
-        [SerializeField] private bool playOnAssign;
-        [SerializeField] private bool loopAnimation = false;
-        [SerializeField] private bool stopGraph  = false;
 
+        [Header("Sequence Clips (Step 0..N-1)")]
+        [Tooltip("คลิปที่เล่นทีละสเต็ป เช่น Insert_0..Insert_N-1")]
+        [SerializeField] private List<AnimationClip> sequenceClips = new();
+
+        [Header("Play Options")]
+        [SerializeField] private bool playOnAssign = false;
+        [SerializeField] private bool loopAnimation = false; // ใช้ตอน mode=Single เท่านั้น
+        [SerializeField] private bool resetIndexAfterEnd = false; // false = ค้างที่ท่าสุดท้าย
+        [SerializeField] private float crossfadeDuration = 0.12f;
+
+        public enum UpdateClock { Scaled, Unscaled }
+        [SerializeField] private UpdateClock updateClock = UpdateClock.Scaled;
+
+        [Header("Wrong Feedback (Optional)")]
+        [SerializeField] private AnimationClip wrongFeedbackClip;
+        [SerializeField] private float wrongFeedbackFade = 0.08f;
+
+        // === Events for gameplay hook ===
+        public event Action<int> OnStepStart; // k
+        public event Action<int> OnStepLocked; // slot index
+        public event Action<int> OnStepEnd;   // k
+
+        // === State ===
+        public int StepIndex => _stepIndex;
+        public bool IsBusy => _isSequencePlaying || _wrongFeedbackCancellation != null;
+
+        // === Playables ===
         private PlayableGraph _graph;
-        private AnimationPlayableOutput _animationOutput;
-        private AnimationClipPlayable _currentPlayable;
-        private AnimationClip _currentClip;
-
-        private ComboStepAnimationDefinition _currentDefinition;
-        private List<AnimationClip> _sequenceClips;
-        private int _sequenceIndex;
-        private CancellationTokenSource _sequenceCancellation;
-        private bool _isSequencePlaying;
-        private AnimationClip _definitionWrongFeedbackClip;
-        private AnimationClipPlayable _wrongFeedbackPlayable;
+        private AnimationPlayableOutput _output;
+        private AnimationMixerPlayable _mixer;        // 2 ช่อง: [0]=current, [1]=next
+        private Playable _current;                    // เก็บ current clip playable
+        private CancellationTokenSource _sequenceCts; // สำหรับ step ต่อเนื่อง
         private CancellationTokenSource _wrongFeedbackCancellation;
-        private double _previousPlayableTime;
 
-        private bool IsSequentialMode => _currentDefinition.Mode == ComboStepAnimationMode.SequentialClips;
+        private int _stepIndex = 0;
+        private bool _graphReady = false;
+        private bool _isSequencePlaying = false;
 
+        #region Unity lifecycle
         private void Awake()
         {
-            animator ??= GetComponent<Animator>();
-            if (animator == null)
+            if (!animator) animator = GetComponent<Animator>();
+            EnsureGraph();
+        }
+
+        private void OnEnable()
+        {
+            if (playOnAssign && sequenceClips.Count > 0)
             {
-                Debug.LogWarning("ComboStepAnimationPlayer requires an Animator component to play clips.", this);
-                return;
+                // วางท่าเริ่ม (ไม่เล่น) เพื่อให้ค้างท่าตาม index ปัจจุบัน
+                PoseStepAt(_stepIndex);
             }
-            _graph = PlayableGraph.Create($"{name}_ComboStepAnimationGraph");
-            _graph.SetTimeUpdateMode(DirectorUpdateMode.GameTime);
-            _animationOutput = AnimationPlayableOutput.Create(_graph, "ComboStepAnimation", animator);
         }
 
         private void OnDisable()
         {
-            StopSequenceRoutine();
-            StopWrongFeedbackRoutine();
-            if (_graph.IsValid())
-            {
-                _graph.Stop();
-            }
+            StopAllRoutines();
+            StopGraph();
         }
 
         private void OnDestroy()
         {
-            StopSequenceRoutine();
-            StopWrongFeedbackRoutine();
-            if (_graph.IsValid())
+            StopAllRoutines();
+            DestroyGraph();
+        }
+        #endregion
+
+        #region Public API (Buttons / Game input)
+        /// <summary>กดเพิ่มหนึ่งสเต็ป ถ้าเล่นได้</summary>
+        public async void PlayNext()
+        {
+            if (!CanPlayNext()) return;
+            await PlayStep(_stepIndex, crossfadeDuration);
+            _stepIndex++;
+            if (_stepIndex >= sequenceClips.Count)
             {
-                _graph.Destroy();
+                // จบท้ายลิสต์
+                if (resetIndexAfterEnd) _stepIndex = 0;
             }
         }
 
-        public void SetAnimation(AnimationClip clip)
+        public bool CanPlayNext() => !_isSequencePlaying && _stepIndex < sequenceClips.Count;
+
+        /// <summary>วางค้างท่าสเต็ป k โดยไม่เล่น (ใช้ดีบัก/ตั้งต้น)</summary>
+        public void PoseStepAt(int index)
         {
-            SetAnimation(ComboStepAnimationDefinition.FromSingle(clip), playOnAssign);
+            index = Mathf.Clamp(index, 0, sequenceClips.Count - 1);
+            var clip = sequenceClips[index];
+            EnsureGraph();
+            EnsureMixer();
+
+            // ทำ playable ใหม่แล้ว set เวลาไปท้ายคลิป → Pause = ค้างท่าสุดท้าย
+            var p = AnimationClipPlayable.Create(_graph, clip);
+            p.SetApplyFootIK(false);
+            p.SetApplyPlayableIK(false);
+            p.SetTime(clip.length);
+            p.SetSpeed(0); // ค้าง
+            p.Pause();
+
+            // ใส่เข้า mixer ช่อง 1 เป็น next แล้ว set weight เต็ม
+            _mixer.DisconnectInput(0);
+            _mixer.DisconnectInput(1);
+            _mixer.ConnectInput(0, p, 0, 0f);
+            _mixer.ConnectInput(1, p, 0, 1f);
+
+            _current = p;
+            if (!_graph.IsPlaying()) _graph.Play();
         }
 
-        public void SetAnimation(AnimationClip clip, bool autoPlay)
+        /// <summary>รีเซ็ตลิสต์และค้างท่าเริ่มต้น (หรือไม่ค้างก็ได้)</summary>
+        public void RewindToStart(bool poseFirst = true) 
         {
-            SetAnimation(ComboStepAnimationDefinition.FromSingle(clip), autoPlay);
-        }
-
-        public void SetAnimation(ComboStepAnimationDefinition definition)
-        {
-            SetAnimation(definition, playOnAssign);
-        }
-
-        public void SetAnimation(ComboStepAnimationDefinition definition, bool autoPlay)
-        {
-            if (!_graph.IsValid())
+            StopAllRoutines();
+            _stepIndex = 0;
+            if (poseFirst && sequenceClips.Count > 0)
             {
-                return;
-            }
-
-            _currentDefinition = definition;
-            _definitionWrongFeedbackClip = definition.WrongFeedbackClip;
-            StopSequenceRoutine();
-            StopWrongFeedbackRoutine();
-
-            switch (definition.Mode)
-            {
-                case ComboStepAnimationMode.SequentialClips:
-                    InitializeSequence(definition.SequentialClips);
-                    if (autoPlay)
-                    {
-                        PlayNextSequenceClip();
-                    }
-                    break;
-                case ComboStepAnimationMode.SingleClip:
-                    InitializeSingle(definition.SingleClip, autoPlay);
-                    break;
-                default:
-                    ClearCurrentPlayable();
-                    break;
+                PoseStepAt(0);
             }
         }
 
-        public void Play()
+        /// <summary>เล่น wrong feedback clip (เช่น สั่น/ปัดออก) แล้วค้างท่าเดิม</summary>
+        public async void PlayWrongFeedback()
         {
-            if (!_graph.IsValid())
-            {
-                return;
-            }
-
-            if (IsSequentialMode)
-            {
-                PlayNextSequenceClip();
-            }
-            else
-            {
-                PlaySingleClip();
-            }
-        }
-
-        public void Stop()
-        {
-            StopSequenceRoutine();
-            StopWrongFeedbackRoutine();
-
-            if (_graph.IsValid() && _graph.IsPlaying())
-            {
-                _graph.Stop();
-            }
-
-            if (IsSequentialMode)
-            {
-                ResetSequenceToStart();
-            }
-            else if (_currentPlayable.IsValid())
-            {
-                _currentPlayable.SetTime(0f);
-                _currentPlayable.Pause();
-                ApplyPoseAtTime(0f);
-            }
-        }
-
-        public void ClearAnimation()
-        {
-            SetAnimation(ComboStepAnimationDefinition.None, false);
-        }
-        
-        public bool PlayWrongFeedback()
-        {
-            if (!_graph.IsValid())
-            {
-                return false;
-            }
-
-            if (_definitionWrongFeedbackClip == null)
-            {
-                return false;
-            }
-
-            StopSequenceRoutine();
-            StopWrongFeedbackRoutine();
-
-            _previousPlayableTime = _currentPlayable.IsValid() ? _currentPlayable.GetTime() : 0d;
-
-            if (!_animationOutput.IsOutputValid())
-            {
-                return false;
-            }
-
-            _wrongFeedbackPlayable = AnimationClipPlayable.Create(_graph, _definitionWrongFeedbackClip);
-            _wrongFeedbackPlayable.SetApplyFootIK(false);
-            _wrongFeedbackPlayable.SetApplyPlayableIK(false);
-            _wrongFeedbackPlayable.SetTime(0f);
-            _wrongFeedbackPlayable.SetSpeed(1f);
-
-            _animationOutput.SetSourcePlayable(_wrongFeedbackPlayable);
-            _wrongFeedbackPlayable.Play();
-
-            if (!_graph.IsPlaying())
-            {
-                _graph.Play();
-            }
+            if (wrongFeedbackClip == null || !_graphReady) return;
+            if (_wrongFeedbackCancellation != null) return; // กันซ้อน
 
             _wrongFeedbackCancellation = new CancellationTokenSource();
-            RestoreAfterWrongAsync(_definitionWrongFeedbackClip.length, _wrongFeedbackCancellation).Forget();
-            return true;
-        }
-
-
-        private void InitializeSingle(AnimationClip clip, bool autoPlay)
-        {
-            _sequenceClips = null;
-            _sequenceIndex = 0;
-
-            ReplaceCurrentPlayable(clip);
-
-            if (clip == null)
+            try
             {
-                if (_graph.IsValid())
-                {
-                    _graph.Stop();
-                }
-                return;
-            }
-
-            if (autoPlay)
+                await CrossfadeToTempClip(wrongFeedbackClip, wrongFeedbackFade, _wrongFeedbackCancellation.Token);
+            } 
+            catch (OperationCanceledException)
             {
-                PlaySingleClip();
-            }
-            else
+                // ignored
+            } 
+            finally
             {
-                ApplyPoseAtTime(0f, stopGraph);
+                _wrongFeedbackCancellation?.Dispose();
+                _wrongFeedbackCancellation = null;
             }
         }
+        #endregion
 
-        private void InitializeSequence(IReadOnlyList<AnimationClip> clips)
+        #region Animation Events (call from clips)
+        // ใส่ event ในคลิปที่เฟรมแรกของสเต็ป
+        public void AE_InsertStart()
         {
-            _sequenceClips = new List<AnimationClip>();
-            if (clips != null)
-            {
-                foreach (var clip in clips)
-                {
-                    if (clip != null)
-                    {
-                        _sequenceClips.Add(clip);
-                    }
-                }
-            }
-
-            _sequenceIndex = 0;
-
-            if (_sequenceClips.Count > 0)
-            {
-                ReplaceCurrentPlayable(_sequenceClips[0]);
-                ApplyPoseAtTime(0f);
-            }
-            else
-            {
-                ClearCurrentPlayable();
-            }
+            OnStepStart?.Invoke(Mathf.Clamp(_stepIndex, 0, sequenceClips.Count - 1));
         }
 
-        private void ResetSequenceToStart()
+        // ใส่ event ตอนชิ้นเข้าล็อค: ส่ง slotIndex มากับ Event (หรือไม่ส่งก็จะใช้ _stepIndex-1)
+        public void AE_StepLock(int slotIndex)
         {
-            if (_sequenceClips == null || _sequenceClips.Count == 0)
-            {
-                ClearCurrentPlayable();
-                return;
-            }
-
-            _sequenceIndex = 0;
-            ReplaceCurrentPlayable(_sequenceClips[0]);
-            ApplyPoseAtTime(0f);
+            int idx = slotIndex >= 0 ? slotIndex : Mathf.Max(0, _stepIndex - 1);
+            OnStepLocked?.Invoke(idx);
         }
 
-        private void PlaySingleClip()
+        public void AE_InsertEnd()
         {
-            if (!_currentPlayable.IsValid())
-            {
-                return;
-            }
-
-            _currentPlayable.SetTime(0f);
-            _currentPlayable.SetSpeed(1f);
-            _currentPlayable.Play();
-
-            if (!_graph.IsPlaying())
-            {
-                _graph.Play();
-            }
+            OnStepEnd?.Invoke(Mathf.Clamp(_stepIndex - 1, 0, sequenceClips.Count - 1));
         }
+        #endregion
 
-        private void PlayNextSequenceClip()
+        #region Core playing
+        private async UniTask PlayStep(int index, float fade)
         {
-            if (_sequenceClips == null || _sequenceClips.Count == 0)
-            {
-                return;
-            }
+            if (index < 0 || index >= sequenceClips.Count) return;
+            var clip = sequenceClips[index];
+            EnsureGraph();
+            EnsureMixer();
 
-            if (_sequenceIndex >= _sequenceClips.Count)
-            {
-                return;
-            }
-
-            if (_isSequencePlaying)
-            {
-                return;
-            }
-
-            var clip = _sequenceClips[_sequenceIndex];
-            _sequenceIndex++;
-
-            if (clip == null)
-            {
-                PlayNextSequenceClip();
-                return;
-            }
-
-            ReplaceCurrentPlayable(clip);
-            _currentPlayable.SetTime(0f);
-            _currentPlayable.SetSpeed(1f);
-            _currentPlayable.Play();
-
-            if (!_graph.IsPlaying())
-            {
-                _graph.Play();
-            }
-
-            StopSequenceRoutine();
-            _sequenceCancellation = new CancellationTokenSource();
             _isSequencePlaying = true;
-            PauseAtEndAsync(clip.length, _sequenceCancellation).Forget();
-        }
 
-        private void StopSequenceRoutine()
-        {
-            if (_sequenceCancellation != null)
+            // ทำ next playable
+            var nextPlayable = AnimationClipPlayable.Create(_graph, clip);
+            nextPlayable.SetApplyFootIK(false);
+            nextPlayable.SetApplyPlayableIK(false);
+            nextPlayable.SetTime(0);
+            nextPlayable.SetSpeed(1);
+
+            // ต่อเข้าช่อง 1 เป็น next, ช่อง 0 เก็บ current (ถ้ามี)
+            _mixer.DisconnectInput(1);
+            _mixer.ConnectInput(1, nextPlayable, 0, 0f); // เริ่มน้ำหนัก 0
+
+            if (!_graph.IsPlaying()) _graph.Play();
+
+            // Crossfade: current(0)->down, next(1)->up
+            float t = 0f;
+            while (t < fade)
             {
-                _sequenceCancellation.Cancel();
-                _sequenceCancellation.Dispose();
-                _sequenceCancellation = null;
+                t += DeltaTime();
+                float w = Mathf.Clamp01(t / fade);
+                _mixer.SetInputWeight(0, 1f - w);
+                _mixer.SetInputWeight(1, w);
+                await UniTask.Yield();
+            }
+            _mixer.SetInputWeight(0, 0f);
+            _mixer.SetInputWeight(1, 1f);
+
+            // ทำ next เป็น current
+            if (_current.IsValid()) _mixer.DisconnectInput(0);
+            _current = nextPlayable;
+
+            // รอจนคลิปจบ แล้วค้างเฟรมสุดท้าย
+            double length = clip.length;
+            while (_current.IsValid() && _current.GetTime() < length)
+            {
+                await UniTask.Yield();
+            }
+            
+            // ค้างเฟรมสุดท้าย
+            if (_current.IsPlayableOfType<AnimationClipPlayable>()) {
+                var cp = (AnimationClipPlayable)_current;
+                PauseAtEnd(cp, clip);              // มี length ชัดเจน → ค้างเฟรมสุดท้ายได้เป๊ะ
+            } 
+            else
+            {
+                // กรณีไม่ใช่คลิป (แทบจะไม่เกิดใน flow นี้ แต่กันไว้)
+                _current.SetSpeed(0);
+                _current.Pause();
+                _mixer.DisconnectInput(0);
+                _mixer.DisconnectInput(1);
+                _mixer.ConnectInput(0, _current, 0, 1f);
             }
 
             _isSequencePlaying = false;
         }
 
-        private void StopWrongFeedbackRoutine()
+        private async UniTask CrossfadeToTempClip(AnimationClip tempClip, float fade, CancellationToken ct) 
         {
-            var wasPlayingWrong = _wrongFeedbackCancellation != null || _wrongFeedbackPlayable.IsValid();
+            EnsureGraph();
+            EnsureMixer();
 
-            if (_wrongFeedbackCancellation != null)
+            // next temp
+            var tempPlayable = AnimationClipPlayable.Create(_graph, tempClip);
+            tempPlayable.SetApplyFootIK(false);
+            tempPlayable.SetApplyPlayableIK(false);
+            tempPlayable.SetTime(0);
+            tempPlayable.SetSpeed(1);
+
+            _mixer.DisconnectInput(1);
+            _mixer.ConnectInput(1, tempPlayable, 0, 0f);
+
+            if (!_graph.IsPlaying()) _graph.Play();
+
+            // Fade in temp
+            float t = 0f;
+            while (t < fade) 
             {
-                _wrongFeedbackCancellation.Cancel();
-                _wrongFeedbackCancellation.Dispose();
-                _wrongFeedbackCancellation = null;
+                ct.ThrowIfCancellationRequested();
+                t += DeltaTime();
+                float w = Mathf.Clamp01(t / fade);
+                _mixer.SetInputWeight(1, w);
+                _mixer.SetInputWeight(0, 1f - w);
+                await UniTask.Yield(PlayerLoopTiming.Update, ct);
+            }
+            _mixer.SetInputWeight(1, 1f);
+            _mixer.SetInputWeight(0, 0f);
+
+            // รอ temp เล่นจบ
+            var length = tempClip.length;
+            while (tempPlayable.IsValid() && tempPlayable.GetTime() < length) 
+            {
+                ct.ThrowIfCancellationRequested();
+                await UniTask.Yield(PlayerLoopTiming.Update, ct);
             }
 
-            if (_wrongFeedbackPlayable.IsValid())
+            // กลับค้างที่ current เดิม (ถ้ามี)
+            if (_current.IsValid()) 
             {
-                _wrongFeedbackPlayable.Destroy();
-                _wrongFeedbackPlayable = default;
-            }
-
-            var outputValid = _animationOutput.IsOutputValid();
-
-            if (wasPlayingWrong && outputValid)
-            {
-                if (_currentPlayable.IsValid())
+                // ค้างท่าสุดท้ายของ current (หรือจะกลับกลางคลิปก็เปลี่ยนได้)
+                if (_current.IsPlayableOfType<AnimationClipPlayable>()) 
                 {
-                    _animationOutput.SetSourcePlayable(_currentPlayable);
-                    ApplyPoseAtTime(_previousPlayableTime);
-                }
-                else
+                    var cp = (AnimationClipPlayable)_current;
+                    PauseAtEnd(cp, cp.GetAnimationClip());
+                } 
+                else 
                 {
-                    _animationOutput.SetSourcePlayable(Playable.Null);
-                }
-            }
-
-            _previousPlayableTime = 0d;
-        }
-
-        private async UniTask PauseAtEndAsync(float duration, CancellationTokenSource cancellation)
-        {
-            try
-            {
-                var seconds = Mathf.Max(duration, 0f);
-                if (seconds > 0f)
-                {
-                    await UniTask.Delay(TimeSpan.FromSeconds(seconds), DelayType.DeltaTime, PlayerLoopTiming.Update, cancellation.Token);
-                }
-
-                if (_currentPlayable.IsValid())
-                {
-                    var finalTime = _currentClip != null ? _currentClip.length : 0f;
-                    _currentPlayable.SetTime(finalTime);
-                    _currentPlayable.Pause();
-                }
-
-                if (_graph.IsValid() && _graph.IsPlaying())
-                {
-                    _graph.Stop();
+                    // ค้างที่สถานะปัจจุบันของ _current
+                    _current.SetSpeed(0);
+                    _current.Pause();
+                    _mixer.SetInputWeight(0, 1f);
                 }
                 
-                if (!cancellation.IsCancellationRequested &&
-                    _sequenceClips != null &&
-                    _sequenceClips.Count > 0 &&
-                    _sequenceIndex >= _sequenceClips.Count)
+                // Fade out temp
+                float t2 = 0f;
+                while (t2 < fade) 
                 {
-                    _sequenceIndex = 0;
+                    ct.ThrowIfCancellationRequested();
+                    t2 += DeltaTime();
+                    float w = 1f - Mathf.Clamp01(t2 / fade);
+                    _mixer.SetInputWeight(1, w);
+                    _mixer.SetInputWeight(0, 1f - w);
+                    await UniTask.Yield(PlayerLoopTiming.Update, ct);
                 }
             }
-            catch (OperationCanceledException)
-            {
-                // Routine cancelled; nothing to do.
-            }
-            finally
-            {
-                if (_sequenceCancellation == cancellation)
-                {
-                    _sequenceCancellation.Dispose();
-                    _sequenceCancellation = null;
-                    _isSequencePlaying = false;
-                }
-                else
-                {
-                    cancellation.Dispose();
-                }
-            }
+
+            // cleanup
+            _mixer.DisconnectInput(1);
+            tempPlayable.Destroy();
         }
 
-        private async UniTask RestoreAfterWrongAsync(float duration, CancellationTokenSource cancellation)
+        private void PauseAtEnd(AnimationClipPlayable playable, AnimationClip clip)
         {
-            try
+            playable.SetTime(clip.length);
+            playable.SetSpeed(0);
+            playable.Pause();
+            // ให้ช่อง current = playable ที่ค้างอยู่ ช่อง 1 ว่าง
+            _mixer.DisconnectInput(0);
+            _mixer.DisconnectInput(1);
+            _mixer.ConnectInput(0, playable, 0, 1f);
+        }
+        #endregion
+
+        #region Graph helpers
+        private void EnsureGraph()
+        {
+            if (_graphReady) return;
+            if (!animator)
             {
-                var seconds = Mathf.Max(duration, 0f);
-                if (seconds > 0f)
-                {
-                    await UniTask.Delay(TimeSpan.FromSeconds(seconds), DelayType.DeltaTime, PlayerLoopTiming.Update, cancellation.Token);
-                }
-
-                if (_wrongFeedbackPlayable.IsValid())
-                {
-                    _wrongFeedbackPlayable.Pause();
-                }
-
-                if (_currentPlayable.IsValid() && _animationOutput.IsOutputValid())
-                {
-                    _animationOutput.SetSourcePlayable(_currentPlayable);
-                    _currentPlayable.SetTime(_previousPlayableTime);
-                    _currentPlayable.Pause();
-                    ApplyPoseAtTime(_previousPlayableTime);
-                }
-                else if (_animationOutput.IsOutputValid())
-                {
-                    _animationOutput.SetSourcePlayable(Playable.Null);
-                }
-
-                if (_wrongFeedbackPlayable.IsValid())
-                {
-                    _wrongFeedbackPlayable.Destroy();
-                    _wrongFeedbackPlayable = default;
-                }
-
-                if (_graph.IsValid() && _graph.IsPlaying())
-                {
-                    _graph.Stop();
-                }
-
-                _previousPlayableTime = 0d;
-            }
-            catch (OperationCanceledException)
-            {
-                // Routine cancelled; nothing to do.
-            }
-            finally
-            {
-                if (_wrongFeedbackCancellation == cancellation)
-                {
-                    _wrongFeedbackCancellation.Dispose();
-                    _wrongFeedbackCancellation = null;
-                }
-                else
-                {
-                    cancellation.Dispose();
+                animator = GetComponent<Animator>();
+                if (!animator) {
+                    Debug.LogWarning("ComboStepAnimationCooking needs an Animator.", this);
+                    return;
                 }
             }
+            _graph = PlayableGraph.Create($"{name}_ComboStepGraph");
+            _graph.SetTimeUpdateMode(updateClock == UpdateClock.Scaled
+                ? DirectorUpdateMode.GameTime
+                : DirectorUpdateMode.UnscaledGameTime);
+
+            _output = AnimationPlayableOutput.Create(_graph, "ComboStepOutput", animator);
+            EnsureMixer();
+
+            _graphReady = true;
         }
 
-        private void ApplyPoseAtTime(double time, bool stopGraph = true)
+        private void EnsureMixer() 
         {
-            if (!_currentPlayable.IsValid())
-            {
-                return;
-            }
+            if (_mixer.IsValid()) return;
+            _mixer = AnimationMixerPlayable.Create(_graph, 2, true);
+            _output.SetSourcePlayable(_mixer);
+            _mixer.SetInputWeight(0, 1f);
+            _mixer.SetInputWeight(1, 0f);
+        }
 
-            _currentPlayable.SetTime(time);
-            _currentPlayable.Pause();
-            if (stopGraph && _graph.IsValid() && _graph.IsPlaying())
-            {
+        private void StopGraph()
+        {
+            if (!_graphReady) return;
+            if (_graph.IsValid()) {
                 _graph.Stop();
             }
-            if (_graph.IsValid() && (stopGraph || !_graph.IsPlaying()))
-            {
-                _graph.Evaluate(0f);
-            }
         }
 
-        private void ClearCurrentPlayable()
+        private void DestroyGraph()
         {
-            StopWrongFeedbackRoutine();
-            if (_currentPlayable.IsValid())
-            {
-                _currentPlayable.Destroy();
-                _currentPlayable = default;
-            }
-
-            _currentClip = null;
-            _sequenceClips = null;
-            _sequenceIndex = 0;
-            _animationOutput.SetSourcePlayable(Playable.Null);
+            if (!_graphReady) return;
+            if (_current.IsValid()) _current.Destroy();
+            if (_mixer.IsValid()) _mixer.Destroy();
+            if (_graph.IsValid()) _graph.Destroy();
+            _graphReady = false;
         }
 
-        private void ReplaceCurrentPlayable(AnimationClip clip)
+        private void StopAllRoutines()
         {
-            if (_currentPlayable.IsValid())
-            {
-                _currentPlayable.Destroy();
-                _currentPlayable = default;
-            }
+            _sequenceCts?.Cancel();
+            _sequenceCts?.Dispose();
+            _sequenceCts = null;
 
-            _currentClip = clip;
+            _wrongFeedbackCancellation?.Cancel();
+            _wrongFeedbackCancellation?.Dispose();
+            _wrongFeedbackCancellation = null;
 
-            if (clip == null)
-            {
-                _animationOutput.SetSourcePlayable(Playable.Null);
-                return;
-            }
-
-            _currentPlayable = AnimationClipPlayable.Create(_graph, clip);
-            _currentPlayable.SetApplyFootIK(false);
-            _currentPlayable.SetApplyPlayableIK(false);
-
-            var shouldLoop = !IsSequentialMode && loopAnimation;
-            if (!shouldLoop)
-            {
-                _currentPlayable.SetDuration(clip.length);
-            }
-
-            _animationOutput.SetSourcePlayable(_currentPlayable);
+            _isSequencePlaying = false;
         }
+
+        private float DeltaTime()
+        {
+            return updateClock == UpdateClock.Scaled ? Time.deltaTime : Time.unscaledDeltaTime;
+        }
+        #endregion
+
+        #region ContextMenu (Editor quick test)
+        [ContextMenu("Play Next Step")]
+        private void CM_PlayNext() => PlayNext();
+
+        [ContextMenu("Rewind To Start (Pose)")]
+        private void CM_Rewind() => RewindToStart(true);
+
+        [ContextMenu("Play Wrong Feedback")]
+        private void CM_Wrong() => PlayWrongFeedback();
+        #endregion
     }
 }
