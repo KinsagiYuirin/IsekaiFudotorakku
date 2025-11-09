@@ -7901,9 +7901,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   <AllMenuInLevel>k__BackingField:
-  - {fileID: 11400000, guid: 9037bbceaf49321409b5c0477176bc64, type: 2}
   - {fileID: 11400000, guid: ff5e1c1e42069614b9c8f333ada88f21, type: 2}
-  appetizerRandomMenuCount: 0
+  appetizerRandomMenuCount: 1
   mainCourseRandomMenuCount: 3
   dessertRandomMenuCount: 0
   appetizerRandomMenu: []
@@ -8423,9 +8422,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   animator: {fileID: 878576955}
+  sequenceClips: []
   playOnAssign: 0
   loopAnimation: 0
-  stopGraph: 0
+  resetIndexAfterEnd: 0
+  crossfadeDuration: 0.12
+  pauseAtNextClipStart: 1
+  updateClock: 0
+  wrongFeedbackClip: {fileID: 0}
+  wrongFeedbackFade: 0.08
 --- !u!4 &1897282217
 Transform:
   m_ObjectHideFlags: 0
