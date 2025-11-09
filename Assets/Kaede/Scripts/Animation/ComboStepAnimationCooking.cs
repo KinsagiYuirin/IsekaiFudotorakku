@@ -115,6 +115,11 @@ namespace Kaede.Scripts.Animation {
             EnsureGraph();
             EnsureMixer();
 
+            if (!IsMixerReady())
+            {
+                return;
+            }
+
             if (_current.IsValid())
             {
                 _mixer.DisconnectInput(0);
@@ -285,6 +290,11 @@ namespace Kaede.Scripts.Animation {
             EnsureGraph();
             EnsureMixer();
 
+            if (!IsMixerReady())
+            {
+                return;
+            }
+
             _isSequencePlaying = true;
 
             // ทำ next playable
@@ -295,6 +305,13 @@ namespace Kaede.Scripts.Animation {
             nextPlayable.SetSpeed(1);
 
             // ต่อเข้าช่อง 1 เป็น next, ช่อง 0 เก็บ current (ถ้ามี)
+            if (!IsMixerReady())
+            {
+                nextPlayable.Destroy();
+                _isSequencePlaying = false;
+                return;
+            }
+
             _mixer.DisconnectInput(1);
             _mixer.ConnectInput(1, nextPlayable, 0, 0f); // เริ่มน้ำหนัก 0
 
@@ -304,17 +321,31 @@ namespace Kaede.Scripts.Animation {
             float t = 0f;
             while (t < fade)
             {
+                if (!IsMixerReady())
+                {
+                    nextPlayable.Destroy();
+                    _isSequencePlaying = false;
+                    return;
+                }
+
                 t += DeltaTime();
                 float w = Mathf.Clamp01(t / fade);
                 _mixer.SetInputWeight(0, 1f - w);
                 _mixer.SetInputWeight(1, w);
                 await UniTask.Yield();
             }
+            if (!IsMixerReady())
+            {
+                nextPlayable.Destroy();
+                _isSequencePlaying = false;
+                return;
+            }
+
             _mixer.SetInputWeight(0, 0f);
             _mixer.SetInputWeight(1, 1f);
 
             // ทำ next เป็น current
-            if (_current.IsValid()) _mixer.DisconnectInput(0);
+            if (_current.IsValid() && IsMixerReady()) _mixer.DisconnectInput(0);
             _current = nextPlayable;
 
             // รอจนคลิปจบ แล้วค้างเฟรมสุดท้าย
@@ -341,7 +372,7 @@ namespace Kaede.Scripts.Animation {
                 if (_current.IsPlayableOfType<AnimationClipPlayable>()) {
                     var cp = (AnimationClipPlayable)_current;
                     PauseAtEnd(cp, clip);
-                } else {
+                } else if (IsMixerReady()) {
                     _current.SetSpeed(0);
                     _current.Pause();
                     _mixer.DisconnectInput(0);
@@ -358,12 +389,23 @@ namespace Kaede.Scripts.Animation {
             EnsureGraph();
             EnsureMixer();
 
+            if (!IsMixerReady())
+            {
+                return;
+            }
+
             // next temp
             var tempPlayable = AnimationClipPlayable.Create(_graph, tempClip);
             tempPlayable.SetApplyFootIK(false);
             tempPlayable.SetApplyPlayableIK(false);
             tempPlayable.SetTime(0);
             tempPlayable.SetSpeed(1);
+
+            if (!IsMixerReady())
+            {
+                tempPlayable.Destroy();
+                return;
+            }
 
             _mixer.DisconnectInput(1);
             _mixer.ConnectInput(1, tempPlayable, 0, 0f);
@@ -377,10 +419,22 @@ namespace Kaede.Scripts.Animation {
                 ct.ThrowIfCancellationRequested();
                 t += DeltaTime();
                 float w = Mathf.Clamp01(t / fade);
+                if (!IsMixerReady())
+                {
+                    tempPlayable.Destroy();
+                    return;
+                }
+
                 _mixer.SetInputWeight(1, w);
                 _mixer.SetInputWeight(0, 1f - w);
                 await UniTask.Yield(PlayerLoopTiming.Update, ct);
             }
+            if (!IsMixerReady())
+            {
+                tempPlayable.Destroy();
+                return;
+            }
+
             _mixer.SetInputWeight(1, 1f);
             _mixer.SetInputWeight(0, 0f);
 
@@ -393,27 +447,33 @@ namespace Kaede.Scripts.Animation {
             }
 
             // กลับค้างที่ current เดิม (ถ้ามี)
-            if (_current.IsValid()) 
+            if (_current.IsValid())
             {
                 // ค้างท่าสุดท้ายของ current (หรือจะกลับกลางคลิปก็เปลี่ยนได้)
-                if (_current.IsPlayableOfType<AnimationClipPlayable>()) 
+                if (_current.IsPlayableOfType<AnimationClipPlayable>())
                 {
                     var cp = (AnimationClipPlayable)_current;
                     PauseAtEnd(cp, cp.GetAnimationClip());
-                } 
-                else 
+                }
+                else if (IsMixerReady())
                 {
                     // ค้างที่สถานะปัจจุบันของ _current
                     _current.SetSpeed(0);
                     _current.Pause();
                     _mixer.SetInputWeight(0, 1f);
                 }
-                
+
                 // Fade out temp
                 float t2 = 0f;
-                while (t2 < fade) 
+                while (t2 < fade)
                 {
                     ct.ThrowIfCancellationRequested();
+                    if (!IsMixerReady())
+                    {
+                        tempPlayable.Destroy();
+                        return;
+                    }
+
                     t2 += DeltaTime();
                     float w = 1f - Mathf.Clamp01(t2 / fade);
                     _mixer.SetInputWeight(1, w);
@@ -423,7 +483,10 @@ namespace Kaede.Scripts.Animation {
             }
 
             // cleanup
-            _mixer.DisconnectInput(1);
+            if (IsMixerReady())
+            {
+                _mixer.DisconnectInput(1);
+            }
             tempPlayable.Destroy();
         }
 
@@ -433,14 +496,24 @@ namespace Kaede.Scripts.Animation {
             playable.SetSpeed(0);
             playable.Pause();
             // ให้ช่อง current = playable ที่ค้างอยู่ ช่อง 1 ว่าง
+            if (!IsMixerReady())
+            {
+                return;
+            }
+
             _mixer.DisconnectInput(0);
             _mixer.DisconnectInput(1);
             _mixer.ConnectInput(0, playable, 0, 1f);
         }
-        
+
         private void PoseClipStart(AnimationClip clip) {
             EnsureGraph();
             EnsureMixer();
+
+            if (!IsMixerReady())
+            {
+                return;
+            }
 
             // เคลียร์ current เดิมถ้ามี
             if (_current.IsValid()) {
@@ -516,6 +589,11 @@ namespace Kaede.Scripts.Animation {
             if (_mixer.IsValid()) _mixer.Destroy();
             if (_graph.IsValid()) _graph.Destroy();
             _graphReady = false;
+        }
+
+        private bool IsMixerReady()
+        {
+            return _graphReady && _graph.IsValid() && _mixer.IsValid();
         }
 
         private void StopAllRoutines()
