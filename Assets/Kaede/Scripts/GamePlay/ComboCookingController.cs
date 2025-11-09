@@ -299,6 +299,7 @@ namespace Kaede.Scripts.GamePlay
             
             _model.ResetCombo();
             _model.ScoreManager.AddRedoCount();
+            animationCooking?.RewindToStart(!autoPlay);
             Debug.Log("Redo Step");
         }
         

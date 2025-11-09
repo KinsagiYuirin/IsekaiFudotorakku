@@ -160,6 +160,84 @@ namespace Kaede.Scripts.Animation {
                 _wrongFeedbackCancellation = null;
             }
         }
+        
+        public bool TryPlayWrongFeedback()
+        {
+            if (wrongFeedbackClip == null || !_graphReady)
+            {
+                return false;
+            }
+
+            if (_wrongFeedbackCancellation != null)
+            {
+                return true;
+            }
+
+            PlayWrongFeedback();
+            return true;
+        }
+
+        public void SetAnimation(ComboStepAnimationDefinition definition, bool autoPlaySequence)
+        {
+            Stop();
+
+            wrongFeedbackClip = definition.WrongFeedbackClip;
+            sequenceClips.Clear();
+
+            switch (definition.Mode)
+            {
+                case ComboStepAnimationMode.SingleClip:
+                    if (definition.SingleClip != null)
+                    {
+                        sequenceClips.Add(definition.SingleClip);
+                    }
+                    break;
+                case ComboStepAnimationMode.SequentialClips:
+                    if (definition.SequentialClips != null)
+                    {
+                        foreach (var clip in definition.SequentialClips)
+                        {
+                            if (clip != null)
+                            {
+                                sequenceClips.Add(clip);
+                            }
+                        }
+                    }
+                    break;
+                default:
+                    break;
+            }
+
+            _stepIndex = 0;
+
+            if (sequenceClips.Count == 0)
+            {
+                return;
+            }
+
+            if (autoPlaySequence)
+            {
+                PlayNext();
+            }
+            else
+            {
+                RewindToStart(true);
+            }
+        }
+
+        public void ClearAnimation()
+        {
+            Stop();
+            sequenceClips.Clear();
+            wrongFeedbackClip = null;
+            _stepIndex = 0;
+        }
+
+        public void Stop()
+        {
+            StopAllRoutines();
+            StopGraph();
+        }
         #endregion
 
         #region Animation Events (call from clips)
