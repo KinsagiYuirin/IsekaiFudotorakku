@@ -110,6 +110,11 @@ namespace Kaede.Scripts.Animation {
         /// <summary>วางค้างท่าสเต็ป k โดยไม่เล่น (ใช้ดีบัก/ตั้งต้น)</summary>
         public void PoseStepAt(int index)
         {
+            if (!IsComponentAlive())
+            {
+                return;
+            }
+
             index = Mathf.Clamp(index, 0, sequenceClips.Count - 1);
             var clip = sequenceClips[index];
             EnsureGraph();
@@ -285,6 +290,11 @@ namespace Kaede.Scripts.Animation {
         #region Core playing
         private async UniTask PlayStep(int index, float fade)
         {
+            if (!IsComponentAlive())
+            {
+                return;
+            }
+
             if (index < 0 || index >= sequenceClips.Count) return;
             var clip = sequenceClips[index];
             EnsureGraph();
@@ -386,6 +396,11 @@ namespace Kaede.Scripts.Animation {
 
         private async UniTask CrossfadeToTempClip(AnimationClip tempClip, float fade, CancellationToken ct) 
         {
+            if (!IsComponentAlive())
+            {
+                return;
+            }
+
             EnsureGraph();
             EnsureMixer();
 
@@ -507,6 +522,11 @@ namespace Kaede.Scripts.Animation {
         }
 
         private void PoseClipStart(AnimationClip clip) {
+            if (!IsComponentAlive())
+            {
+                return;
+            }
+
             EnsureGraph();
             EnsureMixer();
 
@@ -543,8 +563,18 @@ namespace Kaede.Scripts.Animation {
         #endregion
 
         #region Graph helpers
+        private bool IsComponentAlive()
+        {
+            return this != null;
+        }
+
         private void EnsureGraph()
         {
+            if (!IsComponentAlive())
+            {
+                return;
+            }
+
             if (_graphReady) return;
             if (!animator)
             {
@@ -554,7 +584,8 @@ namespace Kaede.Scripts.Animation {
                     return;
                 }
             }
-            _graph = PlayableGraph.Create($"{name}_ComboStepGraph");
+            var graphName = IsComponentAlive() ? name : "ComboStep";
+            _graph = PlayableGraph.Create($"{graphName}_ComboStepGraph");
             _graph.SetTimeUpdateMode(updateClock == UpdateClock.Scaled
                 ? DirectorUpdateMode.GameTime
                 : DirectorUpdateMode.UnscaledGameTime);
@@ -565,8 +596,13 @@ namespace Kaede.Scripts.Animation {
             _graphReady = true;
         }
 
-        private void EnsureMixer() 
+        private void EnsureMixer()
         {
+            if (!IsComponentAlive())
+            {
+                return;
+            }
+
             if (_mixer.IsValid()) return;
             _mixer = AnimationMixerPlayable.Create(_graph, 2, true);
             _output.SetSourcePlayable(_mixer);
@@ -593,7 +629,7 @@ namespace Kaede.Scripts.Animation {
 
         private bool IsMixerReady()
         {
-            return _graphReady && _graph.IsValid() && _mixer.IsValid();
+            return IsComponentAlive() && _graphReady && _graph.IsValid() && _mixer.IsValid();
         }
 
         private void StopAllRoutines()
