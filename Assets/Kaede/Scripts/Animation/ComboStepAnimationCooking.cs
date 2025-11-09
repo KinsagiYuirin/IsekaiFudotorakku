@@ -28,7 +28,8 @@ namespace Kaede.Scripts.Animation {
         [SerializeField] private bool loopAnimation = false; // ใช้ตอน mode=Single เท่านั้น
         [SerializeField] private bool resetIndexAfterEnd = false; // false = ค้างที่ท่าสุดท้าย
         [SerializeField] private float crossfadeDuration = 0.12f;
-
+        [SerializeField] private bool pauseAtNextClipStart = true;
+        
         public enum UpdateClock { Scaled, Unscaled }
         [SerializeField] private UpdateClock updateClock = UpdateClock.Scaled;
 
@@ -56,6 +57,7 @@ namespace Kaede.Scripts.Animation {
         private int _stepIndex = 0;
         private bool _graphReady = false;
         private bool _isSequencePlaying = false;
+        private bool _autoResetAfterSingleClip = false;
 
         #region Unity lifecycle
         private void Awake()
@@ -96,7 +98,10 @@ namespace Kaede.Scripts.Animation {
             if (_stepIndex >= sequenceClips.Count)
             {
                 // จบท้ายลิสต์
-                if (resetIndexAfterEnd) _stepIndex = 0;
+                if (resetIndexAfterEnd || _autoResetAfterSingleClip)
+                {
+                    _stepIndex = 0;
+                }
             }
         }
 
@@ -110,6 +115,14 @@ namespace Kaede.Scripts.Animation {
             EnsureGraph();
             EnsureMixer();
 
+            if (_current.IsValid())
+            {
+                _mixer.DisconnectInput(0);
+                _mixer.DisconnectInput(1);
+                _current.Destroy();
+                _current = Playable.Null;
+            }
+            
             // ทำ playable ใหม่แล้ว set เวลาไปท้ายคลิป → Pause = ค้างท่าสุดท้าย
             var p = AnimationClipPlayable.Create(_graph, clip);
             p.SetApplyFootIK(false);
@@ -118,11 +131,12 @@ namespace Kaede.Scripts.Animation {
             p.SetSpeed(0); // ค้าง
             p.Pause();
 
-            // ใส่เข้า mixer ช่อง 1 เป็น next แล้ว set weight เต็ม
+            // ใส่เข้า mixer เป็น current
             _mixer.DisconnectInput(0);
             _mixer.DisconnectInput(1);
-            _mixer.ConnectInput(0, p, 0, 0f);
-            _mixer.ConnectInput(1, p, 0, 1f);
+            _mixer.ConnectInput(0, p, 0, 1f);
+            _mixer.SetInputWeight(0, 1f);
+            _mixer.SetInputWeight(1, 0f);
 
             _current = p;
             if (!_graph.IsPlaying()) _graph.Play();
@@ -183,7 +197,8 @@ namespace Kaede.Scripts.Animation {
 
             wrongFeedbackClip = definition.WrongFeedbackClip;
             sequenceClips.Clear();
-
+            var shouldAutoReset = definition.Mode == ComboStepAnimationMode.SingleClip;
+            
             switch (definition.Mode)
             {
                 case ComboStepAnimationMode.SingleClip:
@@ -209,6 +224,7 @@ namespace Kaede.Scripts.Animation {
             }
 
             _stepIndex = 0;
+            _autoResetAfterSingleClip = shouldAutoReset && sequenceClips.Count == 1;
 
             if (sequenceClips.Count == 0)
             {
@@ -231,6 +247,7 @@ namespace Kaede.Scripts.Animation {
             sequenceClips.Clear();
             wrongFeedbackClip = null;
             _stepIndex = 0;
+            _autoResetAfterSingleClip = false;
         }
 
         public void Stop()
@@ -307,19 +324,30 @@ namespace Kaede.Scripts.Animation {
                 await UniTask.Yield();
             }
             
-            // ค้างเฟรมสุดท้าย
-            if (_current.IsPlayableOfType<AnimationClipPlayable>()) {
-                var cp = (AnimationClipPlayable)_current;
-                PauseAtEnd(cp, clip);              // มี length ชัดเจน → ค้างเฟรมสุดท้ายได้เป๊ะ
-            } 
-            else
-            {
-                // กรณีไม่ใช่คลิป (แทบจะไม่เกิดใน flow นี้ แต่กันไว้)
-                _current.SetSpeed(0);
-                _current.Pause();
-                _mixer.DisconnectInput(0);
-                _mixer.DisconnectInput(1);
-                _mixer.ConnectInput(0, _current, 0, 1f);
+            // ค้างเฟรมสุดท้าย หริือค้างเฟรมแรกของคลิปถัดไป / รีเซ็ต
+            var nextIndex = index + 1;
+            var hasNext = nextIndex < sequenceClips.Count;
+
+            if (pauseAtNextClipStart && hasNext) {
+                // มีคลิปถัดไป → ค้างเฟรมแรกของคลิปถัดไป
+                PoseClipStart(sequenceClips[nextIndex]);
+            }
+            else if (pauseAtNextClipStart && !hasNext && resetIndexAfterEnd && sequenceClips.Count > 0) {
+                // จบลิสต์ + เซ็ตให้รีเซ็ต → ค้างเฟรมแรกของคลิปแรก
+                PoseClipStart(sequenceClips[0]);
+            }
+            else {
+                // กรณีอื่น ๆ → ค้างเฟรมสุดท้ายของคลิปปัจจุบันเหมือนเดิม
+                if (_current.IsPlayableOfType<AnimationClipPlayable>()) {
+                    var cp = (AnimationClipPlayable)_current;
+                    PauseAtEnd(cp, clip);
+                } else {
+                    _current.SetSpeed(0);
+                    _current.Pause();
+                    _mixer.DisconnectInput(0);
+                    _mixer.DisconnectInput(1);
+                    _mixer.ConnectInput(0, _current, 0, 1f);
+                }
             }
 
             _isSequencePlaying = false;
@@ -409,6 +437,36 @@ namespace Kaede.Scripts.Animation {
             _mixer.DisconnectInput(1);
             _mixer.ConnectInput(0, playable, 0, 1f);
         }
+        
+        private void PoseClipStart(AnimationClip clip) {
+            EnsureGraph();
+            EnsureMixer();
+
+            // เคลียร์ current เดิมถ้ามี
+            if (_current.IsValid()) {
+                _mixer.DisconnectInput(0);
+                _mixer.DisconnectInput(1);
+                _current.Destroy();
+                _current = Playable.Null;
+            }
+
+            var p = AnimationClipPlayable.Create(_graph, clip);
+            p.SetApplyFootIK(false);
+            p.SetApplyPlayableIK(false);
+            p.SetTime(0.0); // เฟรมแรก
+            p.SetSpeed(0);
+            p.Pause();
+
+            _mixer.DisconnectInput(0);
+            _mixer.DisconnectInput(1);
+            _mixer.ConnectInput(0, p, 0, 1f);
+            _mixer.SetInputWeight(0, 1f);
+            _mixer.SetInputWeight(1, 0f);
+
+            _current = p;
+            if (!_graph.IsPlaying()) _graph.Play();
+        }
+
         #endregion
 
         #region Graph helpers
