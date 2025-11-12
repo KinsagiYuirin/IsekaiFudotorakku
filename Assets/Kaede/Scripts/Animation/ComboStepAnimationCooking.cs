@@ -283,7 +283,7 @@ namespace Kaede.Scripts.Animation {
 
         public void AE_InsertEnd()
         {
-            OnStepEnd?.Invoke(Mathf.Clamp(_stepIndex - 1, 0, sequenceClips.Count - 1));
+            OnStepEnd?.Invoke(Mathf.Clamp(_stepIndex, 0, sequenceClips.Count - 1));
         }
         #endregion
 
@@ -369,20 +369,26 @@ namespace Kaede.Scripts.Animation {
             var nextIndex = index + 1;
             var hasNext = nextIndex < sequenceClips.Count;
 
-            if (pauseAtNextClipStart && hasNext) {
+            if (pauseAtNextClipStart && hasNext) 
+            {
                 // มีคลิปถัดไป → ค้างเฟรมแรกของคลิปถัดไป
                 PoseClipStart(sequenceClips[nextIndex]);
             }
-            else if (pauseAtNextClipStart && !hasNext && resetIndexAfterEnd && sequenceClips.Count > 0) {
+            else if (pauseAtNextClipStart && !hasNext && resetIndexAfterEnd && sequenceClips.Count > 0) 
+            {
                 // จบลิสต์ + เซ็ตให้รีเซ็ต → ค้างเฟรมแรกของคลิปแรก
                 PoseClipStart(sequenceClips[0]);
             }
-            else {
+            else 
+            {
                 // กรณีอื่น ๆ → ค้างเฟรมสุดท้ายของคลิปปัจจุบันเหมือนเดิม
-                if (_current.IsPlayableOfType<AnimationClipPlayable>()) {
+                if (_current.IsPlayableOfType<AnimationClipPlayable>()) 
+                {
                     var cp = (AnimationClipPlayable)_current;
                     PauseAtEnd(cp, clip);
-                } else if (IsMixerReady()) {
+                } 
+                else if (IsMixerReady()) 
+                {
                     _current.SetSpeed(0);
                     _current.Pause();
                     _mixer.DisconnectInput(0);
