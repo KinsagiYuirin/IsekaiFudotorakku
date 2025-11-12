@@ -88,6 +88,7 @@ namespace MadDuck.Scripts.Inputs
         #region Fields
         private PlayerInputAction _playerInputAction;
         private IDisposable _anyButtonPressListener;
+        private bool _comboInputEnabled = true;
         #endregion
 
         #region Life Cycle
@@ -190,21 +191,37 @@ namespace MadDuck.Scripts.Inputs
 
         public void OnComboUp(InputAction.CallbackContext context)
         {
+            if (!CanProcessComboInput())
+            {
+                return;
+            }
             BindPressButton(ComboUpButton, context);
         }
         
         public void OnComboDown(InputAction.CallbackContext context)
         {
+            if (!CanProcessComboInput())
+            {
+                return;
+            }
             BindPressButton(ComboDownButton, context);
         }
 
         public void OnComboLeft(InputAction.CallbackContext context)
         {
+            if (!CanProcessComboInput())
+            {
+                return;
+            }
             BindPressButton(ComboLeftButton, context);
         }
         
         public void OnComboRight(InputAction.CallbackContext context)
         {
+            if (!CanProcessComboInput())
+            {
+                return;
+            }
             BindPressButton(ComboRightButton, context);
         }
 
@@ -285,6 +302,53 @@ namespace MadDuck.Scripts.Inputs
         {
             BoatInput = input;
         }
+        #endregion
+
+        #region Utils(by Yuirin)
+
+        public void SetComboInputEnabled(bool enabled)
+        {
+            if (_comboInputEnabled == enabled)
+            {
+                return;
+            }
+
+            _comboInputEnabled = enabled;
+
+            if (!enabled)
+            {
+                ResetComboInputState();
+            }
+        }
+
+        private bool CanProcessComboInput()
+        {
+            return _comboInputEnabled;
+        }
+
+        private void ResetComboInputState()
+        {
+            ResetComboButtonState(ComboUpButton);
+            ResetComboButtonState(ComboDownButton);
+            ResetComboButtonState(ComboLeftButton);
+            ResetComboButtonState(ComboRightButton);
+        }
+
+        private static void ResetComboButtonState(ReactiveProperty<InputButton> button)
+        {
+            if (button?.Value == null)
+            {
+                return;
+            }
+
+            button.Value.isDown = false;
+            button.Value.isUp = false;
+            button.Value.isHeld = false;
+            button.Value.isUpAfterHeld = false;
+            button.Value.heldLastTime = false;
+            button.OnNext(button.Value);
+        }
+
         #endregion
         
         #region Helper(by Yuirin)

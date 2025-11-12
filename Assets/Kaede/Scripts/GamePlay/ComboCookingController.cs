@@ -238,6 +238,7 @@ namespace Kaede.Scripts.GamePlay
             if (!hasNext)
             {
                 sendFood.SetToStartPosition(_model.MenuDatas[_model.CurrentMenuIndex].menuSprite);
+                _inputHandler?.SetComboInputEnabled(false);
                 await timer.PauseTimerForSeconds(timer.DelayAfterFinishMenu);
                 NextMenu().Forget();;
                 return;
@@ -281,7 +282,8 @@ namespace Kaede.Scripts.GamePlay
             _model.ResetCombo();
             timer.ResetTimer();
             ShowCurrentCombo();
-
+            _inputHandler?.SetComboInputEnabled(true);
+            
             var latestMenuScore = _model.ScoreManager.MenuScores[^1];
             var allScore        =  _model.ScoreManager.GrandTotalScore;
             Debug.Log($"Menu {_model.ScoreManager.MenuScores.Count} Score: {latestMenuScore} \n" +
@@ -355,6 +357,7 @@ namespace Kaede.Scripts.GamePlay
             animationCooking?.Stop();
             _inputProcessor?.ResetState();
             characterEmotionPlayer?.ResetToIdle(true);
+            _inputHandler?.SetComboInputEnabled(false);
         }
         
         private void HandleRestFinished()
@@ -365,6 +368,7 @@ namespace Kaede.Scripts.GamePlay
             animationCooking?.Stop();
             ShowCurrentCombo();
             characterEmotionPlayer?.ResetToIdle(true);
+            _inputHandler?.SetComboInputEnabled(true);
         }
         #endregion
     }
