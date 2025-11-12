@@ -291,6 +291,7 @@ namespace Kaede.Scripts.GamePlay
             Debug.Log("Next Menu");
         }
 
+        
         private void RedoStep()
         {
             if (_model is { GameState: CookingState.Resting }) return;
