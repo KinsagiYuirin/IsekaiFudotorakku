@@ -19,6 +19,9 @@ MonoBehaviour:
   - preset: {fileID: 11400000, guid: 08731a1ebe4e67c47a39e2dc5057e904, type: 2}
     overrideSequence: 0
     customSequence: []
+  - preset: {fileID: 11400000, guid: 08731a1ebe4e67c47a39e2dc5057e904, type: 2}
+    overrideSequence: 0
+    customSequence: []
   - preset: {fileID: 11400000, guid: 19e48516be4bd324dae4f9d334f87db8, type: 2}
     overrideSequence: 0
     customSequence: []
