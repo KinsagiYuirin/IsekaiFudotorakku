@@ -278,3 +278,11 @@ MonoBehaviour:
     applyColorToSubfolders: 0
     applyIconToSubfolders: 0
     materialColor: 0
+  - folderName: Manga
+    folderColor: {r: 1, g: 0.43867922, b: 0.9464608, a: 1}
+    fullPath: Assets/Kaede/Art/Manga
+    icon: {fileID: 0}
+    applyToAllFolders: 0
+    applyColorToSubfolders: 0
+    applyIconToSubfolders: 0
+    materialColor: 0
