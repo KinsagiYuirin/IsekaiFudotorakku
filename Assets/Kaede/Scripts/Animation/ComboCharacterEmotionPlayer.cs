@@ -1,7 +1,11 @@
+using System;
 using System.Collections;
+using Cysharp.Threading.Tasks;
+using Sirenix.OdinInspector;
 using UnityEngine;
 using UnityEngine.Animations;
 using UnityEngine.Playables;
+using Random = UnityEngine.Random;
 
 namespace Kaede.Scripts.Animation
 {
@@ -14,7 +18,10 @@ namespace Kaede.Scripts.Animation
         [SerializeField] private AnimationClip[] failureAnimation;
         [SerializeField] private AnimationClip holdLoopAnimation;
         [SerializeField] private bool playIdleOnEnable = true;
+        
+        [Title ("AI Animation")]
         [SerializeField] private bool aiAnimation = false;
+        [ShowIf("aiAnimation")][SerializeField] private Vector2 aiAnimationIntervalRange = new Vector2(2f, 5f);
 
         private PlayableGraph _graph;
         private AnimationPlayableOutput _animationOutput;
@@ -36,6 +43,14 @@ namespace Kaede.Scripts.Animation
             _graph.SetTimeUpdateMode(DirectorUpdateMode.GameTime);
             _animationOutput = AnimationPlayableOutput.Create(_graph, "CharacterEmotion", animator);
             _initialized = true;
+        }
+
+        private void Start()
+        {
+            if (aiAnimation)
+            {
+                AIAnimation().Forget();
+            }
         }
 
         private void OnEnable()
@@ -73,17 +88,26 @@ namespace Kaede.Scripts.Animation
             }
         }
 
-        private void AIAnimation()
+        private async UniTaskVoid AIAnimation()
         {
-            var randomInt = Random.Range(0, 1);
-            switch (randomInt)
+            while (true)
             {
-                case 0:
-                    PlaySuccess();
-                    break;
-                case 1:
-                    PlayFailure();
-                    break;
+                int randomInt = Random.Range(0, 3);
+                switch (randomInt)
+                {
+                    case 0:
+                        PlayIdle();
+                        break;
+                    case 1:
+                        PlaySuccess();
+                        break;
+                    case 2:
+                        PlayFailure();
+                        break;
+                }
+
+                float randomInterval = Random.Range(aiAnimationIntervalRange.x, aiAnimationIntervalRange.y);
+                await UniTask.Delay(TimeSpan.FromSeconds(randomInterval));
             }
         }
         
@@ -97,6 +121,7 @@ namespace Kaede.Scripts.Animation
             var animationClip = successAnimation[Random.Range(0, successAnimation.Length)];
             if (!PlayClip(animationClip != null ? animationClip : idleAnimation, false, true) && successAnimation == null)
             {
+                // Fallback to idle when there is no failure animation clip.
                 PlayIdle();
             }
         }
@@ -106,7 +131,6 @@ namespace Kaede.Scripts.Animation
             var animationClip = failureAnimation[Random.Range(0, failureAnimation.Length)];
             if (!PlayClip(animationClip != null ? animationClip : idleAnimation, false, true) && failureAnimation == null)
             {
-                // Fallback to idle when there is no failure animation clip.
                 PlayIdle();
             }
         }

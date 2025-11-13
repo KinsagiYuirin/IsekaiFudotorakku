@@ -230,7 +230,7 @@ namespace Kaede.Scripts.GamePlay
         private async UniTask NextStep()
         {
             if (_model is { GameState: CookingState.Resting }) return;
-            if (_inputProcessor == null || !_inputProcessor.IsStepComplete) return;
+            if (_inputProcessor is not { IsStepComplete: true }) return;
             _inputProcessor?.ResetState();
             
             _model.ScoreManager.CommitPendingStepScore();
@@ -342,7 +342,7 @@ namespace Kaede.Scripts.GamePlay
         {
             _model.ResetCombo();
             _view.ResetCombo();
-            NextMenu();
+            NextMenu().Forget();
             _model.ScoreManager.ResetPendingStepScore();
             _inputProcessor?.ResetState();
             animationCooking?.Stop();
