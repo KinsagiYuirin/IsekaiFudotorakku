@@ -15,7 +15,11 @@ MonoBehaviour:
   haveMoreOnePage: 0
   pageSetting:
     pageSprite: {fileID: 0}
+    effectType: 04000000
+    sfx: {fileID: 0}
+    pageDuration: 1
+  <PageSprites>k__BackingField:
+  - pageSprite: {fileID: 0}
     effectType: 
     sfx: {fileID: 0}
     pageDuration: 0
-  <PageSprites>k__BackingField: []

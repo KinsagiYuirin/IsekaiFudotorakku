@@ -1739,11 +1739,11 @@ RectTransform:
   - {fileID: 1647415516}
   - {fileID: 319754072}
   - {fileID: 2118260112}
-  - {fileID: 1180846706}
   - {fileID: 1952637158}
   - {fileID: 1593304801}
   - {fileID: 1203022327}
   - {fileID: 2109660078}
+  - {fileID: 1180846706}
   - {fileID: 762913538}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -1844,7 +1844,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &461435974
 RectTransform:
   m_ObjectHideFlags: 0
@@ -3012,7 +3012,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &864780759
 RectTransform:
   m_ObjectHideFlags: 0
@@ -3815,8 +3815,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 983995543}
-  - component: {fileID: 983995545}
-  - component: {fileID: 983995544}
   m_Layer: 5
   m_Name: MangaPanel
   m_TagString: Untagged
@@ -3843,44 +3841,6 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &983995544
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 983995542}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_RaycastTarget: 1
-  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
-  m_Maskable: 1
-  m_OnCullStateChanged:
-    m_PersistentCalls:
-      m_Calls: []
-  m_Sprite: {fileID: 0}
-  m_Type: 0
-  m_PreserveAspect: 0
-  m_FillCenter: 1
-  m_FillMethod: 4
-  m_FillAmount: 1
-  m_FillClockwise: 1
-  m_FillOrigin: 0
-  m_UseSpriteMesh: 0
-  m_PixelsPerUnitMultiplier: 1
---- !u!222 &983995545
-CanvasRenderer:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 983995542}
-  m_CullTransparentMesh: 1
 --- !u!1 &1001102305
 GameObject:
   m_ObjectHideFlags: 0
@@ -4010,6 +3970,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1012049816}
+  - component: {fileID: 1012049817}
   m_Layer: 0
   m_Name: MangaManager
   m_TagString: Untagged
@@ -4032,6 +3993,38 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1012049817
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1012049815}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4bb337ba034004346bebbd5663a1a2a6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  playOnStart: 1
+  pages:
+  - illustration: {fileID: 21300000, guid: 993d6866b7ea85e48994e168adcfcbdd, type: 3}
+    effect: {fileID: 11400000, guid: 9f40fba8a9b7f7c4e9d00a052af64056, type: 2}
+    autoAdvance: 0
+    autoAdvanceDelay: 0
+    sound: {fileID: 0}
+  targetImage: {fileID: 2123320456}
+  canvasGroup: {fileID: 1180846707}
+  audioSource: {fileID: 2084663522}
+  setNativeSizeOnShow: 0
+  onPageStarted:
+    m_PersistentCalls:
+      m_Calls: []
+  onPageCompleted:
+    m_PersistentCalls:
+      m_Calls: []
+  onCutsceneFinished:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!1 &1049526164
 GameObject:
   m_ObjectHideFlags: 0
@@ -4461,13 +4454,14 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1180846706}
+  - component: {fileID: 1180846707}
   m_Layer: 5
   m_Name: Manga
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1180846706
 RectTransform:
   m_ObjectHideFlags: 0
@@ -4493,6 +4487,18 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!225 &1180846707
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1180846705}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
 --- !u!1 &1183027327
 GameObject:
   m_ObjectHideFlags: 0
@@ -6101,7 +6107,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1516027812
 RectTransform:
   m_ObjectHideFlags: 0
@@ -7399,7 +7405,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1667822592
 RectTransform:
   m_ObjectHideFlags: 0
