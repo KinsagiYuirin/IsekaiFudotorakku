@@ -8,11 +8,11 @@ namespace Kaede.Scripts.Item
     [Flags]
     public enum MangaEffectType
     {
-        None,
-        SpeedLines,
-        ScreenShake,
-        ZoomIn,
-        ZoomOut
+        None = 0,
+        SpeedLines = 1 << 0,
+        ScreenShake = 1 << 1,
+        ZoomIn = 1 << 2,
+        ZoomOut = 1 << 3
     }
     
     [System.Serializable]
