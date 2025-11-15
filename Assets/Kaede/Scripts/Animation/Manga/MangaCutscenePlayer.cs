@@ -15,11 +15,18 @@ namespace Kaede.Scripts.Animation.Manga
         [Serializable]
         public class CutscenePage
         {
-            [Tooltip("Image that should be shown on this page.")]
-            public Sprite illustration;
+            [Serializable]
+            public class CutsceneIllustration
+            {
+                [Tooltip("Image object that will be animated for this illustration.")]
+                public Image image;
 
-            [Tooltip("Effect that is applied when the page becomes visible.")]
-            public CutsceneEffect effect;
+                [Tooltip("Effect that is applied when this illustration becomes visible.")]
+                public CutsceneEffect effect;
+            }
+
+            [Tooltip("Illustrations that will be shown sequentially for this page.")]
+            public List<CutsceneIllustration> illustrations = new();
 
             [Tooltip("If true, the cutscene will advance after the delay without user input.")]
             public bool autoAdvance = true;
@@ -42,18 +49,16 @@ namespace Kaede.Scripts.Animation.Manga
         private List<CutscenePage> pages = new();
 
         [SerializeField]
-        private Image targetImage;
-
-        [SerializeField]
-        private CanvasGroup canvasGroup;
-
-        [SerializeField]
         private AudioSource audioSource;
 
         [SerializeField]
         [Tooltip("If true, SetNativeSize() is called whenever a new page is shown.")]
         private bool setNativeSizeOnShow = false;
 
+        [SerializeField]
+        [Tooltip("If true, a CanvasGroup will be created automatically when an illustration needs one.")]
+        private bool createCanvasGroupIfMissing = true;
+        
         [Header("Events")]
         public CutscenePageEvent onPageStarted;
         public CutscenePageEvent onPageCompleted;
@@ -62,6 +67,7 @@ namespace Kaede.Scripts.Animation.Manga
         private int currentPageIndex = -1;
         private Coroutine pageRoutine;
         private bool waitingForInput;
+        private readonly List<Image> activeIllustrations = new();
 
         /// <summary>
         /// Exposes the configured pages in a read-only manner.
@@ -80,21 +86,7 @@ namespace Kaede.Scripts.Animation.Manga
 
         private void Reset()
         {
-            targetImage = GetComponentInChildren<Image>();
-            canvasGroup = GetComponentInChildren<CanvasGroup>();
             audioSource = GetComponent<AudioSource>();
-        }
-
-        private void Awake()
-        {
-            if (canvasGroup == null && targetImage != null)
-            {
-                canvasGroup = targetImage.GetComponent<CanvasGroup>();
-                if (canvasGroup == null)
-                {
-                    canvasGroup = targetImage.gameObject.AddComponent<CanvasGroup>();
-                }
-            }
         }
 
         private void Start()
@@ -180,7 +172,7 @@ namespace Kaede.Scripts.Animation.Manga
 
         private IEnumerator PlayPage(CutscenePage page)
         {
-            ApplyPageVisuals(page);
+            HideActiveIllustrations();
 
             onPageStarted?.Invoke(currentPageIndex, page);
 
@@ -190,15 +182,51 @@ namespace Kaede.Scripts.Animation.Manga
                 audioSource.Play();
             }
 
-            if (page.effect != null)
+            foreach (var illustration in page.illustrations)
             {
+                if (illustration == null || illustration.image == null)
+                {
+                    continue;
+                }
+
+                var image = illustration.image;
+                activeIllustrations.Add(image);
+                image.gameObject.SetActive(true);
+                image.enabled = true;
+
+                if (setNativeSizeOnShow)
+                {
+                    image.SetNativeSize();
+                }
+
+                var canvasGroup = image.GetComponent<CanvasGroup>();
+                if (canvasGroup == null && createCanvasGroupIfMissing)
+                {
+                    canvasGroup = image.gameObject.AddComponent<CanvasGroup>();
+                }
+
+                if (canvasGroup != null)
+                {
+                    canvasGroup.alpha = 1f;
+                }
                 var context = new CutsceneEffectContext(
                     this,
-                    targetImage != null ? targetImage.rectTransform : null,
+                    image.rectTransform,
                     canvasGroup,
-                    targetImage);
+                    image);
 
-                yield return page.effect.Play(context);
+                if (illustration.effect != null)
+                {
+                    yield return illustration.effect.Play(context);
+                }
+                else
+                {
+                    var color = image.color;
+                    color.a = 1f;
+                    image.color = color;
+                    // Ensure at least a frame passes so layout updates are visible.
+                    yield return null;
+                }
             }
 
             onPageCompleted?.Invoke(currentPageIndex, page);
@@ -218,21 +246,21 @@ namespace Kaede.Scripts.Animation.Manga
             }
         }
 
-        private void ApplyPageVisuals(CutscenePage page)
+        private void HideActiveIllustrations()
         {
-            if (targetImage != null)
+            if (activeIllustrations.Count == 0)
             {
-                targetImage.sprite = page.illustration;
-                if (setNativeSizeOnShow)
-                {
-                    targetImage.SetNativeSize();
-                }
+                return;
             }
 
-            if (canvasGroup != null)
+            foreach (var image in activeIllustrations)
             {
-                canvasGroup.alpha = 1f;
+                if (image != null)
+                {
+                    image.gameObject.SetActive(false);
+                }
             }
+            activeIllustrations.Clear();
         }
 
         private void StopCurrentRoutine()

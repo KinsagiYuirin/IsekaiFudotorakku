@@ -12,8 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9e6d817332f2f844ca137965054e9cf0, type: 3}
   m_Name: Test
   m_EditorClassIdentifier: 
-  startOffset: {x: 0, y: 0}
-  duration: 0.6
+  startOffset: {x: 500, y: 0}
+  duration: 5
   curve:
     serializedVersion: 2
     m_Curve:
