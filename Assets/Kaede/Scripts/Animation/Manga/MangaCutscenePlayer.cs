@@ -28,6 +28,8 @@ namespace Kaede.Scripts.Animation.Manga
             [Tooltip("Illustrations that will be shown sequentially for this page.")]
             public List<CutsceneIllustration> illustrations = new();
 
+            public bool playBothPagesAtOnce = false;
+            
             [Tooltip("If true, the cutscene will advance after the delay without user input.")]
             public bool autoAdvance = true;
 
@@ -181,9 +183,10 @@ namespace Kaede.Scripts.Animation.Manga
                 audioSource.clip = page.sound;
                 audioSource.Play();
             }
-
+            
             foreach (var illustration in page.illustrations)
             {
+                int pageNum = currentPageIndex + 1;
                 if (illustration == null || illustration.image == null)
                 {
                     continue;
@@ -217,7 +220,10 @@ namespace Kaede.Scripts.Animation.Manga
 
                 if (illustration.effect != null)
                 {
-                    yield return illustration.effect.Play(context);
+                    if (!page.playBothPagesAtOnce)
+                        yield return illustration.effect.Play(context);
+                    else
+                        StartCoroutine(illustration.effect.Play(context));
                 }
                 else
                 {
@@ -227,6 +233,8 @@ namespace Kaede.Scripts.Animation.Manga
                     // Ensure at least a frame passes so layout updates are visible.
                     yield return null;
                 }
+
+                Debug.Log($"Displayed illustration. {pageNum}");
             }
 
             onPageCompleted?.Invoke(currentPageIndex, page);

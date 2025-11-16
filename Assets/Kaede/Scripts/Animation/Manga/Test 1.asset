@@ -10,9 +10,9 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9e6d817332f2f844ca137965054e9cf0, type: 3}
-  m_Name: Test
+  m_Name: Test 1
   m_EditorClassIdentifier: 
-  startOffset: {x: 714.8, y: 0}
+  startOffset: {x: -556.5, y: 0}
   duration: 5
   curve:
     serializedVersion: 2
