@@ -1,6 +1,8 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading;
+using Cysharp.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
@@ -67,7 +69,7 @@ namespace Kaede.Scripts.Animation.Manga
         public UnityEvent onCutsceneFinished;
 
         private int currentPageIndex = -1;
-        private Coroutine pageRoutine;
+        private CancellationTokenSource pageCancelToken;
         private bool waitingForInput;
         private readonly List<Image> activeIllustrations = new();
 
@@ -93,10 +95,17 @@ namespace Kaede.Scripts.Animation.Manga
 
         private void Start()
         {
+            pageCancelToken = new CancellationTokenSource();
             if (playOnStart)
             {
                 Play();
             }
+        }
+        
+        private void OnDestroy()
+        {
+            StopCurrentRoutine();
+            pageCancelToken.Dispose();
         }
 
         /// <summary>
@@ -143,7 +152,7 @@ namespace Kaede.Scripts.Animation.Manga
             }
 
             var page = pages[currentPageIndex];
-            pageRoutine = StartCoroutine(PlayPage(page));
+            PlayPage(page, pageCancelToken.Token);
         }
 
         /// <summary>
@@ -172,8 +181,10 @@ namespace Kaede.Scripts.Animation.Manga
             pages.Add(page);
         }
 
-        private IEnumerator PlayPage(CutscenePage page)
+        private async UniTask PlayPage(CutscenePage page, CancellationToken  token)
         {
+            token.ThrowIfCancellationRequested();
+            
             HideActiveIllustrations();
 
             onPageStarted?.Invoke(currentPageIndex, page);
@@ -186,6 +197,8 @@ namespace Kaede.Scripts.Animation.Manga
             
             foreach (var illustration in page.illustrations)
             {
+                token.ThrowIfCancellationRequested();
+                
                 int pageNum = currentPageIndex + 1;
                 if (illustration == null || illustration.image == null)
                 {
@@ -221,9 +234,9 @@ namespace Kaede.Scripts.Animation.Manga
                 if (illustration.effect != null)
                 {
                     if (!page.playBothPagesAtOnce)
-                        yield return illustration.effect.Play(context);
+                        await illustration.effect.Play(context, token);
                     else
-                        StartCoroutine(illustration.effect.Play(context));
+                        illustration.effect.Play(context, token).Forget();
                 }
                 else
                 {
@@ -231,7 +244,7 @@ namespace Kaede.Scripts.Animation.Manga
                     color.a = 1f;
                     image.color = color;
                     // Ensure at least a frame passes so layout updates are visible.
-                    yield return null;
+                    await UniTask.Yield(token); 
                 }
 
                 Debug.Log($"Displayed illustration. {pageNum}");
@@ -243,7 +256,7 @@ namespace Kaede.Scripts.Animation.Manga
             {
                 if (page.autoAdvanceDelay > 0f)
                 {
-                    yield return new WaitForSeconds(page.autoAdvanceDelay);
+                    await UniTask.WaitForSeconds(page.autoAdvanceDelay);
                 }
 
                 Advance();
@@ -273,10 +286,9 @@ namespace Kaede.Scripts.Animation.Manga
 
         private void StopCurrentRoutine()
         {
-            if (pageRoutine != null)
+            if (pageCancelToken != null)
             {
-                StopCoroutine(pageRoutine);
-                pageRoutine = null;
+                pageCancelToken.Cancel();
             }
         }
 

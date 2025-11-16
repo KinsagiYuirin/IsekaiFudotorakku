@@ -1,4 +1,6 @@
 using System.Collections;
+using System.Threading;
+using Cysharp.Threading.Tasks;
 using UnityEngine;
 
 namespace Kaede.Scripts.Animation.Manga
@@ -18,11 +20,11 @@ namespace Kaede.Scripts.Animation.Manga
         [SerializeField]
         private AnimationCurve curve = AnimationCurve.EaseInOut(0f, 0f, 1f, 1f);
 
-        public override IEnumerator Play(CutsceneEffectContext context)
+        public override async UniTask Play(CutsceneEffectContext context, CancellationToken token)
         {
             if (context.RectTransform == null)
             {
-                yield break;
+                return;
             }
 
             var rectTransform = context.RectTransform;
@@ -37,7 +39,7 @@ namespace Kaede.Scripts.Animation.Manga
                 float t = duration <= 0f ? 1f : Mathf.Clamp01(elapsed / duration);
                 float evaluated = curve.Evaluate(t);
                 rectTransform.anchoredPosition = Vector2.LerpUnclamped(originalPosition + startOffset, originalPosition, evaluated);
-                yield return null;
+                await UniTask.Yield(token); 
             }
 
             rectTransform.anchoredPosition = originalPosition;

@@ -1,4 +1,6 @@
 using System.Collections;
+using System.Threading;
+using Cysharp.Threading.Tasks;
 using UnityEngine;
 
 namespace Kaede.Scripts.Animation.Manga
@@ -12,7 +14,7 @@ namespace Kaede.Scripts.Animation.Manga
         /// Called when a cutscene page should be animated.
         /// </summary>
         /// <param name="context">References to the player and the active UI elements.</param>
-        public abstract IEnumerator Play(CutsceneEffectContext context);
+        public abstract UniTask Play(CutsceneEffectContext contex, CancellationToken cancellationToken);
     }
 
     /// <summary>

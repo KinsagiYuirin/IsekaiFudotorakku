@@ -1,4 +1,6 @@
 using System.Collections;
+using System.Threading;
+using Cysharp.Threading.Tasks;
 using UnityEngine;
 
 namespace Kaede.Scripts.Animation.Manga
@@ -18,11 +20,11 @@ namespace Kaede.Scripts.Animation.Manga
         [SerializeField]
         private bool fadeImageColor = true;
 
-        public override IEnumerator Play(CutsceneEffectContext context)
+        public override async UniTask Play(CutsceneEffectContext context, CancellationToken token)
         {
             if (context.CanvasGroup == null && context.Image == null)
             {
-                yield break;
+                return;
             }
 
             float elapsed = 0f;
@@ -56,7 +58,7 @@ namespace Kaede.Scripts.Animation.Manga
                     context.Image.color = new Color(originalColor.r, originalColor.g, originalColor.b, evaluated);
                 }
 
-                yield return null;
+                await UniTask.Yield(token); 
             }
 
             if (context.CanvasGroup != null)
