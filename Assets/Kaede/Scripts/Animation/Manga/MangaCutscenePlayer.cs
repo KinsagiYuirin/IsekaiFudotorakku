@@ -105,7 +105,6 @@ namespace Kaede.Scripts.Animation.Manga
         private void OnDestroy()
         {
             StopCurrentRoutine();
-            pageCancelToken.Dispose();
         }
 
         /// <summary>
@@ -289,7 +288,10 @@ namespace Kaede.Scripts.Animation.Manga
             if (pageCancelToken != null)
             {
                 pageCancelToken.Cancel();
+                pageCancelToken.Dispose();
             }
+            
+            pageCancelToken = new CancellationTokenSource();
         }
 
         protected virtual void HandleCutsceneFinished()
