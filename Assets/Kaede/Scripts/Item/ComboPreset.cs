@@ -13,7 +13,11 @@ namespace Kaede.Scripts.Item
         W,
         A,
         S,
-        D
+        D,
+        Up,
+        Down,
+        Left,
+        Right
     }
 
     public enum ComboType

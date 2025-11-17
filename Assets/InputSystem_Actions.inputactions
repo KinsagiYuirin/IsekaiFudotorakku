@@ -87,6 +87,42 @@
                     "initialStateCheck": false
                 },
                 {
+                    "name": "Combo Arrow Up",
+                    "type": "Button",
+                    "id": "aac8251b-5d77-4414-b125-a6e90fde477b",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "Combo Arrow Down",
+                    "type": "Button",
+                    "id": "da429efd-f0ed-4fca-82a9-f3fc04839616",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "Combo Arrow Left",
+                    "type": "Button",
+                    "id": "5e242b3e-4d48-46b1-b112-91d6a40b6582",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "Combo Arrow Right",
+                    "type": "Button",
+                    "id": "bc22db63-50af-4cbd-bcb6-39e5966885c9",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
                     "name": "Confirm Button",
                     "type": "Button",
                     "id": "6b76238e-db5a-4fbc-9e0c-049608c06f14",
@@ -477,6 +513,94 @@
                     "processors": "",
                     "groups": "",
                     "action": "Combo Right",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "f7480848-f4e4-4c41-a536-7955c5ca5b9b",
+                    "path": "<Keyboard>/upArrow",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Combo Arrow Up",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "fc544913-e247-4f7b-9af3-7eadbaa74bbf",
+                    "path": "<XInputController>/dpad/up",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Combo Arrow Up",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "2b4d8d01-3501-437b-9a13-7b46028ae138",
+                    "path": "<Keyboard>/downArrow",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Combo Arrow Down",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "3ae9a120-e4e5-4beb-bf22-3bf9b4059d9f",
+                    "path": "<XInputController>/dpad/down",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Combo Arrow Down",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "bb6fa94d-cf86-4f40-9074-78052640296e",
+                    "path": "<Keyboard>/leftArrow",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Combo Arrow Left",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "f423d19e-56ab-482c-a0ec-270a74f41655",
+                    "path": "<XInputController>/dpad/left",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Combo Arrow Left",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "d3c70abb-cad3-4d90-a644-56f0988fec71",
+                    "path": "<Keyboard>/rightArrow",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Combo Arrow Right",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "7e1346a8-376b-4bef-b751-642d0986fd38",
+                    "path": "<XInputController>/dpad/right",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Combo Arrow Right",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },

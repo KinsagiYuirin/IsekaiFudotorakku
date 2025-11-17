@@ -77,6 +77,18 @@ namespace MadDuck.Scripts.Inputs
         public SerializableReactiveProperty<InputButton> ComboRightButton { get; private set; }
         
         [field: SerializeField, ReadOnly]
+        public SerializableReactiveProperty<InputButton> ComboArrowUp { get; private set; }
+        
+        [field: SerializeField, ReadOnly]
+        public SerializableReactiveProperty<InputButton> ComboArrowDown { get; private set; }
+        
+        [field: SerializeField, ReadOnly]
+        public SerializableReactiveProperty<InputButton> ComboArrowLeft { get; private set; }
+        
+        [field: SerializeField, ReadOnly]
+        public SerializableReactiveProperty<InputButton> ComboArrowRight { get; private set; }
+        
+        [field: SerializeField, ReadOnly]
         public SerializableReactiveProperty<InputButton> ConfirmButton { get; private set; }
         [field: SerializeField, ReadOnly]
         public SerializableReactiveProperty<InputButton> CancelButton { get; private set; }
@@ -113,6 +125,11 @@ namespace MadDuck.Scripts.Inputs
             ComboDownButton.Value = new InputButton(_playerInputAction.Player.ComboDown);
             ComboLeftButton.Value = new InputButton(_playerInputAction.Player.ComboLeft);
             ComboRightButton.Value = new InputButton(_playerInputAction.Player.ComboRight);
+            ComboArrowUp.Value = new InputButton(_playerInputAction.Player.ComboArrowUp);
+            ComboArrowDown.Value = new InputButton(_playerInputAction.Player.ComboArrowDown);
+            ComboArrowLeft.Value = new InputButton(_playerInputAction.Player.ComboArrowLeft);
+            ComboArrowRight.Value = new InputButton(_playerInputAction.Player.ComboArrowRight);
+            CancelButton.Value = new InputButton(_playerInputAction.Player.CancelButton);
             ConfirmButton.Value = new InputButton(_playerInputAction.Player.ConfirmButton);
             
             /*JerkBaitButton.Value = new InputButton(_playerInputAction.Player.JerkBait);
@@ -224,6 +241,42 @@ namespace MadDuck.Scripts.Inputs
             }
             BindPressButton(ComboRightButton, context);
         }
+        
+        public void OnComboArrowUp(InputAction.CallbackContext context)
+        {
+            if (!CanProcessComboInput())
+            {
+                return;
+            }
+            BindPressButton(ComboArrowUp, context);
+        }
+        
+        public void OnComboArrowDown(InputAction.CallbackContext context)
+        {
+            if (!CanProcessComboInput())
+            {
+                return;
+            }
+            BindPressButton(ComboArrowDown, context);
+        }
+        
+        public void OnComboArrowLeft(InputAction.CallbackContext context)
+        {
+            if (!CanProcessComboInput())
+            {
+                return;
+            }
+            BindPressButton(ComboArrowLeft, context);
+        }
+        
+        public void OnComboArrowRight(InputAction.CallbackContext context)
+        {
+            if (!CanProcessComboInput())
+            {
+                return;
+            }
+            BindPressButton(ComboArrowRight, context);
+        }
 
         public void OnConfirmButton(InputAction.CallbackContext context)
         {
@@ -332,6 +385,10 @@ namespace MadDuck.Scripts.Inputs
             ResetComboButtonState(ComboDownButton);
             ResetComboButtonState(ComboLeftButton);
             ResetComboButtonState(ComboRightButton);
+            ResetComboButtonState(ComboArrowUp);
+            ResetComboButtonState(ComboArrowDown);
+            ResetComboButtonState(ComboArrowLeft);
+            ResetComboButtonState(ComboArrowRight);
         }
 
         private static void ResetComboButtonState(ReactiveProperty<InputButton> button)
@@ -359,6 +416,10 @@ namespace MadDuck.Scripts.Inputs
             ComboKey.S => ComboDownButton?.Value.isDown == true,
             ComboKey.A => ComboLeftButton?.Value.isDown == true,
             ComboKey.D => ComboRightButton?.Value.isDown == true,
+            ComboKey.Up => ComboArrowUp?.Value.isDown == true,
+            ComboKey.Down => ComboArrowDown?.Value.isDown == true,
+            ComboKey.Left => ComboArrowLeft?.Value.isDown == true,
+            ComboKey.Right => ComboArrowRight?.Value.isDown == true,
             _ => false
         };
 
@@ -368,6 +429,10 @@ namespace MadDuck.Scripts.Inputs
             ComboKey.S => ComboDownButton?.Value.isHeld == true,
             ComboKey.A => ComboLeftButton?.Value.isHeld == true,
             ComboKey.D => ComboRightButton?.Value.isHeld == true,
+            ComboKey.Up => ComboArrowUp?.Value.isHeld == true,
+            ComboKey.Down => ComboArrowDown?.Value.isHeld == true,
+            ComboKey.Left => ComboArrowLeft?.Value.isHeld == true,
+            ComboKey.Right => ComboArrowRight?.Value.isHeld == true,
             _ => false
         };
 
@@ -377,6 +442,10 @@ namespace MadDuck.Scripts.Inputs
             ComboKey.S => ComboDownButton?.Value.isUp == true,
             ComboKey.A => ComboLeftButton?.Value.isUp == true,
             ComboKey.D => ComboRightButton?.Value.isUp == true,
+            ComboKey.Up => ComboArrowUp?.Value.isUp == true,
+            ComboKey.Down => ComboArrowDown?.Value.isUp == true,
+            ComboKey.Left => ComboArrowLeft?.Value.isUp == true,
+            ComboKey.Right => ComboArrowRight?.Value.isUp == true,
             _ => false
         };
 

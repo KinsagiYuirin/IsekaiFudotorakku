@@ -173,6 +173,42 @@ public partial class @PlayerInputAction: IInputActionCollection2, IDisposable
                     ""initialStateCheck"": false
                 },
                 {
+                    ""name"": ""Combo Arrow Up"",
+                    ""type"": ""Button"",
+                    ""id"": ""aac8251b-5d77-4414-b125-a6e90fde477b"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Combo Arrow Down"",
+                    ""type"": ""Button"",
+                    ""id"": ""da429efd-f0ed-4fca-82a9-f3fc04839616"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Combo Arrow Left"",
+                    ""type"": ""Button"",
+                    ""id"": ""5e242b3e-4d48-46b1-b112-91d6a40b6582"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Combo Arrow Right"",
+                    ""type"": ""Button"",
+                    ""id"": ""bc22db63-50af-4cbd-bcb6-39e5966885c9"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
                     ""name"": ""Confirm Button"",
                     ""type"": ""Button"",
                     ""id"": ""6b76238e-db5a-4fbc-9e0c-049608c06f14"",
@@ -563,6 +599,94 @@ public partial class @PlayerInputAction: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""groups"": """",
                     ""action"": ""Combo Right"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""f7480848-f4e4-4c41-a536-7955c5ca5b9b"",
+                    ""path"": ""<Keyboard>/upArrow"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Combo Arrow Up"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""fc544913-e247-4f7b-9af3-7eadbaa74bbf"",
+                    ""path"": ""<XInputController>/dpad/up"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Combo Arrow Up"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""2b4d8d01-3501-437b-9a13-7b46028ae138"",
+                    ""path"": ""<Keyboard>/downArrow"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Combo Arrow Down"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""3ae9a120-e4e5-4beb-bf22-3bf9b4059d9f"",
+                    ""path"": ""<XInputController>/dpad/down"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Combo Arrow Down"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""bb6fa94d-cf86-4f40-9074-78052640296e"",
+                    ""path"": ""<Keyboard>/leftArrow"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Combo Arrow Left"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""f423d19e-56ab-482c-a0ec-270a74f41655"",
+                    ""path"": ""<XInputController>/dpad/left"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Combo Arrow Left"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""d3c70abb-cad3-4d90-a644-56f0988fec71"",
+                    ""path"": ""<Keyboard>/rightArrow"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Combo Arrow Right"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""7e1346a8-376b-4bef-b751-642d0986fd38"",
+                    ""path"": ""<XInputController>/dpad/right"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Combo Arrow Right"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -1203,6 +1327,10 @@ public partial class @PlayerInputAction: IInputActionCollection2, IDisposable
         m_Player_ComboDown = m_Player.FindAction("Combo Down", throwIfNotFound: true);
         m_Player_ComboLeft = m_Player.FindAction("Combo Left", throwIfNotFound: true);
         m_Player_ComboRight = m_Player.FindAction("Combo Right", throwIfNotFound: true);
+        m_Player_ComboArrowUp = m_Player.FindAction("Combo Arrow Up", throwIfNotFound: true);
+        m_Player_ComboArrowDown = m_Player.FindAction("Combo Arrow Down", throwIfNotFound: true);
+        m_Player_ComboArrowLeft = m_Player.FindAction("Combo Arrow Left", throwIfNotFound: true);
+        m_Player_ComboArrowRight = m_Player.FindAction("Combo Arrow Right", throwIfNotFound: true);
         m_Player_ConfirmButton = m_Player.FindAction("Confirm Button", throwIfNotFound: true);
         m_Player_CancelButton = m_Player.FindAction("Cancel Button", throwIfNotFound: true);
         // UI
@@ -1307,6 +1435,10 @@ public partial class @PlayerInputAction: IInputActionCollection2, IDisposable
     private readonly InputAction m_Player_ComboDown;
     private readonly InputAction m_Player_ComboLeft;
     private readonly InputAction m_Player_ComboRight;
+    private readonly InputAction m_Player_ComboArrowUp;
+    private readonly InputAction m_Player_ComboArrowDown;
+    private readonly InputAction m_Player_ComboArrowLeft;
+    private readonly InputAction m_Player_ComboArrowRight;
     private readonly InputAction m_Player_ConfirmButton;
     private readonly InputAction m_Player_CancelButton;
     /// <summary>
@@ -1356,6 +1488,22 @@ public partial class @PlayerInputAction: IInputActionCollection2, IDisposable
         /// Provides access to the underlying input action "Player/ComboRight".
         /// </summary>
         public InputAction @ComboRight => m_Wrapper.m_Player_ComboRight;
+        /// <summary>
+        /// Provides access to the underlying input action "Player/ComboArrowUp".
+        /// </summary>
+        public InputAction @ComboArrowUp => m_Wrapper.m_Player_ComboArrowUp;
+        /// <summary>
+        /// Provides access to the underlying input action "Player/ComboArrowDown".
+        /// </summary>
+        public InputAction @ComboArrowDown => m_Wrapper.m_Player_ComboArrowDown;
+        /// <summary>
+        /// Provides access to the underlying input action "Player/ComboArrowLeft".
+        /// </summary>
+        public InputAction @ComboArrowLeft => m_Wrapper.m_Player_ComboArrowLeft;
+        /// <summary>
+        /// Provides access to the underlying input action "Player/ComboArrowRight".
+        /// </summary>
+        public InputAction @ComboArrowRight => m_Wrapper.m_Player_ComboArrowRight;
         /// <summary>
         /// Provides access to the underlying input action "Player/ConfirmButton".
         /// </summary>
@@ -1417,6 +1565,18 @@ public partial class @PlayerInputAction: IInputActionCollection2, IDisposable
             @ComboRight.started += instance.OnComboRight;
             @ComboRight.performed += instance.OnComboRight;
             @ComboRight.canceled += instance.OnComboRight;
+            @ComboArrowUp.started += instance.OnComboArrowUp;
+            @ComboArrowUp.performed += instance.OnComboArrowUp;
+            @ComboArrowUp.canceled += instance.OnComboArrowUp;
+            @ComboArrowDown.started += instance.OnComboArrowDown;
+            @ComboArrowDown.performed += instance.OnComboArrowDown;
+            @ComboArrowDown.canceled += instance.OnComboArrowDown;
+            @ComboArrowLeft.started += instance.OnComboArrowLeft;
+            @ComboArrowLeft.performed += instance.OnComboArrowLeft;
+            @ComboArrowLeft.canceled += instance.OnComboArrowLeft;
+            @ComboArrowRight.started += instance.OnComboArrowRight;
+            @ComboArrowRight.performed += instance.OnComboArrowRight;
+            @ComboArrowRight.canceled += instance.OnComboArrowRight;
             @ConfirmButton.started += instance.OnConfirmButton;
             @ConfirmButton.performed += instance.OnConfirmButton;
             @ConfirmButton.canceled += instance.OnConfirmButton;
@@ -1461,6 +1621,18 @@ public partial class @PlayerInputAction: IInputActionCollection2, IDisposable
             @ComboRight.started -= instance.OnComboRight;
             @ComboRight.performed -= instance.OnComboRight;
             @ComboRight.canceled -= instance.OnComboRight;
+            @ComboArrowUp.started -= instance.OnComboArrowUp;
+            @ComboArrowUp.performed -= instance.OnComboArrowUp;
+            @ComboArrowUp.canceled -= instance.OnComboArrowUp;
+            @ComboArrowDown.started -= instance.OnComboArrowDown;
+            @ComboArrowDown.performed -= instance.OnComboArrowDown;
+            @ComboArrowDown.canceled -= instance.OnComboArrowDown;
+            @ComboArrowLeft.started -= instance.OnComboArrowLeft;
+            @ComboArrowLeft.performed -= instance.OnComboArrowLeft;
+            @ComboArrowLeft.canceled -= instance.OnComboArrowLeft;
+            @ComboArrowRight.started -= instance.OnComboArrowRight;
+            @ComboArrowRight.performed -= instance.OnComboArrowRight;
+            @ComboArrowRight.canceled -= instance.OnComboArrowRight;
             @ConfirmButton.started -= instance.OnConfirmButton;
             @ConfirmButton.performed -= instance.OnConfirmButton;
             @ConfirmButton.canceled -= instance.OnConfirmButton;
@@ -1830,6 +2002,34 @@ public partial class @PlayerInputAction: IInputActionCollection2, IDisposable
         /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
         void OnComboRight(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "Combo Arrow Up" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnComboArrowUp(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "Combo Arrow Down" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnComboArrowDown(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "Combo Arrow Left" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnComboArrowLeft(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "Combo Arrow Right" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnComboArrowRight(InputAction.CallbackContext context);
         /// <summary>
         /// Method invoked when associated input action "Confirm Button" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
         /// </summary>
