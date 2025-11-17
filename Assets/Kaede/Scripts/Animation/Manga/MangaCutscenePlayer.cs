@@ -24,7 +24,7 @@ namespace Kaede.Scripts.Animation.Manga
                 public Image image;
 
                 [Tooltip("Effect that is applied when this illustration becomes visible.")]
-                public CutsceneEffect effect;
+                public CutsceneEffect[] effect;
             }
 
             [Tooltip("Illustrations that will be shown sequentially for this page.")]
@@ -151,7 +151,7 @@ namespace Kaede.Scripts.Animation.Manga
             }
 
             var page = pages[currentPageIndex];
-            PlayPage(page, pageCancelToken.Token);
+            PlayPage(page, pageCancelToken.Token).Forget();
         }
 
         /// <summary>
@@ -232,10 +232,13 @@ namespace Kaede.Scripts.Animation.Manga
 
                 if (illustration.effect != null)
                 {
-                    if (!page.playBothPagesAtOnce)
-                        await illustration.effect.Play(context, token);
-                    else
-                        illustration.effect.Play(context, token).Forget();
+                    foreach (var effect in illustration.effect)
+                    {
+                        if (!page.playBothPagesAtOnce)
+                            await effect.Play(context, token);
+                        else
+                            effect.Play(context, token).Forget();
+                    }
                 }
                 else
                 {

@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using Kaede.Scripts.Animation.Manga;
 using Kaede.Scripts.Item;
 using Kaede.Scripts.Managers;
 
@@ -75,7 +76,7 @@ namespace Kaede.Scripts.GamePlay
 
         #endregion
 
-        public void Resting(float duration)
+        public void Resting()
         {
             GameState = CookingState.Resting;
         }

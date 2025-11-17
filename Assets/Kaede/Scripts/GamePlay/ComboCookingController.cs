@@ -271,7 +271,7 @@ namespace Kaede.Scripts.GamePlay
                     GameManager.Instance.GameOver(_model.ScoreManager.GrandTotalScore);
                     return;
                 }
-                _model.Resting(timer.RestingTime);
+                _model.Resting();
                 timer.BeginRestingPhase();
                 Debug.Log("Next Menu Type");
                 return;
