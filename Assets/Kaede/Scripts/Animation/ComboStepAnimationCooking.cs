@@ -90,10 +90,18 @@ namespace Kaede.Scripts.Animation {
 
         #region Public API (Buttons / Game input)
         /// <summary>กดเพิ่มหนึ่งสเต็ป ถ้าเล่นได้</summary>
-        public async void PlayNext()
+        public async UniTask PlayNext(CancellationToken cancellationToken = default)
         {
             if (!CanPlayNext()) return;
-            await PlayStep(_stepIndex, crossfadeDuration);
+            
+            _sequenceCts?.Cancel();
+            _sequenceCts?.Dispose();
+            
+            _sequenceCts = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken);
+            var ct = _sequenceCts.Token;
+            
+            await PlayStep(_stepIndex, crossfadeDuration, ct);
+            
             _stepIndex++;
             if (_stepIndex >= sequenceClips.Count)
             {
@@ -288,22 +296,16 @@ namespace Kaede.Scripts.Animation {
         #endregion
 
         #region Core playing
-        private async UniTask PlayStep(int index, float fade)
+        private async UniTask PlayStep(int index, float fade, CancellationToken ct)
         {
-            if (!IsComponentAlive())
-            {
-                return;
-            }
-
+            if (!IsComponentAlive()) return;
             if (index < 0 || index >= sequenceClips.Count) return;
+
             var clip = sequenceClips[index];
             EnsureGraph();
             EnsureMixer();
 
-            if (!IsMixerReady())
-            {
-                return;
-            }
+            if (!IsMixerReady()) return;
 
             _isSequencePlaying = true;
 
@@ -331,6 +333,7 @@ namespace Kaede.Scripts.Animation {
             float t = 0f;
             while (t < fade)
             {
+                ct.ThrowIfCancellationRequested();
                 if (!IsMixerReady())
                 {
                     nextPlayable.Destroy();
@@ -342,7 +345,7 @@ namespace Kaede.Scripts.Animation {
                 float w = Mathf.Clamp01(t / fade);
                 _mixer.SetInputWeight(0, 1f - w);
                 _mixer.SetInputWeight(1, w);
-                await UniTask.Yield();
+                await UniTask.Yield(ct);
             }
             if (!IsMixerReady())
             {
@@ -362,7 +365,8 @@ namespace Kaede.Scripts.Animation {
             double length = clip.length;
             while (_current.IsValid() && _current.GetTime() < length)
             {
-                await UniTask.Yield();
+                ct.ThrowIfCancellationRequested();
+                await UniTask.Yield(ct);
             }
             
             // ค้างเฟรมสุดท้าย หริือค้างเฟรมแรกของคลิปถัดไป / รีเซ็ต

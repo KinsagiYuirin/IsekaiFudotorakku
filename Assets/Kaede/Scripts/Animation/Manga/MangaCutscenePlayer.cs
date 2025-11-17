@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Threading;
 using Cysharp.Threading.Tasks;
+using Sirenix.OdinInspector;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
@@ -31,12 +32,13 @@ namespace Kaede.Scripts.Animation.Manga
             public List<CutsceneIllustration> illustrations = new();
 
             public bool playBothPagesAtOnce = false;
+            public bool hideAfterFinish = false;
             
             [Tooltip("If true, the cutscene will advance after the delay without user input.")]
             public bool autoAdvance = true;
 
             [Tooltip("Time in seconds to wait before advancing automatically.")]
-            public float autoAdvanceDelay = 2f;
+            [ShowIf("autoAdvance")] public float autoAdvanceDelay = 2f;
 
             [Tooltip("Sound effect or voice line that plays when this page is shown.")]
             public AudioClip sound;
@@ -146,7 +148,10 @@ namespace Kaede.Scripts.Animation.Manga
             currentPageIndex++;
             if (currentPageIndex >= pages.Count)
             {
-                HandleCutsceneFinished();
+                if (pages[currentPageIndex].playBothPagesAtOnce)
+                {
+                    HideActiveIllustrations();
+                }
                 return;
             }
 
@@ -161,6 +166,7 @@ namespace Kaede.Scripts.Animation.Manga
         {
             StopCurrentRoutine();
             currentPageIndex = pages.Count;
+            HideActiveIllustrations();
             HandleCutsceneFinished();
         }
 
@@ -183,8 +189,6 @@ namespace Kaede.Scripts.Animation.Manga
         private async UniTask PlayPage(CutscenePage page, CancellationToken  token)
         {
             token.ThrowIfCancellationRequested();
-            
-            HideActiveIllustrations();
 
             onPageStarted?.Invoke(currentPageIndex, page);
 

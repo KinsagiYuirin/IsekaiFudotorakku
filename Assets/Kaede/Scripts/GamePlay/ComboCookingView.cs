@@ -126,6 +126,11 @@ namespace Kaede.Scripts.GamePlay
             SetUIElementActive(CookingImageObject?.gameObject, !isResting);
             SetUIElementActive(cookingLightEffect?.gameObject, !isResting);
         }
+
+        public void HideShowTimer(float alpha)
+        {
+            TimerText.alpha = alpha;
+        }
         #endregion
 
         #region Private Methods

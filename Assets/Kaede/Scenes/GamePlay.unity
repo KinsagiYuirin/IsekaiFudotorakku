@@ -1844,7 +1844,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &461435974
 RectTransform:
   m_ObjectHideFlags: 0
@@ -3806,41 +3806,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 971172824}
   m_CullTransparentMesh: 1
---- !u!1 &983995542
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 983995543}
-  m_Layer: 5
-  m_Name: MangaPanel
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!224 &983995543
-RectTransform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 983995542}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 1180846706}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 100, y: 100}
-  m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &1001102305
 GameObject:
   m_ObjectHideFlags: 0
@@ -4005,16 +3970,32 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4bb337ba034004346bebbd5663a1a2a6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playOnStart: 1
+  playOnStart: 0
   pages:
   - illustrations:
     - image: {fileID: 2123320456}
-      effect: {fileID: 11400000, guid: 9f40fba8a9b7f7c4e9d00a052af64056, type: 2}
+      effect:
+      - {fileID: 11400000, guid: 9f40fba8a9b7f7c4e9d00a052af64056, type: 2}
+      - {fileID: 11400000, guid: d414d029c0bbd9349b14b508a0c8231e, type: 2}
     - image: {fileID: 461435975}
-      effect: {fileID: 11400000, guid: 552af9bb327b3944aa0ffcfd61727ee3, type: 2}
+      effect:
+      - {fileID: 11400000, guid: 552af9bb327b3944aa0ffcfd61727ee3, type: 2}
     playBothPagesAtOnce: 1
+    hideAfterFinish: 0
+    autoAdvance: 1
+    autoAdvanceDelay: 8
+    sound: {fileID: 0}
+  - illustrations:
+    - image: {fileID: 1516027813}
+      effect:
+      - {fileID: 11400000, guid: 4d7d784dac8d4ae41a7a893a996ef4cc, type: 2}
+    - image: {fileID: 864780760}
+      effect:
+      - {fileID: 11400000, guid: ac39e60e8168f4d4ea23154f9a472e42, type: 2}
+    playBothPagesAtOnce: 1
+    hideAfterFinish: 0
     autoAdvance: 0
-    autoAdvanceDelay: 0
+    autoAdvanceDelay: 1
     sound: {fileID: 0}
   audioSource: {fileID: 2084663522}
   setNativeSizeOnShow: 0
@@ -4482,7 +4463,6 @@ RectTransform:
   - {fileID: 864780759}
   - {fileID: 461435974}
   - {fileID: 1667822592}
-  - {fileID: 983995543}
   m_Father: {fileID: 382246677}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
@@ -8147,7 +8127,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   timer:
-    restingTime: 3
+    restingTime: 30
     maxTimePerCombo: 20
     currentTimer: 0
     dividerTimeScore: 0
@@ -8163,6 +8143,7 @@ MonoBehaviour:
   characterEmotionPlayer: {fileID: 1848500657}
   sfxManager: {fileID: 2084663521}
   sendFood: {fileID: 2118260111}
+  restingCutscenePlayer: {fileID: 1012049817}
 --- !u!4 &1835431552
 Transform:
   m_ObjectHideFlags: 0
@@ -8259,7 +8240,7 @@ MonoBehaviour:
   <AllMenuInLevel>k__BackingField:
   - {fileID: 11400000, guid: ff5e1c1e42069614b9c8f333ada88f21, type: 2}
   - {fileID: 11400000, guid: 9037bbceaf49321409b5c0477176bc64, type: 2}
-  appetizerRandomMenuCount: 2
+  appetizerRandomMenuCount: 1
   mainCourseRandomMenuCount: 3
   dessertRandomMenuCount: 0
   appetizerRandomMenu: []
@@ -10040,7 +10021,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &2123320455
 RectTransform:
   m_ObjectHideFlags: 0

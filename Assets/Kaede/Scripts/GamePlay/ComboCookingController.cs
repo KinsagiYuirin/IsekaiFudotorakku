@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Cysharp.Threading.Tasks;
 using Kaede.Art.TA_Works.Scripts;
 using Kaede.Scripts.Animation;
+using Kaede.Scripts.Animation.Manga;
 using Kaede.Scripts.Audios;
 using Kaede.Scripts.Item;
 using Kaede.Scripts.Managers;
@@ -57,6 +58,7 @@ namespace Kaede.Scripts.GamePlay
         [SerializeField] private ComboCharacterEmotionPlayer characterEmotionPlayer;
         [SerializeField] private SfxManagerDemo sfxManager;
         [SerializeField] private SendFood sendFood;
+        [SerializeField] private MangaCutscenePlayer restingCutscenePlayer;
         
         #region Awake, Start, Update
         
@@ -113,6 +115,8 @@ namespace Kaede.Scripts.GamePlay
             
             characterEmotionPlayer ??= GetComponent<ComboCharacterEmotionPlayer>();
             characterEmotionPlayer ??= GetComponentInChildren<ComboCharacterEmotionPlayer>();
+            
+            restingCutscenePlayer ??= GetComponent<MangaCutscenePlayer>();
             
             _inventoryController = GetComponent<InventoryController>();
             _vfxControl =  GetComponent<VFXControl>();
@@ -354,10 +358,12 @@ namespace Kaede.Scripts.GamePlay
             _inventoryController?.SetVisible(false);
             _model.ResetCombo();
             _view.ResetCombo();
+            _view.HideShowTimer(0f);
             animationCooking?.Stop();
             _inputProcessor?.ResetState();
             characterEmotionPlayer?.ResetToIdle(true);
             _inputHandler?.SetComboInputEnabled(false);
+            restingCutscenePlayer?.Play();
         }
         
         private void HandleRestFinished()
@@ -365,10 +371,12 @@ namespace Kaede.Scripts.GamePlay
             _inventoryController?.SetVisible(true);
             _model.ResetCombo();
             _view.ResetCombo();
+            _view.HideShowTimer(1f);
             animationCooking?.Stop();
             ShowCurrentCombo();
             characterEmotionPlayer?.ResetToIdle(true);
             _inputHandler?.SetComboInputEnabled(true);
+            restingCutscenePlayer?.Stop();
         }
         #endregion
     }

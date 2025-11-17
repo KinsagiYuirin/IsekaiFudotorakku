@@ -80,7 +80,7 @@ namespace Kaede.Scripts.Managers
             else
             {
                 HideAllSlots();
-                restingText.alpha = 1;
+                restingText.alpha = 0;
             }
         }
 
