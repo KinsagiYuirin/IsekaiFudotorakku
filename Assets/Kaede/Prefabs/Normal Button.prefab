@@ -143,6 +143,26 @@ MonoBehaviour:
     prepareSprite: {fileID: -151260099459723900, guid: 7185b012f5404da4f9de1fee0ec54945, type: 3}
     currentSprite: {fileID: 8288787037889794839, guid: 0e808d4ad2a81454b8829e3f390734d2, type: 3}
     activeSprite: {fileID: 8288787037889794839, guid: 0e808d4ad2a81454b8829e3f390734d2, type: 3}
+  - key: 5
+    idealSprite: {fileID: 0}
+    prepareSprite: {fileID: 0}
+    currentSprite: {fileID: 0}
+    activeSprite: {fileID: 0}
+  - key: 6
+    idealSprite: {fileID: 0}
+    prepareSprite: {fileID: 0}
+    currentSprite: {fileID: 0}
+    activeSprite: {fileID: 0}
+  - key: 7
+    idealSprite: {fileID: 0}
+    prepareSprite: {fileID: 0}
+    currentSprite: {fileID: 0}
+    activeSprite: {fileID: 0}
+  - key: 8
+    idealSprite: {fileID: 0}
+    prepareSprite: {fileID: 0}
+    currentSprite: {fileID: 0}
+    activeSprite: {fileID: 0}
 --- !u!1 &1215787788728107017
 GameObject:
   m_ObjectHideFlags: 0

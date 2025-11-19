@@ -294,6 +294,26 @@ MonoBehaviour:
     prepareSprite: {fileID: -6005958826879534344, guid: 1cd4845ae32457d41acb519b556e11f0, type: 3}
     currentSprite: {fileID: -1848775471284043364, guid: b0ddabacc136c1546b2e42c37498b7fc, type: 3}
     activeSprite: {fileID: -1848775471284043364, guid: b0ddabacc136c1546b2e42c37498b7fc, type: 3}
+  - key: 5
+    idealSprite: {fileID: 0}
+    prepareSprite: {fileID: 0}
+    currentSprite: {fileID: 0}
+    activeSprite: {fileID: 0}
+  - key: 6
+    idealSprite: {fileID: 0}
+    prepareSprite: {fileID: 0}
+    currentSprite: {fileID: 0}
+    activeSprite: {fileID: 0}
+  - key: 7
+    idealSprite: {fileID: 0}
+    prepareSprite: {fileID: 0}
+    currentSprite: {fileID: 0}
+    activeSprite: {fileID: 0}
+  - key: 8
+    idealSprite: {fileID: 0}
+    prepareSprite: {fileID: 0}
+    currentSprite: {fileID: 0}
+    activeSprite: {fileID: 0}
   needSmoothFill: 0
   holdDuration: 0
 --- !u!225 &-2631633700790150971
