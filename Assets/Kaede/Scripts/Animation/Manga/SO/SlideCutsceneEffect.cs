@@ -1,9 +1,8 @@
-using System.Collections;
 using System.Threading;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
 
-namespace Kaede.Scripts.Animation.Manga
+namespace Kaede.Scripts.Animation.Manga.SO
 {
     /// <summary>
     /// Slides the image from an offset position into place.

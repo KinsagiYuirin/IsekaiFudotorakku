@@ -1,9 +1,8 @@
-using System.Collections;
 using System.Threading;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
 
-namespace Kaede.Scripts.Animation.Manga
+namespace Kaede.Scripts.Animation.Manga.SO
 {
     /// <summary>
     /// Simple fade-in effect that animates the image alpha.
@@ -11,6 +10,12 @@ namespace Kaede.Scripts.Animation.Manga
     [CreateAssetMenu(menuName = "Cutscenes/Effects/Fade", fileName = "FadeCutsceneEffect")]
     public class FadeCutsceneEffect : CutsceneEffect
     {
+        public enum FadeDirection
+        {
+            FadeIn,
+            FadeOut,
+        }
+
         [SerializeField, Min(0f)]
         private float duration = 0.75f;
 
@@ -20,6 +25,9 @@ namespace Kaede.Scripts.Animation.Manga
         [SerializeField]
         private bool fadeImageColor = true;
 
+        [SerializeField]
+        private FadeDirection direction = FadeDirection.FadeIn;
+
         public override async UniTask Play(CutsceneEffectContext context, CancellationToken token)
         {
             if (context.CanvasGroup == null && context.Image == null)
@@ -28,7 +36,8 @@ namespace Kaede.Scripts.Animation.Manga
             }
 
             float elapsed = 0f;
-            float startAlpha = 0f;
+            float startAlpha = direction == FadeDirection.FadeIn ? 0f : 1f;
+            float targetAlpha = direction == FadeDirection.FadeIn ? 1f : 0f;
 
             if (context.CanvasGroup != null)
             {
@@ -39,7 +48,7 @@ namespace Kaede.Scripts.Animation.Manga
             if (fadeImageColor && context.Image != null)
             {
                 originalColor = context.Image.color;
-                context.Image.color = new Color(originalColor.r, originalColor.g, originalColor.b, 0f);
+                context.Image.color = new Color(originalColor.r, originalColor.g, originalColor.b, startAlpha);
             }
 
             while (elapsed < duration)
@@ -47,15 +56,16 @@ namespace Kaede.Scripts.Animation.Manga
                 elapsed += Time.deltaTime;
                 float t = duration <= 0f ? 1f : Mathf.Clamp01(elapsed / duration);
                 float evaluated = curve.Evaluate(t);
+                float alpha = Mathf.Lerp(startAlpha, targetAlpha, evaluated);
 
                 if (context.CanvasGroup != null)
                 {
-                    context.CanvasGroup.alpha = evaluated;
+                    context.CanvasGroup.alpha = alpha;
                 }
 
                 if (fadeImageColor && context.Image != null)
                 {
-                    context.Image.color = new Color(originalColor.r, originalColor.g, originalColor.b, evaluated);
+                    context.Image.color = new Color(originalColor.r, originalColor.g, originalColor.b, alpha);
                 }
 
                 await UniTask.Yield(token); 
@@ -64,11 +74,12 @@ namespace Kaede.Scripts.Animation.Manga
             if (context.CanvasGroup != null)
             {
                 context.CanvasGroup.alpha = 1f;
+                context.CanvasGroup.alpha = targetAlpha;
             }
 
             if (fadeImageColor && context.Image != null)
             {
-                context.Image.color = new Color(originalColor.r, originalColor.g, originalColor.b, 1f);
+                context.Image.color = new Color(originalColor.r, originalColor.g, originalColor.b, targetAlpha);
             }
         }
     }

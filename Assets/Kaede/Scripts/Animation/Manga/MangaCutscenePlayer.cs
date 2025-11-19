@@ -69,7 +69,7 @@ namespace Kaede.Scripts.Animation.Manga
         public CutscenePageEvent onPageStarted;
         public CutscenePageEvent onPageCompleted;
         public UnityEvent onCutsceneFinished;
-
+        
         private int currentPageIndex = -1;
         private CancellationTokenSource pageCancelToken;
         private bool waitingForInput;
@@ -141,20 +141,19 @@ namespace Kaede.Scripts.Animation.Manga
         public void Advance()
         {
             if (waitingForInput)
-            {
                 waitingForInput = false;
-            }
 
             currentPageIndex++;
+
+            // ถ้าเล่นครบแล้ว
             if (currentPageIndex >= pages.Count)
             {
-                if (pages[currentPageIndex].playBothPagesAtOnce)
-                {
-                    HideActiveIllustrations();
-                }
+                HideActiveIllustrations();
+                HandleCutsceneFinished();   // เรียก event จบคัตซีน
                 return;
             }
 
+            // ตอนนี้ index ปลอดภัยแล้ว
             var page = pages[currentPageIndex];
             PlayPage(page, pageCancelToken.Token).Forget();
         }

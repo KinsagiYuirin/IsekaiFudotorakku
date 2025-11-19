@@ -10,9 +10,9 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 6c8fe31a53e0b53489350767cf2c74da, type: 3}
-  m_Name: FadeTest
+  m_Name: FadeIn 1
   m_EditorClassIdentifier: 
-  duration: 5
+  duration: 0.5
   curve:
     serializedVersion: 2
     m_Curve:
@@ -38,3 +38,4 @@ MonoBehaviour:
     m_PostInfinity: 2
     m_RotationOrder: 4
   fadeImageColor: 1
+  direction: 0
