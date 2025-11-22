@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7de288b75a2ee1e4d86fa0a87141a7b3, type: 3}
   m_Name: EndFillImageEffect 1
   m_EditorClassIdentifier: 
-  duration: 0.8
+  duration: 0.45
   curve:
     serializedVersion: 2
     m_Curve:
@@ -25,6 +25,15 @@ MonoBehaviour:
       weightedMode: 0
       inWeight: 0
       outWeight: 0
+    - serializedVersion: 3
+      time: 0.759258
+      value: 0.854035
+      inSlope: 1.0967119
+      outSlope: 1.0967119
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
     - serializedVersion: 3
       time: 1
       value: 1

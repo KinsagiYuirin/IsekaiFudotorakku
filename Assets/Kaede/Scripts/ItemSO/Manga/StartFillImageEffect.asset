@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7de288b75a2ee1e4d86fa0a87141a7b3, type: 3}
   m_Name: StartFillImageEffect
   m_EditorClassIdentifier: 
-  duration: 0.8
+  duration: 0.15
   curve:
     serializedVersion: 2
     m_Curve:
