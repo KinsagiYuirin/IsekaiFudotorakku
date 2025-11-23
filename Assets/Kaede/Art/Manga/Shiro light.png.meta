@@ -147,7 +147,8 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      Shiro light_0: 7185616380082193791
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
