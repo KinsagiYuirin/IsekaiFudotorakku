@@ -151,18 +151,6 @@ MonoBehaviour:
   playOnStart: 1
   pages:
   - illustrations:
-    - image: {fileID: 495803341}
-      effect:
-      - {fileID: 11400000, guid: 14bc5342067d2ea449c33ce96f13843e, type: 2}
-    - image: {fileID: 2070334670}
-      effect:
-      - {fileID: 11400000, guid: 079fce981a3e88240aae45462ce84495, type: 2}
-    playBothPagesAtOnce: 1
-    hideAfterFinish: 0
-    autoAdvance: 1
-    autoAdvanceDelay: 2
-    sound: {fileID: 0}
-  - illustrations:
     - image: {fileID: 662495312}
       effect:
       - {fileID: 11400000, guid: 061dc283468439b40acc80715281663b, type: 2}
@@ -192,7 +180,7 @@ MonoBehaviour:
     playBothPagesAtOnce: 1
     hideAfterFinish: 0
     autoAdvance: 1
-    autoAdvanceDelay: 1.5
+    autoAdvanceDelay: 0.5
     sound: {fileID: 0}
   - illustrations:
     - image: {fileID: 1911345343}
@@ -204,18 +192,51 @@ MonoBehaviour:
     autoAdvanceDelay: 1
     sound: {fileID: 0}
   - illustrations:
+    - image: {fileID: 495803341}
+      effect:
+      - {fileID: 11400000, guid: 14bc5342067d2ea449c33ce96f13843e, type: 2}
+    - image: {fileID: 2070334670}
+      effect:
+      - {fileID: 11400000, guid: 079fce981a3e88240aae45462ce84495, type: 2}
+    playBothPagesAtOnce: 1
+    hideAfterFinish: 0
+    autoAdvance: 1
+    autoAdvanceDelay: 1
+    sound: {fileID: 0}
+  - illustrations:
     - image: {fileID: 1255013513}
       effect:
-      - {fileID: 11400000, guid: ac39e60e8168f4d4ea23154f9a472e42, type: 2}
+      - {fileID: 11400000, guid: 4d7d784dac8d4ae41a7a893a996ef4cc, type: 2}
       - {fileID: 11400000, guid: 079fce981a3e88240aae45462ce84495, type: 2}
     - image: {fileID: 1563666086}
       effect:
-      - {fileID: 11400000, guid: 4d7d784dac8d4ae41a7a893a996ef4cc, type: 2}
+      - {fileID: 11400000, guid: ac39e60e8168f4d4ea23154f9a472e42, type: 2}
       - {fileID: 11400000, guid: 079fce981a3e88240aae45462ce84495, type: 2}
     playBothPagesAtOnce: 1
     hideAfterFinish: 0
     autoAdvance: 1
     autoAdvanceDelay: 2
+    sound: {fileID: 0}
+  - illustrations:
+    - image: {fileID: 1911345343}
+      effect:
+      - {fileID: 11400000, guid: d414d029c0bbd9349b14b508a0c8231e, type: 2}
+    - image: {fileID: 495803341}
+      effect:
+      - {fileID: 11400000, guid: d414d029c0bbd9349b14b508a0c8231e, type: 2}
+    - image: {fileID: 2070334670}
+      effect:
+      - {fileID: 11400000, guid: d414d029c0bbd9349b14b508a0c8231e, type: 2}
+    - image: {fileID: 1255013513}
+      effect:
+      - {fileID: 11400000, guid: d414d029c0bbd9349b14b508a0c8231e, type: 2}
+    - image: {fileID: 1563666086}
+      effect:
+      - {fileID: 11400000, guid: d414d029c0bbd9349b14b508a0c8231e, type: 2}
+    playBothPagesAtOnce: 1
+    hideAfterFinish: 0
+    autoAdvance: 1
+    autoAdvanceDelay: 1
     sound: {fileID: 0}
   audioSource: {fileID: 0}
   setNativeSizeOnShow: 0
@@ -614,7 +635,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 0376bc470b0896f4d995ebaa8df4fe8f, type: 3}
+  m_Sprite: {fileID: 8202900402673924190, guid: c2476bbf69eefd94fbcf9bd1a8fabcef, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -814,11 +835,11 @@ RectTransform:
   m_LocalScale: {x: 0, y: 0, z: 0}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 1255013512}
-  - {fileID: 1563666085}
+  - {fileID: 1911345342}
   - {fileID: 495803340}
   - {fileID: 2070334669}
-  - {fileID: 1911345342}
+  - {fileID: 1255013512}
+  - {fileID: 1563666085}
   - {fileID: 662495311}
   - {fileID: 471357811}
   - {fileID: 435823672}
@@ -842,7 +863,7 @@ GameObject:
   - component: {fileID: 1255013514}
   - component: {fileID: 1255013513}
   m_Layer: 5
-  m_Name: Egg
+  m_Name: Kapao
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -887,7 +908,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 675cd981bafb1c845abb90869da7e619, type: 3}
+  m_Sprite: {fileID: 664023317, guid: 95bfefe16d990df42b315cb8ec0ac0c1, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -992,7 +1013,7 @@ GameObject:
   - component: {fileID: 1563666087}
   - component: {fileID: 1563666086}
   m_Layer: 5
-  m_Name: Ramen
+  m_Name: Duck
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1037,7 +1058,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 226c0dcc57a3da34b9458ee1d4ca038f, type: 3}
+  m_Sprite: {fileID: -1537030753, guid: 9a82f8ad1ada236498319abf1d7ccc90, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -1187,7 +1208,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 993d6866b7ea85e48994e168adcfcbdd, type: 3}
+  m_Sprite: {fileID: 7185616380082193791, guid: 8f9f8bf7fee5f3d49bd3ceca0a4d8c9e, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
