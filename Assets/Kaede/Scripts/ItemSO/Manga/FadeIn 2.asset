@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6c8fe31a53e0b53489350767cf2c74da, type: 3}
   m_Name: FadeIn 2
   m_EditorClassIdentifier: 
-  duration: 1
+  duration: 0.4
   curve:
     serializedVersion: 2
     m_Curve:

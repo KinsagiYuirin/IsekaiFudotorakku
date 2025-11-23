@@ -377,6 +377,9 @@ namespace Kaede.Scripts.GamePlay
             characterEmotionPlayer?.ResetToIdle(true);
             _inputHandler?.SetComboInputEnabled(true);
             restingCutscenePlayer?.Stop();
+            
+            var gameManager = GameManager.Instance;
+            gameManager?.StartReadyCountdown();
         }
         #endregion
     }
