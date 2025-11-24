@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: 2ee3b7fe99ad39d488fb21461965bd4d
+guid: c140890a32e2f6f42920f5c9e5d6197b
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: -1870491627198568282
-    second: '[Press Prepare] Right Base_0'
+      213: 8435627724010439440
+    second: '[Press Prepare] Up Base_0'
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -46,7 +46,7 @@ TextureImporter:
   nPOTScale: 0
   lightmap: 0
   compressionQuality: 50
-  spriteMode: 2
+  spriteMode: 1
   spriteExtrude: 1
   spriteMeshType: 1
   alignment: 0
@@ -100,7 +100,7 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: '[Press Prepare] Right Base_0'
+      name: '[Press Prepare] Up Base_0'
       rect:
         serializedVersion: 2
         x: 30
@@ -115,8 +115,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 6a8ac7d76cdaa06e0800000000000000
-      internalID: -1870491627198568282
+      spriteID: 013441b98be511570800000000000000
+      internalID: 8435627724010439440
       vertices: []
       indices: 
       edges: []
@@ -125,7 +125,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: 
+    spriteID: 5e97eb03825dee720800000000000000
     internalID: 0
     vertices: []
     indices: 
@@ -134,7 +134,8 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      '[Press Prepare] Up Base_0': 8435627724010439440
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

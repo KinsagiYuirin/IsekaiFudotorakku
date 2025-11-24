@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: 9e24aab03ec571e438977785dc47adad
+guid: 4219c8451a5db8045a147bd025e1fb23
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 2293301483895342090
-    second: '[Press Prepare] Down Base_0'
+      213: 4157603703991588877
+    second: '[paper icon] Khaosoi_0'
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -100,23 +100,23 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: '[Press Prepare] Down Base_0'
+      name: '[paper icon] Khaosoi_0'
       rect:
         serializedVersion: 2
-        x: 29
-        y: 36
-        width: 163
-        height: 136
+        x: 114
+        y: 134
+        width: 886
+        height: 866
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: a0445769c8173df10800000000000000
-      internalID: 2293301483895342090
+      spriteID: d0854457a86c2b930800000000000000
+      internalID: 4157603703991588877
       vertices: []
       indices: 
       edges: []
@@ -125,7 +125,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: 5e97eb03825dee720800000000000000
+    spriteID: 1691290c6b23d2d478b38e2a5e5ed3a9
     internalID: 0
     vertices: []
     indices: 
@@ -135,7 +135,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      '[Press Prepare] Down Base_0': 2293301483895342090
+      '[paper icon] Khaosoi_0': 4157603703991588877
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

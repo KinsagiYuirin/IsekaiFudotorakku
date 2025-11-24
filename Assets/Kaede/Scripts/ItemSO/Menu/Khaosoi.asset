@@ -10,19 +10,19 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 6f108eedc8f2fc34a9a05d04b5878ca2, type: 3}
-  m_Name: Malah
+  m_Name: Khaosoi
   m_EditorClassIdentifier: 
-  menuName: Malah
-  foodType: 1
-  menuLevel: 1
+  menuName: Khaosoi
+  foodType: 0
+  menuLevel: 2
   steps:
-  - preset: {fileID: 11400000, guid: 08731a1ebe4e67c47a39e2dc5057e904, type: 2}
+  - preset: {fileID: 11400000, guid: 8a9e1b4d726323547991630770ce9beb, type: 2}
     overrideSequence: 0
     customSequence: []
-  - preset: {fileID: 11400000, guid: 08731a1ebe4e67c47a39e2dc5057e904, type: 2}
+  - preset: {fileID: 11400000, guid: cbd6fd47feabc084d925ae561c0cbc07, type: 2}
     overrideSequence: 0
     customSequence: []
-  - preset: {fileID: 11400000, guid: 19e48516be4bd324dae4f9d334f87db8, type: 2}
+  - preset: {fileID: 11400000, guid: c9d8aa2e46e15064e9763241108e1457, type: 2}
     overrideSequence: 0
     customSequence: []
-  menuSprite: {fileID: -1240688201547671087, guid: 0b787d1e8e557ed469aa590564628421, type: 3}
+  menuSprite: {fileID: 21300000, guid: 4219c8451a5db8045a147bd025e1fb23, type: 3}

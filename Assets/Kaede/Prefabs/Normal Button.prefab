@@ -144,25 +144,25 @@ MonoBehaviour:
     currentSprite: {fileID: 8288787037889794839, guid: 0e808d4ad2a81454b8829e3f390734d2, type: 3}
     activeSprite: {fileID: 8288787037889794839, guid: 0e808d4ad2a81454b8829e3f390734d2, type: 3}
   - key: 5
-    idealSprite: {fileID: 0}
-    prepareSprite: {fileID: 0}
-    currentSprite: {fileID: 0}
-    activeSprite: {fileID: 0}
+    idealSprite: {fileID: 21300000, guid: 141fd5a1a169e5a45af34f1a37b3cc59, type: 3}
+    prepareSprite: {fileID: 21300000, guid: 141fd5a1a169e5a45af34f1a37b3cc59, type: 3}
+    currentSprite: {fileID: 21300000, guid: c140890a32e2f6f42920f5c9e5d6197b, type: 3}
+    activeSprite: {fileID: 21300000, guid: c140890a32e2f6f42920f5c9e5d6197b, type: 3}
   - key: 6
-    idealSprite: {fileID: 0}
-    prepareSprite: {fileID: 0}
-    currentSprite: {fileID: 0}
-    activeSprite: {fileID: 0}
+    idealSprite: {fileID: 21300000, guid: 9e24aab03ec571e438977785dc47adad, type: 3}
+    prepareSprite: {fileID: 21300000, guid: 9e24aab03ec571e438977785dc47adad, type: 3}
+    currentSprite: {fileID: 21300000, guid: 55751a683d7a63548aebb17f37b1d34c, type: 3}
+    activeSprite: {fileID: 21300000, guid: 55751a683d7a63548aebb17f37b1d34c, type: 3}
   - key: 7
-    idealSprite: {fileID: 0}
-    prepareSprite: {fileID: 0}
-    currentSprite: {fileID: 0}
-    activeSprite: {fileID: 0}
+    idealSprite: {fileID: 21300000, guid: ea81096b51376414e986c181a73233c5, type: 3}
+    prepareSprite: {fileID: 21300000, guid: ea81096b51376414e986c181a73233c5, type: 3}
+    currentSprite: {fileID: 21300000, guid: 7003a24ceb50bb04e9b2c190589b972e, type: 3}
+    activeSprite: {fileID: 21300000, guid: 7003a24ceb50bb04e9b2c190589b972e, type: 3}
   - key: 8
-    idealSprite: {fileID: 0}
-    prepareSprite: {fileID: 0}
-    currentSprite: {fileID: 0}
-    activeSprite: {fileID: 0}
+    idealSprite: {fileID: 21300000, guid: 46a429591650a4d4f86782fa1ec82e99, type: 3}
+    prepareSprite: {fileID: 21300000, guid: 46a429591650a4d4f86782fa1ec82e99, type: 3}
+    currentSprite: {fileID: 21300000, guid: 2ee3b7fe99ad39d488fb21461965bd4d, type: 3}
+    activeSprite: {fileID: 21300000, guid: 2ee3b7fe99ad39d488fb21461965bd4d, type: 3}
 --- !u!1 &1215787788728107017
 GameObject:
   m_ObjectHideFlags: 0

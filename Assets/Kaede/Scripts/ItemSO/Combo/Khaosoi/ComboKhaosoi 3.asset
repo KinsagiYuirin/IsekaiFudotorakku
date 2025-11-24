@@ -1,0 +1,36 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 26ddcd7fcb6ef3949b75ef3a03086fc1, type: 3}
+  m_Name: ComboKhaosoi 3
+  m_EditorClassIdentifier: 
+  displayName: 
+  phase: 1
+  cookingSprite: {fileID: 0}
+  useSequentialAnimation: 1
+  comboAnimation: {fileID: 7400000, guid: 5dc7b50759baadb4e864b625b88903a0, type: 2}
+  wrongComboAnimation: {fileID: 0}
+  comboStepAnimations:
+  - {fileID: 7400000, guid: abcadfba162600846a371eb95146fb89, type: 2}
+  - {fileID: 7400000, guid: cf90d53995be1be4c8e43cd510643f83, type: 2}
+  comboSequence:
+  - key: 7
+    type: 2
+    buttonDuration: 0.3
+    pressCount: 2
+    holdTime: 3
+    stackCount: 3
+  - key: 4
+    type: 2
+    buttonDuration: 0.3
+    pressCount: 2
+    holdTime: 3
+    stackCount: 3

@@ -295,25 +295,25 @@ MonoBehaviour:
     currentSprite: {fileID: -1848775471284043364, guid: b0ddabacc136c1546b2e42c37498b7fc, type: 3}
     activeSprite: {fileID: -1848775471284043364, guid: b0ddabacc136c1546b2e42c37498b7fc, type: 3}
   - key: 5
-    idealSprite: {fileID: 0}
-    prepareSprite: {fileID: 0}
-    currentSprite: {fileID: 0}
-    activeSprite: {fileID: 0}
+    idealSprite: {fileID: -7048180800117179376, guid: 0525a41d9c3554e41a717ff92b964020, type: 3}
+    prepareSprite: {fileID: -7048180800117179376, guid: 0525a41d9c3554e41a717ff92b964020, type: 3}
+    currentSprite: {fileID: -7048180800117179376, guid: a63e24add4ecfee4495f8d6d8b09eddf, type: 3}
+    activeSprite: {fileID: -7048180800117179376, guid: a63e24add4ecfee4495f8d6d8b09eddf, type: 3}
   - key: 6
-    idealSprite: {fileID: 0}
-    prepareSprite: {fileID: 0}
-    currentSprite: {fileID: 0}
-    activeSprite: {fileID: 0}
+    idealSprite: {fileID: 6964039590799618251, guid: 4e321ea5b4783be418ceb44ed830b763, type: 3}
+    prepareSprite: {fileID: 6964039590799618251, guid: 4e321ea5b4783be418ceb44ed830b763, type: 3}
+    currentSprite: {fileID: 6964039590799618251, guid: 76c6ec959914f254ab5f242d3630be42, type: 3}
+    activeSprite: {fileID: 6964039590799618251, guid: 76c6ec959914f254ab5f242d3630be42, type: 3}
   - key: 7
-    idealSprite: {fileID: 0}
-    prepareSprite: {fileID: 0}
-    currentSprite: {fileID: 0}
-    activeSprite: {fileID: 0}
+    idealSprite: {fileID: 3421466134282005081, guid: 35748d049f04fe44d8fe669df34f5653, type: 3}
+    prepareSprite: {fileID: 3421466134282005081, guid: 35748d049f04fe44d8fe669df34f5653, type: 3}
+    currentSprite: {fileID: 3421466134282005081, guid: 3238d2eb1347e974a8ec76605da6aaa9, type: 3}
+    activeSprite: {fileID: 3421466134282005081, guid: 3238d2eb1347e974a8ec76605da6aaa9, type: 3}
   - key: 8
-    idealSprite: {fileID: 0}
-    prepareSprite: {fileID: 0}
-    currentSprite: {fileID: 0}
-    activeSprite: {fileID: 0}
+    idealSprite: {fileID: 3563807740768598986, guid: 76d68999d5d1ac944816009bfcf77f71, type: 3}
+    prepareSprite: {fileID: 3563807740768598986, guid: 64502843e6a32374fab88f6586eeb13e, type: 3}
+    currentSprite: {fileID: 3563807740768598986, guid: 76d68999d5d1ac944816009bfcf77f71, type: 3}
+    activeSprite: {fileID: 3563807740768598986, guid: 76d68999d5d1ac944816009bfcf77f71, type: 3}
   needSmoothFill: 0
   holdDuration: 0
 --- !u!225 &-2631633700790150971
