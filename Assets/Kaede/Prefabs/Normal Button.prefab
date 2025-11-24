@@ -163,6 +163,47 @@ MonoBehaviour:
     prepareSprite: {fileID: 21300000, guid: 46a429591650a4d4f86782fa1ec82e99, type: 3}
     currentSprite: {fileID: 21300000, guid: 2ee3b7fe99ad39d488fb21461965bd4d, type: 3}
     activeSprite: {fileID: 21300000, guid: 2ee3b7fe99ad39d488fb21461965bd4d, type: 3}
+  gamepadSpriteEntries:
+  - keyPad: 1
+    idealGamepadSprite: {fileID: 0}
+    prepareGamepadSprite: {fileID: 0}
+    currentGamepadSprite: {fileID: 0}
+    activeGamepadSprite: {fileID: 0}
+  - keyPad: 2
+    idealGamepadSprite: {fileID: 0}
+    prepareGamepadSprite: {fileID: 0}
+    currentGamepadSprite: {fileID: 0}
+    activeGamepadSprite: {fileID: 0}
+  - keyPad: 3
+    idealGamepadSprite: {fileID: 0}
+    prepareGamepadSprite: {fileID: 0}
+    currentGamepadSprite: {fileID: 0}
+    activeGamepadSprite: {fileID: 0}
+  - keyPad: 4
+    idealGamepadSprite: {fileID: 0}
+    prepareGamepadSprite: {fileID: 0}
+    currentGamepadSprite: {fileID: 0}
+    activeGamepadSprite: {fileID: 0}
+  - keyPad: 5
+    idealGamepadSprite: {fileID: 0}
+    prepareGamepadSprite: {fileID: 0}
+    currentGamepadSprite: {fileID: 0}
+    activeGamepadSprite: {fileID: 0}
+  - keyPad: 6
+    idealGamepadSprite: {fileID: 0}
+    prepareGamepadSprite: {fileID: 0}
+    currentGamepadSprite: {fileID: 0}
+    activeGamepadSprite: {fileID: 0}
+  - keyPad: 7
+    idealGamepadSprite: {fileID: 0}
+    prepareGamepadSprite: {fileID: 0}
+    currentGamepadSprite: {fileID: 0}
+    activeGamepadSprite: {fileID: 0}
+  - keyPad: 8
+    idealGamepadSprite: {fileID: 0}
+    prepareGamepadSprite: {fileID: 0}
+    currentGamepadSprite: {fileID: 0}
+    activeGamepadSprite: {fileID: 0}
 --- !u!1 &1215787788728107017
 GameObject:
   m_ObjectHideFlags: 0

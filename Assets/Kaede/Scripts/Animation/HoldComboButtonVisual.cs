@@ -8,6 +8,7 @@ using Kaede.Scripts.Utils;
 using Sirenix.OdinInspector;
 using TMPro;
 using UnityEngine;
+using UnityEngine.InputSystem;
 using UnityEngine.UI;
 
 namespace Kaede.Scripts.Animation
@@ -18,6 +19,7 @@ namespace Kaede.Scripts.Animation
         [System.Serializable]
         private class SpriteEntry
         {
+            [Title("Keyboard Key")]
             public ComboKey key = ComboKey.None;
             public Sprite idealSprite;
             public Sprite prepareSprite;
@@ -43,6 +45,7 @@ namespace Kaede.Scripts.Animation
         [Title("Sprite Settings")]
         [SerializeField] private Sprite fallbackSprite;
         [SerializeField] private SpriteEntry[] spriteEntries;
+        [SerializeField] private SpriteEntry[] gamepadSpriteEntries;
         
         private RectTransform _rectTransform;
         private RectTransform _fillImageRect;
@@ -257,17 +260,35 @@ namespace Kaede.Scripts.Animation
                 return;
             }
 
-            foreach (var entry in spriteEntries)
+            if (Gamepad.current != null)
             {
-                if (entry == null)
+                foreach (var entry in gamepadSpriteEntries)
                 {
-                    continue;
-                }
+                    if (entry == null)
+                    {
+                        continue;
+                    }
 
-                TryRegisterSprite(entry.key, KeyState.Ideal, entry.idealSprite);
-                TryRegisterSprite(entry.key, KeyState.Prepare, entry.prepareSprite);
-                TryRegisterSprite(entry.key, KeyState.Current, entry.currentSprite);
-                TryRegisterSprite(entry.key, KeyState.Active, entry.activeSprite);
+                    TryRegisterSprite(entry.key, KeyState.Ideal, entry.idealSprite);
+                    TryRegisterSprite(entry.key, KeyState.Prepare, entry.prepareSprite);
+                    TryRegisterSprite(entry.key, KeyState.Current, entry.currentSprite);
+                    TryRegisterSprite(entry.key, KeyState.Active, entry.activeSprite);
+                }
+            }
+            else
+            {
+                foreach (var entry in spriteEntries)
+                {
+                    if (entry == null)
+                    {
+                        continue;
+                    }
+
+                    TryRegisterSprite(entry.key, KeyState.Ideal, entry.idealSprite);
+                    TryRegisterSprite(entry.key, KeyState.Prepare, entry.prepareSprite);
+                    TryRegisterSprite(entry.key, KeyState.Current, entry.currentSprite);
+                    TryRegisterSprite(entry.key, KeyState.Active, entry.activeSprite);
+                }
             }
         }
 

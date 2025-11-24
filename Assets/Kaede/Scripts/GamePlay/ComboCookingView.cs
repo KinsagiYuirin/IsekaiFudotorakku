@@ -204,7 +204,10 @@ namespace Kaede.Scripts.GamePlay
                 return string.Empty;
             }
 
-            return Gamepad.current != null ? ConvertToGamepadKey(key) : key.ToString();
+            if (Gamepad.current != null)
+                return ConvertToGamepadKey(key);
+            else
+                return key.ToString();
         }
         
         private string ConvertToGamepadKey(ComboKey key)
@@ -215,6 +218,10 @@ namespace Kaede.Scripts.GamePlay
                 ComboKey.A => "X", 
                 ComboKey.S => "A",
                 ComboKey.D => "B",
+                ComboKey.Up => "↑",
+                ComboKey.Down => "↓",
+                ComboKey.Left => "←",
+                ComboKey.Right => "→",
                 _ => key.ToString()
             };
         }
