@@ -9,6 +9,7 @@ using TMPro;
 using UnityCommunity.UnitySingleton;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 namespace Kaede.Scripts.Managers
 {
@@ -29,6 +30,7 @@ namespace Kaede.Scripts.Managers
         [SerializeField] private TodayManuUI todayManuUI;
         
         [Title("Pause Settings")]
+        [SerializeField] private Button pauseButton;
         [SerializeField] private GameObject pauseMenuUI;
         [SerializeField] private bool isPaused = false;
         
@@ -50,7 +52,8 @@ namespace Kaede.Scripts.Managers
         {
             base.Awake();
             _inputHandler = FindObjectOfType<PlayerInputHandler>();
-
+            SetupButtons();
+            
             _readyTimer = 0f;
             _isReadyCountdownActive = false;
 
@@ -66,6 +69,35 @@ namespace Kaede.Scripts.Managers
             PauseGame();
         }
 
+        private void OnDestroy()
+        {
+            CleanupButtons();
+        }
+        
+        private void SetupButtons()
+        {
+            if (pauseButton != null)
+            {
+                pauseButton.onClick.AddListener(TogglePause);
+            }
+        }
+
+        private void CleanupButtons()
+        {
+            if (pauseButton != null)
+            {
+                pauseButton.onClick.RemoveAllListeners();
+            }
+        }
+
+        private void SetButtonsInteractable(bool interactable)
+        {
+            if (pauseButton != null)
+            {
+                pauseButton.interactable = interactable;
+            }
+        }
+
         /// <summary>
         /// Have changed a bit, called in Update of UIManager
         /// </summary>
@@ -75,7 +107,7 @@ namespace Kaede.Scripts.Managers
             CountdownReady();
         }
 
-        private void OnDestroy()
+        private void OnDisable()
         {
             UnsubscribeFromInput();
         }

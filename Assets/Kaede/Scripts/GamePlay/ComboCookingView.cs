@@ -65,7 +65,7 @@ namespace Kaede.Scripts.GamePlay
             else
             {
                 ComboText.alpha = 1;
-                ComboText.text = current.ToString();
+                ComboText.text = $"{current} combo";
             }
         }
         
