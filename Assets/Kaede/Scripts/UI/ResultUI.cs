@@ -1,3 +1,4 @@
+using System;
 using Kaede.Scripts.Managers;
 using MadDuck.Scripts.Managers;
 using Sirenix.OdinInspector;
@@ -34,6 +35,11 @@ namespace Kaede.Scripts.UI
                 
             //if (quitButton != null)
                 quitButton.onClick.AddListener(QuitGame);
+        }
+
+        private void OnEnable()
+        {
+            GameManager.Instance.SetInteractable(false);
         }
 
         private void OnDestroy()

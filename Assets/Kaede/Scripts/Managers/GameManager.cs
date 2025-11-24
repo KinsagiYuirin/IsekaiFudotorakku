@@ -37,6 +37,7 @@ namespace Kaede.Scripts.Managers
         [Title("ResultUI")]
         [SerializeField] private ResultUI resultUI;
 
+        private bool _interactable = true;
         private PlayerInputHandler _inputHandler;
         private IDisposable _pauseButtonSubscription;
         private float _readyTimer;
@@ -66,6 +67,7 @@ namespace Kaede.Scripts.Managers
             SubscribeToInput();
             InitializeReadyText();
             SetPauseMenuVisibility(false);
+            SetInteractable(true);
             PauseGame();
         }
 
@@ -98,6 +100,12 @@ namespace Kaede.Scripts.Managers
             }
         }
 
+        public void SetInteractable(bool interactable)
+        {
+            _interactable = interactable;
+            SetButtonsInteractable(_interactable);
+        }
+        
         /// <summary>
         /// Have changed a bit, called in Update of UIManager
         /// </summary>
@@ -174,6 +182,7 @@ namespace Kaede.Scripts.Managers
             {
                 if (button.isDown)
                 {
+                    if (!_interactable) return;
                     TogglePause();
                 }
             });
