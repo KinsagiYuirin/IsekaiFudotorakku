@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: 46e2cef0999387341895f1a40acf6b59
+guid: cefcc518b0704ec44a9e7b6c29d69426
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 5121293154447663080
-    second: '[Press] A Base_0'
+      213: 1577056807743713876
+    second: '[Press Prepare] X base_0'
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -96,14 +96,27 @@ TextureImporter:
     ignorePlatformSupport: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: WebGL
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
   spriteSheet:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: '[Press] A Base_0'
+      name: '[Press Prepare] X base_0'
       rect:
         serializedVersion: 2
-        x: 30
+        x: 31
         y: 34
         width: 163
         height: 136
@@ -115,8 +128,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 8ef1e7d7dfc721740800000000000000
-      internalID: 5121293154447663080
+      spriteID: 452fc20afc4d2e510800000000000000
+      internalID: 1577056807743713876
       vertices: []
       indices: 
       edges: []
@@ -135,7 +148,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      '[Press] A Base_0': 5121293154447663080
+      '[Press Prepare] X base_0': 1577056807743713876
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

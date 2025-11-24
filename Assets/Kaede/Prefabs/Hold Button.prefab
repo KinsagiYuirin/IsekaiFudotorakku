@@ -270,7 +270,7 @@ MonoBehaviour:
   currentIndexPercent: 1
   baseWidth: 300
   pixelsPerSecond: 50
-  sizeRange: {x: 80, y: 600}
+  sizeRange: {x: 60, y: 600}
   layoutElement: {fileID: 251972248414950566}
   fallbackSprite: {fileID: 5435592366743510017, guid: 00970c7cc4838fb47968a656b413bc71, type: 3}
   spriteEntries:
@@ -311,6 +311,47 @@ MonoBehaviour:
     activeSprite: {fileID: 3421466134282005081, guid: 3238d2eb1347e974a8ec76605da6aaa9, type: 3}
   - key: 8
     idealSprite: {fileID: 3563807740768598986, guid: 76d68999d5d1ac944816009bfcf77f71, type: 3}
+    prepareSprite: {fileID: 3563807740768598986, guid: 64502843e6a32374fab88f6586eeb13e, type: 3}
+    currentSprite: {fileID: 3563807740768598986, guid: 76d68999d5d1ac944816009bfcf77f71, type: 3}
+    activeSprite: {fileID: 3563807740768598986, guid: 76d68999d5d1ac944816009bfcf77f71, type: 3}
+  gamepadSpriteEntries:
+  - key: 1
+    idealSprite: {fileID: 7993284949347219416, guid: ff56ba7a7ef030b41952aab34c95c225, type: 3}
+    prepareSprite: {fileID: 7993284949347219416, guid: ff56ba7a7ef030b41952aab34c95c225, type: 3}
+    currentSprite: {fileID: 7993284949347219416, guid: 8add5a8cdf04fe249b2c89915860b811, type: 3}
+    activeSprite: {fileID: 7993284949347219416, guid: 8add5a8cdf04fe249b2c89915860b811, type: 3}
+  - key: 2
+    idealSprite: {fileID: -457315896927573824, guid: 209f30f0761f5814a9fa366eb47e731b, type: 3}
+    prepareSprite: {fileID: -457315896927573824, guid: 209f30f0761f5814a9fa366eb47e731b, type: 3}
+    currentSprite: {fileID: -457315896927573824, guid: 0c52c006dc5eef946a8d621a384ddbe9, type: 3}
+    activeSprite: {fileID: -457315896927573824, guid: 0c52c006dc5eef946a8d621a384ddbe9, type: 3}
+  - key: 3
+    idealSprite: {fileID: 1198633364760859731, guid: 2dc36ff3be6bc184c88522cf870d7497, type: 3}
+    prepareSprite: {fileID: 1198633364760859731, guid: 2dc36ff3be6bc184c88522cf870d7497, type: 3}
+    currentSprite: {fileID: 1198633364760859731, guid: 362e8a2f04e044f4389e78c546df8f04, type: 3}
+    activeSprite: {fileID: 1198633364760859731, guid: 362e8a2f04e044f4389e78c546df8f04, type: 3}
+  - key: 4
+    idealSprite: {fileID: -5362995340644077714, guid: 687abb0be05542c47a53880cffc7cb3f, type: 3}
+    prepareSprite: {fileID: -5362995340644077714, guid: 687abb0be05542c47a53880cffc7cb3f, type: 3}
+    currentSprite: {fileID: -5362995340644077714, guid: 5cca791e879f829449843f66eb01bd17, type: 3}
+    activeSprite: {fileID: -5362995340644077714, guid: 5cca791e879f829449843f66eb01bd17, type: 3}
+  - key: 5
+    idealSprite: {fileID: -7048180800117179376, guid: 0525a41d9c3554e41a717ff92b964020, type: 3}
+    prepareSprite: {fileID: -7048180800117179376, guid: 0525a41d9c3554e41a717ff92b964020, type: 3}
+    currentSprite: {fileID: -7048180800117179376, guid: a63e24add4ecfee4495f8d6d8b09eddf, type: 3}
+    activeSprite: {fileID: -7048180800117179376, guid: a63e24add4ecfee4495f8d6d8b09eddf, type: 3}
+  - key: 6
+    idealSprite: {fileID: 6964039590799618251, guid: 4e321ea5b4783be418ceb44ed830b763, type: 3}
+    prepareSprite: {fileID: 6964039590799618251, guid: 4e321ea5b4783be418ceb44ed830b763, type: 3}
+    currentSprite: {fileID: 6964039590799618251, guid: 76c6ec959914f254ab5f242d3630be42, type: 3}
+    activeSprite: {fileID: 6964039590799618251, guid: 76c6ec959914f254ab5f242d3630be42, type: 3}
+  - key: 7
+    idealSprite: {fileID: 3421466134282005081, guid: 35748d049f04fe44d8fe669df34f5653, type: 3}
+    prepareSprite: {fileID: 3421466134282005081, guid: 35748d049f04fe44d8fe669df34f5653, type: 3}
+    currentSprite: {fileID: 3421466134282005081, guid: 3238d2eb1347e974a8ec76605da6aaa9, type: 3}
+    activeSprite: {fileID: 3421466134282005081, guid: 3238d2eb1347e974a8ec76605da6aaa9, type: 3}
+  - key: 8
+    idealSprite: {fileID: 3563807740768598986, guid: 64502843e6a32374fab88f6586eeb13e, type: 3}
     prepareSprite: {fileID: 3563807740768598986, guid: 64502843e6a32374fab88f6586eeb13e, type: 3}
     currentSprite: {fileID: 3563807740768598986, guid: 76d68999d5d1ac944816009bfcf77f71, type: 3}
     activeSprite: {fileID: 3563807740768598986, guid: 76d68999d5d1ac944816009bfcf77f71, type: 3}

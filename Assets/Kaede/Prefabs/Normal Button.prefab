@@ -164,46 +164,46 @@ MonoBehaviour:
     currentSprite: {fileID: 21300000, guid: 2ee3b7fe99ad39d488fb21461965bd4d, type: 3}
     activeSprite: {fileID: 21300000, guid: 2ee3b7fe99ad39d488fb21461965bd4d, type: 3}
   gamepadSpriteEntries:
-  - keyPad: 1
-    idealGamepadSprite: {fileID: 0}
-    prepareGamepadSprite: {fileID: 0}
-    currentGamepadSprite: {fileID: 0}
-    activeGamepadSprite: {fileID: 0}
-  - keyPad: 2
-    idealGamepadSprite: {fileID: 0}
-    prepareGamepadSprite: {fileID: 0}
-    currentGamepadSprite: {fileID: 0}
-    activeGamepadSprite: {fileID: 0}
-  - keyPad: 3
-    idealGamepadSprite: {fileID: 0}
-    prepareGamepadSprite: {fileID: 0}
-    currentGamepadSprite: {fileID: 0}
-    activeGamepadSprite: {fileID: 0}
-  - keyPad: 4
-    idealGamepadSprite: {fileID: 0}
-    prepareGamepadSprite: {fileID: 0}
-    currentGamepadSprite: {fileID: 0}
-    activeGamepadSprite: {fileID: 0}
-  - keyPad: 5
-    idealGamepadSprite: {fileID: 0}
-    prepareGamepadSprite: {fileID: 0}
-    currentGamepadSprite: {fileID: 0}
-    activeGamepadSprite: {fileID: 0}
-  - keyPad: 6
-    idealGamepadSprite: {fileID: 0}
-    prepareGamepadSprite: {fileID: 0}
-    currentGamepadSprite: {fileID: 0}
-    activeGamepadSprite: {fileID: 0}
-  - keyPad: 7
-    idealGamepadSprite: {fileID: 0}
-    prepareGamepadSprite: {fileID: 0}
-    currentGamepadSprite: {fileID: 0}
-    activeGamepadSprite: {fileID: 0}
-  - keyPad: 8
-    idealGamepadSprite: {fileID: 0}
-    prepareGamepadSprite: {fileID: 0}
-    currentGamepadSprite: {fileID: 0}
-    activeGamepadSprite: {fileID: 0}
+  - key: 1
+    idealSprite: {fileID: 21300000, guid: bf4fbbf96e713bc40b06f150184159b2, type: 3}
+    prepareSprite: {fileID: 21300000, guid: bf4fbbf96e713bc40b06f150184159b2, type: 3}
+    currentSprite: {fileID: 21300000, guid: ecabc6533837fa544baf0e68484bf826, type: 3}
+    activeSprite: {fileID: 21300000, guid: ecabc6533837fa544baf0e68484bf826, type: 3}
+  - key: 2
+    idealSprite: {fileID: 21300000, guid: cefcc518b0704ec44a9e7b6c29d69426, type: 3}
+    prepareSprite: {fileID: 21300000, guid: cefcc518b0704ec44a9e7b6c29d69426, type: 3}
+    currentSprite: {fileID: 21300000, guid: 17e3b0a6086bc424ea9f9175d62b3657, type: 3}
+    activeSprite: {fileID: 21300000, guid: 17e3b0a6086bc424ea9f9175d62b3657, type: 3}
+  - key: 3
+    idealSprite: {fileID: 21300000, guid: 18c9a514c0daa804eb250920feb605e6, type: 3}
+    prepareSprite: {fileID: 21300000, guid: 18c9a514c0daa804eb250920feb605e6, type: 3}
+    currentSprite: {fileID: 21300000, guid: 46e2cef0999387341895f1a40acf6b59, type: 3}
+    activeSprite: {fileID: 21300000, guid: 46e2cef0999387341895f1a40acf6b59, type: 3}
+  - key: 4
+    idealSprite: {fileID: 21300000, guid: 034495a12601b214491a34f3151c49c5, type: 3}
+    prepareSprite: {fileID: 21300000, guid: 034495a12601b214491a34f3151c49c5, type: 3}
+    currentSprite: {fileID: 21300000, guid: 567754171ebc8d54497649de2cfdece6, type: 3}
+    activeSprite: {fileID: 21300000, guid: 567754171ebc8d54497649de2cfdece6, type: 3}
+  - key: 5
+    idealSprite: {fileID: 21300000, guid: 141fd5a1a169e5a45af34f1a37b3cc59, type: 3}
+    prepareSprite: {fileID: 21300000, guid: 141fd5a1a169e5a45af34f1a37b3cc59, type: 3}
+    currentSprite: {fileID: 21300000, guid: c140890a32e2f6f42920f5c9e5d6197b, type: 3}
+    activeSprite: {fileID: 21300000, guid: c140890a32e2f6f42920f5c9e5d6197b, type: 3}
+  - key: 6
+    idealSprite: {fileID: 21300000, guid: 9e24aab03ec571e438977785dc47adad, type: 3}
+    prepareSprite: {fileID: 21300000, guid: 9e24aab03ec571e438977785dc47adad, type: 3}
+    currentSprite: {fileID: 21300000, guid: 55751a683d7a63548aebb17f37b1d34c, type: 3}
+    activeSprite: {fileID: 21300000, guid: 55751a683d7a63548aebb17f37b1d34c, type: 3}
+  - key: 7
+    idealSprite: {fileID: 21300000, guid: ea81096b51376414e986c181a73233c5, type: 3}
+    prepareSprite: {fileID: 21300000, guid: ea81096b51376414e986c181a73233c5, type: 3}
+    currentSprite: {fileID: 21300000, guid: 7003a24ceb50bb04e9b2c190589b972e, type: 3}
+    activeSprite: {fileID: 21300000, guid: 7003a24ceb50bb04e9b2c190589b972e, type: 3}
+  - key: 8
+    idealSprite: {fileID: 21300000, guid: 46a429591650a4d4f86782fa1ec82e99, type: 3}
+    prepareSprite: {fileID: 21300000, guid: 46a429591650a4d4f86782fa1ec82e99, type: 3}
+    currentSprite: {fileID: 21300000, guid: 2ee3b7fe99ad39d488fb21461965bd4d, type: 3}
+    activeSprite: {fileID: 21300000, guid: 2ee3b7fe99ad39d488fb21461965bd4d, type: 3}
 --- !u!1 &1215787788728107017
 GameObject:
   m_ObjectHideFlags: 0

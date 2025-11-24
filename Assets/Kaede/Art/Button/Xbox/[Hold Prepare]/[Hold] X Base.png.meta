@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: 034495a12601b214491a34f3151c49c5
+guid: 209f30f0761f5814a9fa366eb47e731b
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: -7142272978600066747
-    second: '[Press Prepare] B base_0'
+      213: -457315896927573824
+    second: '[Hold] X Base_0'
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -46,7 +46,7 @@ TextureImporter:
   nPOTScale: 0
   lightmap: 0
   compressionQuality: 50
-  spriteMode: 1
+  spriteMode: 2
   spriteExtrude: 1
   spriteMeshType: 1
   alignment: 0
@@ -96,17 +96,30 @@ TextureImporter:
     ignorePlatformSupport: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: WebGL
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
   spriteSheet:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: '[Press Prepare] B base_0'
+      name: '[Hold] X Base_0'
       rect:
         serializedVersion: 2
-        x: 31
-        y: 34
-        width: 163
-        height: 136
+        x: 87
+        y: 78
+        width: 501
+        height: 141
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -115,8 +128,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 5410cad319c81ec90800000000000000
-      internalID: -7142272978600066747
+      spriteID: 0c82e7d5d9947a9f0800000000000000
+      internalID: -457315896927573824
       vertices: []
       indices: 
       edges: []
@@ -125,7 +138,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: 5e97eb03825dee720800000000000000
+    spriteID: 
     internalID: 0
     vertices: []
     indices: 
@@ -135,7 +148,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      '[Press Prepare] B base_0': -7142272978600066747
+      '[Hold] X Base_0': -457315896927573824
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
