@@ -1634,6 +1634,7 @@ RectTransform:
   - {fileID: 2109660078}
   - {fileID: 1180846706}
   - {fileID: 762913538}
+  - {fileID: 1203022327}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
@@ -4682,8 +4683,7 @@ RectTransform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children:
-  - {fileID: 1534675174}
+  m_Children: []
   m_Father: {fileID: 382246677}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
@@ -4703,12 +4703,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e62fe6ebc22c052449fb7b266c9acc97, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  tutorialImage: {fileID: 1534675175}
+  tutorialImage: {fileID: 0}
   tutorialImages:
   - {fileID: -4686411917525605591, guid: e7223fd059e466a41b975f450ce86f73, type: 3}
   nextButton: {fileID: 0}
   prevButton: {fileID: 0}
-  closeButton: {fileID: 1001102307}
+  closeButton: {fileID: 0}
 --- !u!114 &1203022329
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -9832,7 +9832,7 @@ MonoBehaviour:
     m_Top: 0
     m_Bottom: 0
   m_ChildAlignment: 4
-  m_Spacing: -800
+  m_Spacing: -500
   m_ChildForceExpandWidth: 1
   m_ChildForceExpandHeight: 1
   m_ChildControlWidth: 0
