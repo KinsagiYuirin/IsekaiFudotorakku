@@ -1,5 +1,6 @@
 using System;
 using System.Threading;
+using Cysharp.Threading.Tasks;
 using Kaede.Art.TA_Works.Scripts;
 using Kaede.Scripts.Animation;
 using Kaede.Scripts.Audios;
@@ -155,14 +156,14 @@ namespace Kaede.Scripts.GamePlay
 
             if (isCorrect)
             {
-                _animationCooking.PlayNext();
+                _animationCooking.PlayNext().Forget();
             }
             else
             {
                 var playedWrong = _animationCooking.TryPlayWrongFeedback();
                 if (!playedWrong)
                 {
-                    _animationCooking.PlayNext();
+                    _animationCooking.PlayNext().Forget();
                 }
             }
         }
@@ -174,6 +175,7 @@ namespace Kaede.Scripts.GamePlay
 
             _holdAnimationActive = true;
             _emotionPlayer.PlayHoldLoop();
+            TriggerAnimation(true);
         }
 
         private void ResetHoldEmotion()
