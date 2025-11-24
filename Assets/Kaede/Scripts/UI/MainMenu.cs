@@ -14,6 +14,7 @@ namespace Kaede.Scripts.UI
     {
         GameStart,
         MainMenu,
+        Tutorial,
         Settings,
     }
 
@@ -33,7 +34,9 @@ namespace Kaede.Scripts.UI
         
         [Title("UI Buttons")]
         [SerializeField] private Button startButton;
+        [SerializeField] private Button tutorialButton;
         [SerializeField] private Button quitButton;
+        [SerializeField] private Button closeTutorialButton;
         
         [Title("Settings")]
         [SerializeField] private MainMenuPanelType initialPanelType = MainMenuPanelType.GameStart;
@@ -119,7 +122,13 @@ namespace Kaede.Scripts.UI
         {
             if (startButton != null)
                 startButton.onClick.AddListener(StartGame);
-                
+
+            if (tutorialButton != null)
+                tutorialButton.onClick.AddListener(OpenTutorial);
+            
+            if (closeTutorialButton != null)
+                closeTutorialButton.onClick.AddListener(CloseTutorial);
+            
             if (quitButton != null)
                 quitButton.onClick.AddListener(QuitGame);
         }
@@ -128,6 +137,12 @@ namespace Kaede.Scripts.UI
         {
             if (startButton != null)
                 startButton.onClick.RemoveAllListeners();
+
+            if (tutorialButton != null)
+                tutorialButton.onClick.RemoveAllListeners();
+            
+            if (closeTutorialButton != null)
+                closeTutorialButton.onClick.RemoveAllListeners();
 
             if (quitButton != null)
                 quitButton.onClick.RemoveAllListeners();
@@ -138,6 +153,12 @@ namespace Kaede.Scripts.UI
             if (startButton != null)
                 startButton.interactable = interactable;
 
+            if ( tutorialButton != null)
+                tutorialButton.interactable = interactable;
+            
+            if (closeTutorialButton != null)
+                closeTutorialButton.interactable = interactable;
+            
             if (quitButton != null)
                 quitButton.interactable = interactable;
         }
@@ -170,6 +191,18 @@ namespace Kaede.Scripts.UI
             if (_inputDisabled) return;
             var nextScene = SceneType.Gameplay;
             LoadSceneManager.Instance.LoadScene(nextScene, LoadSceneMode.Single, false);
+        }
+        
+        public void OpenTutorial()
+        {
+            if (_inputDisabled) return;
+            ShowPanel(MainMenuPanelType.Tutorial);
+        }
+        
+        public void CloseTutorial()
+        {
+            if (_inputDisabled) return;
+            ShowPanel(MainMenuPanelType.MainMenu);
         }
         
         public void ShowSettings()
