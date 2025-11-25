@@ -43,18 +43,11 @@ namespace Kaede.Scripts.Item
         Cooking
     }
     
-    public enum AnimationType
-    {
-        Loop,
-        StepByStep
-    }
-    
     [Serializable]
-    public class AnimationSetting
+    public class AnimationAndSfx
     {
-        public AnimationType type;
-        [ShowIf("type", AnimationType.Loop)] 
-        public float loopDuration = 1.0f;
+        public AnimationClip animationClip;
+        public AudioClip sfxClip;
     }
     
     [Serializable]
@@ -94,12 +87,24 @@ namespace Kaede.Scripts.Item
         [LabelText("Animation")]
         public AnimationClip comboAnimation;
         
+        [HideIf(nameof(useSequentialAnimation))]
+        [LabelText("Sound Effect")]
+        public AudioClip comboSfx;
+        
+        [HideIf(nameof(useSequentialAnimation))]
+        [LabelText("Setting Animation & SFX")]
+        public AnimationAndSfx comboAnimationAndSfx;
+        
         [LabelText("Wrong Input Animation")]
         public AnimationClip wrongComboAnimation;
         
         [ShowIf(nameof(useSequentialAnimation))]
         [LabelText("Sequential Animations"), ListDrawerSettings(Expanded = true, DraggableItems = true)]
         public List<AnimationClip> comboStepAnimations = new();
+        
+        [ShowIf(nameof(useSequentialAnimation))]
+        [LabelText("Wrong Input Animation & SFX"), ListDrawerSettings(Expanded = true, DraggableItems = true)]
+        public AnimationAndSfx[] stepComboAnimationAndSfx;
         
         [Title("Sequence")]
         [ListDrawerSettings(
