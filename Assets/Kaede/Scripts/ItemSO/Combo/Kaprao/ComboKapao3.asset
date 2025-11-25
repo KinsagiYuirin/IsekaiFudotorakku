@@ -17,9 +17,10 @@ MonoBehaviour:
   cookingSprite: {fileID: 0}
   useSequentialAnimation: 0
   comboAnimation: {fileID: 7400000, guid: c10f90a8929b98240bfa8864497675a1, type: 2}
+  wrongComboAnimation: {fileID: 0}
   comboStepAnimations: []
   comboSequence:
-  - key: 1
+  - key: 5
     type: 0
     buttonDuration: 0.3
     pressCount: 2
@@ -31,7 +32,7 @@ MonoBehaviour:
     pressCount: 2
     holdTime: 1
     stackCount: 3
-  - key: 3
+  - key: 6
     type: 0
     buttonDuration: 0.3
     pressCount: 2
