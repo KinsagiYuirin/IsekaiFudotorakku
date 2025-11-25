@@ -7,11 +7,12 @@ using UnityEngine;
 
 namespace Kaede.Scripts.Item
 {
+    [Flags]
     public enum FoodType
     {
-        [InspectorName("Appetizer")]  Appetizer,
-        [InspectorName("Main Course")] MainCourse,
-        [InspectorName("Dessert")] Dessert
+        [InspectorName("Appetizer")]  Appetizer = 1 << 0,
+        [InspectorName("Main Course")] MainCourse = 1 << 1,
+        [InspectorName("Dessert")] Dessert = 1 << 2
     }
     
     [System.Serializable]
