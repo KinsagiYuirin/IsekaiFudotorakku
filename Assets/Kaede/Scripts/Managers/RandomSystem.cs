@@ -115,7 +115,7 @@ namespace Kaede.Scripts.Managers
             foreach (FoodType foodType in Enum.GetValues(typeof(FoodType)))
             {
                 var menusOfType = AllMenuInLevel
-                    .Where(menu => menu != null && menu.foodType == foodType)
+                    .Where(menu => menu != null && menu.foodType.HasFlag(foodType))
                     .ToList();
 
                 if (menusOfType.Count == 0) continue;

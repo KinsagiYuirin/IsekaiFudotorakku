@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Kapao
   m_EditorClassIdentifier: 
   menuName: kapao
-  foodType: 1
+  foodType: 3
   menuLevel: 1
   steps:
   - preset: {fileID: 11400000, guid: 03dfa2455f8934940a817294acd65cf2, type: 2}

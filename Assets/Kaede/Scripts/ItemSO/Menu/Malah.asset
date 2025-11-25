@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Malah
   m_EditorClassIdentifier: 
   menuName: Malah
-  foodType: 1
+  foodType: 3
   menuLevel: 1
   steps:
   - preset: {fileID: 11400000, guid: 08731a1ebe4e67c47a39e2dc5057e904, type: 2}
