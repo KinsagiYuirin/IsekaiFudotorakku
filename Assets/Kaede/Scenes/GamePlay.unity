@@ -526,8 +526,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -276, y: -288}
-  m_SizeDelta: {x: 200, y: 50}
+  m_AnchoredPosition: {x: -246.41, y: -288}
+  m_SizeDelta: {x: 300.3704, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &85986212
 MonoBehaviour:
@@ -1660,7 +1660,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &395951766
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1748,7 +1748,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &414026408
 RectTransform:
   m_ObjectHideFlags: 0
@@ -2666,7 +2666,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &733699600
 RectTransform:
   m_ObjectHideFlags: 0
@@ -3430,7 +3430,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!95 &878576955
 Animator:
   serializedVersion: 7
@@ -8192,7 +8192,7 @@ MonoBehaviour:
   autoPlay: 0
   <MenuDatasList>k__BackingField: []
   <TimeBetweenCombos>k__BackingField: 1
-  scorePerButton: 10
+  scorePerButton: 5
   completedMenus: []
   animationCooking: {fileID: 1897282216}
   characterEmotionPlayer: {fileID: 1848500657}
@@ -8296,8 +8296,8 @@ MonoBehaviour:
   - {fileID: 11400000, guid: ff5e1c1e42069614b9c8f333ada88f21, type: 2}
   - {fileID: 11400000, guid: 9037bbceaf49321409b5c0477176bc64, type: 2}
   - {fileID: 11400000, guid: 1fb12396c08cfac4b8a17e27696de961, type: 2}
-  appetizerRandomMenuCount: 3
-  mainCourseRandomMenuCount: 4
+  appetizerRandomMenuCount: 5
+  mainCourseRandomMenuCount: 5
   dessertRandomMenuCount: 0
   appetizerRandomMenu:
   - {fileID: 11400000, guid: 1fb12396c08cfac4b8a17e27696de961, type: 2}
