@@ -156,14 +156,14 @@ namespace Kaede.Scripts.GamePlay
 
             if (isCorrect)
             {
-                _animationCooking.PlayNext().Forget();
+                _animationCooking.PlayNext();
             }
             else
             {
                 var playedWrong = _animationCooking.TryPlayWrongFeedback();
                 if (!playedWrong)
                 {
-                    _animationCooking.PlayNext().Forget();
+                    _animationCooking.PlayNext();
                 }
             }
         }
