@@ -97,7 +97,6 @@ namespace Kaede.Scripts.GamePlay
                         NextCombo(model);
                         break;
                     case ComboInputResult.Holding:
-                        TriggerAnimation(true);
                         BeginHoldEmotion();
                         break;
                     case ComboInputResult.None:
@@ -176,6 +175,7 @@ namespace Kaede.Scripts.GamePlay
 
             _holdAnimationActive = true;
             _emotionPlayer.PlayHoldLoop();
+            TriggerAnimation(true);
         }
 
         private void ResetHoldEmotion()

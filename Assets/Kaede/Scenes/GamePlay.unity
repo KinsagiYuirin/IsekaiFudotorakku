@@ -8829,7 +8829,8 @@ MonoBehaviour:
   loopAnimation: 0
   resetIndexAfterEnd: 0
   crossfadeDuration: 0.12
-  pauseAtNextClipStart: 0
+  pauseAtNextClipStart: 1
+  forceAnimatorUpdate: 1
   updateClock: 0
   wrongFeedbackClip: {fileID: 0}
   wrongFeedbackFade: 0.08

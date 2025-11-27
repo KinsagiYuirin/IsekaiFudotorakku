@@ -15,7 +15,8 @@ namespace Kaede.Scripts.Animation {
     /// - มี IsBusy กันกดรัว และโหมด Scaled/Unscaled time
     /// </summary>
     [DisallowMultipleComponent]
-    public class ComboStepAnimationCooking : MonoBehaviour {
+    public class ComboStepAnimationCooking : MonoBehaviour 
+    {
         [Header("Animator / Output")]
         [SerializeField] private Animator animator;
 
@@ -29,7 +30,8 @@ namespace Kaede.Scripts.Animation {
         [SerializeField] private bool resetIndexAfterEnd = false; // false = ค้างที่ท่าสุดท้าย
         [SerializeField] private float crossfadeDuration = 0.12f;
         [SerializeField] private bool pauseAtNextClipStart = true;
-        
+        [SerializeField] private bool forceAnimatorUpdate = false;
+         
         public enum UpdateClock { Scaled, Unscaled }
         [SerializeField] private UpdateClock updateClock = UpdateClock.Scaled;
 
@@ -92,7 +94,7 @@ namespace Kaede.Scripts.Animation {
         /// <summary>กดเพิ่มหนึ่งสเต็ป ถ้าเล่นได้</summary>
         public async UniTask PlayNext(CancellationToken cancellationToken = default)
         {
-            if (!CanPlayNext()) return;
+            if (!forceAnimatorUpdate && !CanPlayNext()) return;
             
             _sequenceCts?.Cancel();
             _sequenceCts?.Dispose();
