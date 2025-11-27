@@ -90,18 +90,49 @@ namespace Kaede.Scripts.Animation {
 
         #region Public API (Buttons / Game input)
         /// <summary>กดเพิ่มหนึ่งสเต็ป ถ้าเล่นได้</summary>
-        public async UniTask PlayNext(CancellationToken cancellationToken = default)
+        public async UniTask PlayNext(bool force = false, CancellationToken cancellationToken = default)
         {
-            if (!CanPlayNext()) return;
-            
+            if (!force && !CanPlayNext()) return;
+
+            if (force)
+            {
+                if (sequenceClips.Count == 0)
+                {
+                    return;
+                }
+
+                if (_isSequencePlaying)
+                {
+                    StopAllRoutines();
+
+                    if (_stepIndex < sequenceClips.Count - 1)
+                    {
+                        _stepIndex++;
+                    }
+                }
+                else if (_stepIndex >= sequenceClips.Count)
+                {
+                    return;
+                }
+            }
+
             _sequenceCts?.Cancel();
             _sequenceCts?.Dispose();
-            
+
             _sequenceCts = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken);
             var ct = _sequenceCts.Token;
-            
-            await PlayStep(_stepIndex, crossfadeDuration, ct);
-            
+
+            try
+            {
+                await PlayStep(_stepIndex, crossfadeDuration, ct);
+            }
+            catch (OperationCanceledException)
+            {
+                ResetMixerToCurrent();
+                _isSequencePlaying = false;
+                return;
+            }
+
             _stepIndex++;
             if (_stepIndex >= sequenceClips.Count)
             {
@@ -309,64 +340,94 @@ namespace Kaede.Scripts.Animation {
 
             _isSequencePlaying = true;
 
-            // ทำ next playable
             var nextPlayable = AnimationClipPlayable.Create(_graph, clip);
-            nextPlayable.SetApplyFootIK(false);
-            nextPlayable.SetApplyPlayableIK(false);
-            nextPlayable.SetTime(0);
-            nextPlayable.SetSpeed(1);
+            bool promotedToCurrent = false;
 
-            // ต่อเข้าช่อง 1 เป็น next, ช่อง 0 เก็บ current (ถ้ามี)
-            if (!IsMixerReady())
+            try
             {
-                nextPlayable.Destroy();
-                _isSequencePlaying = false;
-                return;
-            }
+                nextPlayable.SetApplyFootIK(false);
+                nextPlayable.SetApplyPlayableIK(false);
+                nextPlayable.SetTime(0);
+                nextPlayable.SetSpeed(1);
 
-            _mixer.DisconnectInput(1);
-            _mixer.ConnectInput(1, nextPlayable, 0, 0f); // เริ่มน้ำหนัก 0
-
-            if (!_graph.IsPlaying()) _graph.Play();
-
-            // Crossfade: current(0)->down, next(1)->up
-            float t = 0f;
-            while (t < fade)
-            {
-                ct.ThrowIfCancellationRequested();
+                // ต่อเข้าช่อง 1 เป็น next, ช่อง 0 เก็บ current (ถ้ามี)
                 if (!IsMixerReady())
                 {
-                    nextPlayable.Destroy();
+                    ResetMixerToCurrent();
                     _isSequencePlaying = false;
                     return;
                 }
 
-                t += DeltaTime();
-                float w = Mathf.Clamp01(t / fade);
-                _mixer.SetInputWeight(0, 1f - w);
-                _mixer.SetInputWeight(1, w);
-                await UniTask.Yield(ct);
+                _mixer.DisconnectInput(1);
+                _mixer.ConnectInput(1, nextPlayable, 0, 0f); // เริ่มน้ำหนัก 0
+
+                if (!_graph.IsPlaying()) _graph.Play();
+
+                // Crossfade: current(0)->down, next(1)->up
+                float t = 0f;
+                while (t < fade)
+                {
+                    ct.ThrowIfCancellationRequested();
+                    if (!IsMixerReady())
+                    {
+                        ResetMixerToCurrent();
+                        _isSequencePlaying = false;
+                        return;
+                    }
+
+                    t += DeltaTime();
+                    float w = Mathf.Clamp01(t / fade);
+                    _mixer.SetInputWeight(0, 1f - w);
+                    _mixer.SetInputWeight(1, w);
+                    await UniTask.Yield(ct);
+                }
+                if (!IsMixerReady())
+                {
+                    ResetMixerToCurrent();
+                    _isSequencePlaying = false;
+                    return;
+                }
+
+                _mixer.SetInputWeight(0, 0f);
+                _mixer.SetInputWeight(1, 1f);
+
+                // ทำ next เป็น current
+                if (_current.IsValid() && IsMixerReady()) _mixer.DisconnectInput(0);
+                _current = nextPlayable;
+                promotedToCurrent = true;
+
+                // รอจนคลิปจบ แล้วค้างเฟรมสุดท้าย
+                double length = clip.length;
+                while (_current.IsValid() && _current.GetTime() < length)
+                {
+                    ct.ThrowIfCancellationRequested();
+                    await UniTask.Yield(ct);
+                }
             }
-            if (!IsMixerReady())
+            catch (OperationCanceledException)
             {
-                nextPlayable.Destroy();
+                if (!promotedToCurrent && nextPlayable.IsValid())
+                {
+                    if (IsMixerReady())
+                    {
+                        _mixer.DisconnectInput(1);
+                        _mixer.SetInputWeight(1, 0f);
+                        _mixer.SetInputWeight(0, 1f);
+                    }
+
+                    nextPlayable.Destroy();
+                }
+
+                ResetMixerToCurrent();
                 _isSequencePlaying = false;
-                return;
+                throw;
             }
-
-            _mixer.SetInputWeight(0, 0f);
-            _mixer.SetInputWeight(1, 1f);
-
-            // ทำ next เป็น current
-            if (_current.IsValid() && IsMixerReady()) _mixer.DisconnectInput(0);
-            _current = nextPlayable;
-
-            // รอจนคลิปจบ แล้วค้างเฟรมสุดท้าย
-            double length = clip.length;
-            while (_current.IsValid() && _current.GetTime() < length)
+            finally
             {
-                ct.ThrowIfCancellationRequested();
-                await UniTask.Yield(ct);
+                if (!promotedToCurrent && nextPlayable.IsValid())
+                {
+                    nextPlayable.Destroy();
+                }
             }
             
             // ค้างเฟรมสุดท้าย หริือค้างเฟรมแรกของคลิปถัดไป / รีเซ็ต
@@ -652,12 +713,36 @@ namespace Kaede.Scripts.Animation {
             _wrongFeedbackCancellation?.Dispose();
             _wrongFeedbackCancellation = null;
 
+            ResetMixerToCurrent();
             _isSequencePlaying = false;
         }
 
         private float DeltaTime()
         {
             return updateClock == UpdateClock.Scaled ? Time.deltaTime : Time.unscaledDeltaTime;
+        }
+
+        private void ResetMixerToCurrent()
+        {
+            if (!IsMixerReady())
+            {
+                return;
+            }
+
+            if (_current.IsValid())
+            {
+                _mixer.DisconnectInput(0);
+                _mixer.DisconnectInput(1);
+                _mixer.ConnectInput(0, _current, 0, 1f);
+                _mixer.SetInputWeight(0, 1f);
+            }
+            else
+            {
+                _mixer.DisconnectInput(1);
+                _mixer.SetInputWeight(0, 1f);
+            }
+
+            _mixer.SetInputWeight(1, 0f);
         }
         #endregion
 
