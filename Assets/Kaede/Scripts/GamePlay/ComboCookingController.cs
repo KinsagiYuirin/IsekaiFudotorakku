@@ -259,7 +259,7 @@ namespace Kaede.Scripts.GamePlay
         {
             _inputProcessor?.ResetState();
 
-            var multiplier = MathF.Round(timer.DividerTimeToMultiply(), 1);
+            var multiplier = Mathf.Round(timer.DividerTimeToMultiply());
             
             if (!_model.HasNextMenu())
             {

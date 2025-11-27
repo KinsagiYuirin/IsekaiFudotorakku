@@ -58,7 +58,7 @@ namespace Kaede.Scripts.UI
         {
             if (scoreText != null)
             {
-                scoreText.text = score.ToString($"Score: {score:N0}");
+                scoreText.text = $"Score: {score:N0}";
                 
                 if (niceText == null) return;
                 switch (score)

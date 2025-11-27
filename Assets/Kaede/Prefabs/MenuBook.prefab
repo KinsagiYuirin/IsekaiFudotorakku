@@ -190,9 +190,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 32eed57d303a7284c8c7d963f2a2333d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  foodType: {fileID: 9186777000552901156}
+  foodType: {fileID: 3775243551828433588}
   foodImage: {fileID: 951434266896269587}
-  foodName: {fileID: 3775243551828433588}
+  foodName: {fileID: 9186777000552901156}
   coverAnimator: {fileID: 4403602909680575383}
   coverAnimation: {fileID: 7400000, guid: 6f67e46c0899a964f8866736551086ef, type: 2}
 --- !u!1 &3737544045998682303
@@ -365,7 +365,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 236, y: -275.79205}
+  m_AnchoredPosition: {x: 233.60999, y: -311.59}
   m_SizeDelta: {x: 340.6898, y: 342.2723}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &3950034042261384156
@@ -423,7 +423,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &6321463201110896308
 RectTransform:
   m_ObjectHideFlags: 0
