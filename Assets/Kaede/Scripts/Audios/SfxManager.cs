@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace Kaede.Scripts.Audios
 {
-    internal class SfxManagerDemo : MonoBehaviour
+    internal class SfxManager : MonoBehaviour
     {
         [Title("Audio Clips")]
         [field: SerializeField] private AudioClip _successClip;
@@ -15,7 +15,7 @@ namespace Kaede.Scripts.Audios
         [SerializeField] private AudioSource _audioSource;
         [SerializeField] private AudioSource _cookingSfxSource;
         
-        [SerializeField, DisplayAsString] private List<AudioClip> _audioClips = new();
+        [SerializeField, DisplayAsString] private List<AudioClip> _sfxClips = new();
         private int _currentClipIndex;
         
         public void PlaySuccessSound()
@@ -34,18 +34,18 @@ namespace Kaede.Scripts.Audios
             }
         }
         
-        public void ConfigureSequentialSfx(AnimationAndSfx[] animationsAndSfx)
+        public void ConfigureSequentialSfx(AnimationAndSfx[] animationAndSfx)
         {
-            //_audioClips.Clear();
+            _sfxClips.Clear();
             _currentClipIndex = 0;
 
-            if (animationsAndSfx != null) return;
-            
-            foreach (var entry in animationsAndSfx)
+            if (animationAndSfx == null) return;
+
+            foreach (var entry in animationAndSfx)
             {
                 if (entry?.sfxClip != null)
                 {
-                    _audioClips.Add(entry.sfxClip);
+                    _sfxClips.Add(entry.sfxClip);
                 }
             }
         }
@@ -57,16 +57,16 @@ namespace Kaede.Scripts.Audios
         
         public void PlaySequentialSfx()
         {
-            if (_cookingSfxSource == null || _audioClips.Count == 0) return;
+            if (_cookingSfxSource == null || _sfxClips.Count == 0) return;
             
-            var safeIndex = Mathf.Clamp(_currentClipIndex, 0, _audioClips.Count - 1);
-            var clip = _audioClips[safeIndex];
+            var safeIndex = Mathf.Clamp(_currentClipIndex, 0, _sfxClips.Count - 1);
+            var clip = _sfxClips[safeIndex];
             
             if (clip == null) return; 
             
             _cookingSfxSource.PlayOneShot(clip);
 
-            if (_currentClipIndex + 1 < _audioClips.Count)
+            if (_currentClipIndex + 1 < _sfxClips.Count)
             {
                 _currentClipIndex++;
             }

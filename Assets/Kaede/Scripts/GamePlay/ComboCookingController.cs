@@ -56,7 +56,7 @@ namespace Kaede.Scripts.GamePlay
         
         [SerializeField] private ComboStepAnimationCooking animationCooking;
         [SerializeField] private ComboCharacterEmotionPlayer characterEmotionPlayer;
-        [SerializeField] private SfxManagerDemo sfxManager;
+        [SerializeField] private SfxManager sfxManager;
         [SerializeField] private SendFood sendFood;
         [SerializeField] private MangaCutscenePlayer restingCutscenePlayer;
         

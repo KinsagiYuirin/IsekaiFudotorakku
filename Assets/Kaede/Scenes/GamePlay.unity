@@ -9877,7 +9877,7 @@ MonoBehaviour:
   _failureClip: {fileID: 8300000, guid: b54d094d0d1828c43ad8d4183bfa3b62, type: 3}
   _audioSource: {fileID: 2084663522}
   _cookingSfxSource: {fileID: 2084663522}
-  _audioClips: []
+  _sfxClips: []
 --- !u!82 &2084663522
 AudioSource:
   m_ObjectHideFlags: 0

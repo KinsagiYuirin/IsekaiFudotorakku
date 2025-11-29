@@ -17,7 +17,7 @@ namespace Kaede.Scripts.GamePlay
         private readonly float              _scorePerButton;
         private readonly ComboStepAnimationCooking _animationCooking;
         private readonly ComboCharacterEmotionPlayer _emotionPlayer;
-        private readonly SfxManagerDemo _sfxManager;
+        private readonly SfxManager _sfxManager;
         
         private IComboHandler _currentHandler;
         private ComboKeySetting _currentComboSetting;
@@ -25,7 +25,7 @@ namespace Kaede.Scripts.GamePlay
         private bool _checking;
 
         public ComboInputProcessor(PlayerInputHandler inputHandler, ComboCookingView view, float scorePerButton, 
-            ComboStepAnimationCooking animationCooking, ComboCharacterEmotionPlayer emotionPlayer, SfxManagerDemo sfxManager)
+            ComboStepAnimationCooking animationCooking, ComboCharacterEmotionPlayer emotionPlayer, SfxManager sfxManager)
         {
             _inputHandler    = inputHandler;
             _view            = view;

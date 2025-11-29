@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 26ddcd7fcb6ef3949b75ef3a03086fc1, type: 3}
-  m_Name: ComboTest2
+  m_Name: ComboTest2 1
   m_EditorClassIdentifier: 
   displayName: Chiken Chop
   phase: 0
@@ -22,23 +22,7 @@ MonoBehaviour:
     sfxClip: {fileID: 8300000, guid: 2619e2c8c02842748ac008c58cf49af0, type: 3}
   wrongComboAnimation: {fileID: 0}
   comboStepAnimations: []
-  stepComboAnimationAndSfx:
-  - animationClip: {fileID: 7400000, guid: 48e2df4ce362b9a4ead2e3e6f3bb17ab, type: 2}
-    sfxClip: {fileID: 8300000, guid: 2619e2c8c02842748ac008c58cf49af0, type: 3}
-  - animationClip: {fileID: 7400000, guid: abd85c6a7b6819e498518abcbde00f95, type: 2}
-    sfxClip: {fileID: 8300000, guid: 2619e2c8c02842748ac008c58cf49af0, type: 3}
-  - animationClip: {fileID: 7400000, guid: 38c03fa647fc851458e5aae3c4eb0894, type: 2}
-    sfxClip: {fileID: 8300000, guid: 2619e2c8c02842748ac008c58cf49af0, type: 3}
-  - animationClip: {fileID: 7400000, guid: 48e2df4ce362b9a4ead2e3e6f3bb17ab, type: 2}
-    sfxClip: {fileID: 8300000, guid: 2619e2c8c02842748ac008c58cf49af0, type: 3}
-  - animationClip: {fileID: 7400000, guid: abd85c6a7b6819e498518abcbde00f95, type: 2}
-    sfxClip: {fileID: 8300000, guid: 2619e2c8c02842748ac008c58cf49af0, type: 3}
-  - animationClip: {fileID: 7400000, guid: 38c03fa647fc851458e5aae3c4eb0894, type: 2}
-    sfxClip: {fileID: 8300000, guid: 2619e2c8c02842748ac008c58cf49af0, type: 3}
-  - animationClip: {fileID: 7400000, guid: 48e2df4ce362b9a4ead2e3e6f3bb17ab, type: 2}
-    sfxClip: {fileID: 8300000, guid: 2619e2c8c02842748ac008c58cf49af0, type: 3}
-  - animationClip: {fileID: 7400000, guid: abd85c6a7b6819e498518abcbde00f95, type: 2}
-    sfxClip: {fileID: 8300000, guid: 2619e2c8c02842748ac008c58cf49af0, type: 3}
+  stepComboAnimationAndSfx: []
   comboSequence:
   - key: 1
     type: 0
