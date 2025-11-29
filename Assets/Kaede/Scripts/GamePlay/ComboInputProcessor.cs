@@ -156,6 +156,7 @@ namespace Kaede.Scripts.GamePlay
 
             if (isCorrect)
             {
+                _sfxManager?.PlaySequentialSfx();
                 _animationCooking.PlayNext();
             }
             else

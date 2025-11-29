@@ -303,6 +303,7 @@ namespace Kaede.Scripts.GamePlay
             if (_model is { GameState: CookingState.Resting }) return;
             
             _inputProcessor?.ResetStateWithCombo(_model);
+            sfxManager?.ResetSequentialSfxProgress();
             
             _model.ResetCombo();
             _model.ScoreManager.AddRedoCount();
@@ -324,6 +325,7 @@ namespace Kaede.Scripts.GamePlay
                     var sprite = step?.preset != null ? step.preset.cookingSprite : null;
                     _view.SetCookingImage(sprite);
                     var animationDefinition = step?.ResolveAnimation() ?? ComboStepAnimationDefinition.None;
+                    sfxManager?.ConfigureSequentialSfx(step?.preset?.stepComboAnimationAndSfx);
                     if (animationDefinition.HasAnimation)
                     {
                         animationCooking?.SetAnimation(animationDefinition, autoPlay);

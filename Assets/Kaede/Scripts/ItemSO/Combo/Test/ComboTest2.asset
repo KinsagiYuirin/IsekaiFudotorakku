@@ -17,21 +17,28 @@ MonoBehaviour:
   cookingSprite: {fileID: 21300000, guid: a4282f1b75a795e4583eefee8d697dfd, type: 3}
   useSequentialAnimation: 1
   comboAnimation: {fileID: 0}
-  comboSfx: {fileID: 0}
   comboAnimationAndSfx:
     animationClip: {fileID: 0}
     sfxClip: {fileID: 0}
   wrongComboAnimation: {fileID: 0}
-  comboStepAnimations:
-  - {fileID: 7400000, guid: 48e2df4ce362b9a4ead2e3e6f3bb17ab, type: 2}
-  - {fileID: 7400000, guid: abd85c6a7b6819e498518abcbde00f95, type: 2}
-  - {fileID: 7400000, guid: 38c03fa647fc851458e5aae3c4eb0894, type: 2}
-  - {fileID: 7400000, guid: 48e2df4ce362b9a4ead2e3e6f3bb17ab, type: 2}
-  - {fileID: 7400000, guid: abd85c6a7b6819e498518abcbde00f95, type: 2}
-  - {fileID: 7400000, guid: 38c03fa647fc851458e5aae3c4eb0894, type: 2}
-  - {fileID: 7400000, guid: 48e2df4ce362b9a4ead2e3e6f3bb17ab, type: 2}
-  - {fileID: 7400000, guid: abd85c6a7b6819e498518abcbde00f95, type: 2}
-  stepComboAnimationAndSfx: []
+  comboStepAnimations: []
+  stepComboAnimationAndSfx:
+  - animationClip: {fileID: 7400000, guid: 48e2df4ce362b9a4ead2e3e6f3bb17ab, type: 2}
+    sfxClip: {fileID: 8300000, guid: 2619e2c8c02842748ac008c58cf49af0, type: 3}
+  - animationClip: {fileID: 7400000, guid: abd85c6a7b6819e498518abcbde00f95, type: 2}
+    sfxClip: {fileID: 8300000, guid: 2619e2c8c02842748ac008c58cf49af0, type: 3}
+  - animationClip: {fileID: 7400000, guid: 38c03fa647fc851458e5aae3c4eb0894, type: 2}
+    sfxClip: {fileID: 8300000, guid: 2619e2c8c02842748ac008c58cf49af0, type: 3}
+  - animationClip: {fileID: 7400000, guid: 48e2df4ce362b9a4ead2e3e6f3bb17ab, type: 2}
+    sfxClip: {fileID: 8300000, guid: 2619e2c8c02842748ac008c58cf49af0, type: 3}
+  - animationClip: {fileID: 7400000, guid: abd85c6a7b6819e498518abcbde00f95, type: 2}
+    sfxClip: {fileID: 8300000, guid: 2619e2c8c02842748ac008c58cf49af0, type: 3}
+  - animationClip: {fileID: 7400000, guid: 38c03fa647fc851458e5aae3c4eb0894, type: 2}
+    sfxClip: {fileID: 8300000, guid: 2619e2c8c02842748ac008c58cf49af0, type: 3}
+  - animationClip: {fileID: 7400000, guid: 48e2df4ce362b9a4ead2e3e6f3bb17ab, type: 2}
+    sfxClip: {fileID: 8300000, guid: 2619e2c8c02842748ac008c58cf49af0, type: 3}
+  - animationClip: {fileID: 7400000, guid: abd85c6a7b6819e498518abcbde00f95, type: 2}
+    sfxClip: {fileID: 8300000, guid: 2619e2c8c02842748ac008c58cf49af0, type: 3}
   comboSequence:
   - key: 1
     type: 0

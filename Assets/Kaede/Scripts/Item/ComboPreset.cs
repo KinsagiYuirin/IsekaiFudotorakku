@@ -88,10 +88,6 @@ namespace Kaede.Scripts.Item
         public AnimationClip comboAnimation;
         
         [HideIf(nameof(useSequentialAnimation))]
-        [LabelText("Sound Effect")]
-        public AudioClip comboSfx;
-        
-        [HideIf(nameof(useSequentialAnimation))]
         [LabelText("Setting Animation & SFX")]
         public AnimationAndSfx comboAnimationAndSfx;
         
@@ -116,8 +112,18 @@ namespace Kaede.Scripts.Item
         {
             if (useSequentialAnimation)
             {
-                var clips = comboStepAnimations?.Where(clip => clip != null).ToList();
-                if (clips != null && clips.Count > 0)
+                //var clips = comboStepAnimations?.Where(clip => clip != null).ToList();
+                var clips = stepComboAnimationAndSfx
+                    ?.Where(entry => entry?.animationClip != null)
+                    .Select(entry => entry.animationClip)
+                    .ToList();
+                
+                if ((clips?.Count ?? 0) == 0)
+                {
+                    clips = comboStepAnimations?.Where(animationClip => animationClip != null).ToList();
+                }
+                
+                if (clips is { Count: > 0 })
                 {
                     return ComboStepAnimationDefinition.FromSequence(clips, wrongComboAnimation);
                 }
@@ -126,10 +132,11 @@ namespace Kaede.Scripts.Item
                     return ComboStepAnimationDefinition.FromSingle(null, wrongComboAnimation);
                 }
             }
-
-            if (comboAnimation != null)
+            
+            var singleClip = comboAnimationAndSfx?.animationClip ?? comboAnimation;
+            if (singleClip != null)
             {
-                return ComboStepAnimationDefinition.FromSingle(comboAnimation, wrongComboAnimation);
+                return ComboStepAnimationDefinition.FromSingle(singleClip, wrongComboAnimation);
             }
 
             return wrongComboAnimation != null
