@@ -12,8 +12,11 @@ namespace Kaede.Scripts.Inputs.ComboHandlers.Combo
         private float _elapsed;
         private readonly float _maxAmount;
         private readonly Vector2 _requiredTimeRange;
+        private float _remainingSimultaneousWindow;
+        private bool _waitingForSecondKey;
         private bool _isHolding;
         private readonly ComboKey _secondKey;
+        private const float SimultaneousGraceSeconds = 0.1f;
         public float Progress => _maxAmount <= 0f ? 0f : Mathf.Clamp01(_elapsed / _maxAmount);
 
         public DualHoldComboHandler(float requiredTime, ComboKey secondKey)
@@ -28,24 +31,47 @@ namespace Kaede.Scripts.Inputs.ComboHandlers.Combo
         {
             var primaryDown = input.IsKeyDown(expectedKey);
             var secondaryDown = input.IsKeyDown(_secondKey);
+            
             var primaryHeld = input.IsKeyHeld(expectedKey);
             var secondaryHeld = input.IsKeyHeld(_secondKey);
+            
+            var primaryActive = primaryHeld || primaryDown;
+            var secondaryActive = secondaryHeld || secondaryDown;
 
             // ต้องกดพร้อมกัน ถ้ากดปุ่มใดปุ่มหนึ่งก่อนถือว่าผิด
-            if (!_isHolding && primaryDown != secondaryDown)
+            if (!_isHolding)
+            {
+                if (primaryActive && secondaryActive)
+                {
+                    BeginHold();
+                }
+                else if (primaryActive ^ secondaryActive)
+                {
+                    if (!_waitingForSecondKey)
+                    {
+                        _waitingForSecondKey = true;
+                        _remainingSimultaneousWindow = SimultaneousGraceSeconds;
+                    }
+                    else
+                    {
+                        _remainingSimultaneousWindow -= Time.deltaTime;
+                        if (_remainingSimultaneousWindow <= 0f || (!primaryActive && !secondaryActive))
+                        {
+                            ResetHold();
+                            return ComboInputResult.Wrong;
+                        }
+                    }
+                }
+            }
+
+            if (_waitingForSecondKey && !primaryActive && !secondaryActive)
             {
                 ResetHold();
                 return ComboInputResult.Wrong;
             }
 
-            if ((primaryHeld || primaryDown) && (secondaryHeld || secondaryDown))
+            if (_isHolding && primaryActive && secondaryActive)
             {
-                if (!_isHolding)
-                {
-                    _isHolding = true;
-                    _elapsed = 0f;
-                }
-
                 _elapsed += Time.deltaTime;
                 if (_elapsed > _requiredTimeRange.y)
                 {
@@ -83,6 +109,14 @@ namespace Kaede.Scripts.Inputs.ComboHandlers.Combo
         private void ResetHold()
         {
             _isHolding = false;
+            _waitingForSecondKey = false;
+            _elapsed = 0f;
+        }
+
+        private void BeginHold()
+        {
+            _isHolding = true;
+            _waitingForSecondKey = false;
             _elapsed = 0f;
         }
     }
