@@ -462,7 +462,25 @@ namespace MadDuck.Scripts.Inputs
 
             return false;
         }
-        
+
+        public bool AnyOtherKeyDown(ComboKey expectedKey, ComboKey secondaryExpectedKey)
+        {
+            foreach (ComboKey key in Enum.GetValues(typeof(ComboKey)))
+            {
+                if (key == ComboKey.None || key == expectedKey || key == secondaryExpectedKey)
+                {
+                    continue;
+                }
+
+                if (IsKeyDown(key))
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
         #endregion
     }
 }

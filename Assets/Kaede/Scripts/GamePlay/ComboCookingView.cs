@@ -171,6 +171,14 @@ namespace Kaede.Scripts.GamePlay
                             SetupKeyIcon(holdIcon, comboSetting);
                         }
                         break;
+                    case {type: ComboType.DualKeyHold}:
+                        if (holdIconPrefab != null)
+                        {
+                            var dualHoldIcon = Instantiate(holdIconPrefab, ComboPanel);
+                            _comboSettings.Add(comboSetting);
+                            SetupKeyIcon(dualHoldIcon, comboSetting);
+                        }
+                        break;
                     case {type:ComboType.Stack or ComboType.StackTimer}:
                         if (stackIconPrefab != null)
                         {
@@ -186,15 +194,45 @@ namespace Kaede.Scripts.GamePlay
         private void SetupKeyIcon(GameObject icon, ComboKeySetting comboSetting)
         {
             var visual = icon.GetComponent<IComboButtonVisual>() ?? icon.AddComponent<DefaultComboButtonVisual>();
-            
+
             var key = comboSetting?.key ?? ComboKey.None;
-            var displayKey = GetDisplayKey(key);
+            var displayKey = comboSetting?.type == ComboType.DualKeyHold
+                ? GetDualDisplayKey(comboSetting)
+                : GetDisplayKey(key);
 
             visual.Initialize(comboSetting, displayKey, useStringDisplayKey);
             visual.SetState(KeyState.Ideal, null, null);
             visual.SetColor(Color.white);
 
             _buttonVisuals.Add(visual);
+        }
+
+        private string GetDualDisplayKey(ComboKeySetting comboSetting)
+        {
+            if (comboSetting == null)
+            {
+                return string.Empty;
+            }
+
+            var firstKey = GetDisplayKey(comboSetting.key);
+            var secondKey = GetDisplayKey(comboSetting.secondKey);
+
+            if (string.IsNullOrEmpty(firstKey) && string.IsNullOrEmpty(secondKey))
+            {
+                return string.Empty;
+            }
+
+            if (string.IsNullOrEmpty(firstKey))
+            {
+                return secondKey;
+            }
+
+            if (string.IsNullOrEmpty(secondKey))
+            {
+                return firstKey;
+            }
+
+            return $"{firstKey}+{secondKey}";
         }
         
         private string GetDisplayKey(ComboKey key)
