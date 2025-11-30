@@ -85,7 +85,12 @@ namespace Kaede.Scripts.Animation
 
         public void Initialize(ComboKeySetting comboSetting, string displayKey, bool isStringKey)
         {
-            holdDuration = comboSetting is { type: ComboType.Hold } ? comboSetting.holdTime : 1f;
+            holdDuration = comboSetting switch
+            {
+                { type: ComboType.Hold } => comboSetting.holdTime,
+                { type: ComboType.DualKeyHold } => comboSetting.dualHoldTime,
+                _ => 1f
+            };
             _currentKey = comboSetting?.key ?? ComboKey.None;
             ApplySprite(KeyState.Ideal);
             

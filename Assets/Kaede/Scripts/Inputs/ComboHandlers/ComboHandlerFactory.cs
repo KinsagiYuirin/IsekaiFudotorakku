@@ -13,6 +13,7 @@ namespace Kaede.Scripts.Inputs.ComboHandlers
                 ComboType.StackTimer => new StackTimerComboHandler(setting.buttonDuration, setting.pressCount),
                 ComboType.Hold   => new HoldComboHandler(setting.holdTime),
                 ComboType.Stack  => new StackComboHandler(setting.stackCount),
+                ComboType.DualKeyHold => new DualHoldComboHandler(setting.dualHoldTime, setting.secondKey),
                 _                => new SingleComboHandler(),
             };
         }
