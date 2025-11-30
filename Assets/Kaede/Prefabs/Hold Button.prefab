@@ -268,9 +268,9 @@ MonoBehaviour:
   fillImage: {fileID: 8125303326650330900}
   updateSpeed: 0.5
   currentIndexPercent: 1
-  baseWidth: 300
+  baseWidth: 500
   pixelsPerSecond: 50
-  sizeRange: {x: 60, y: 600}
+  sizeRange: {x: 500, y: 1000}
   layoutElement: {fileID: 251972248414950566}
   fallbackSprite: {fileID: 5435592366743510017, guid: 00970c7cc4838fb47968a656b413bc71, type: 3}
   spriteEntries:

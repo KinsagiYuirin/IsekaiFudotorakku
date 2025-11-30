@@ -25,7 +25,8 @@ namespace Kaede.Scripts.Item
         Single,
         StackTimer,
         Hold,
-        Stack
+        Stack,
+        DualKeyHold
     }
 
     [Serializable]
@@ -66,6 +67,11 @@ namespace Kaede.Scripts.Item
     
         [ShowIf("type", ComboType.Stack)] 
         public int stackCount = 3;
+        
+        [ShowIf("type", ComboType.DualKeyHold)] 
+        public ComboKey secondKey = ComboKey.None;
+        [ShowIf("type", ComboType.DualKeyHold)] 
+        public float dualHoldTime = 1.0f;
     }
     
     [CreateAssetMenu(fileName = "ComboPreset", menuName = "Kaede/ComboPreset")]

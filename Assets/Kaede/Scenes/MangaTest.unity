@@ -155,6 +155,7 @@ MonoBehaviour:
       effect:
       - {fileID: 11400000, guid: 061dc283468439b40acc80715281663b, type: 2}
       - {fileID: 11400000, guid: bf134d81678572241b48b51fddd2095e, type: 2}
+      - {fileID: 11400000, guid: df2df3859b9ab1f4c8894136da697b6c, type: 2}
     - image: {fileID: 471357812}
       effect:
       - {fileID: 11400000, guid: c1f5e9845d0c54945ad94d6fb944d570, type: 2}
@@ -163,7 +164,7 @@ MonoBehaviour:
       - {fileID: 11400000, guid: cbdc9d204f9dda248a1b96ccbb4f3270, type: 2}
     playBothPagesAtOnce: 1
     hideAfterFinish: 0
-    autoAdvance: 1
+    autoAdvance: 0
     autoAdvanceDelay: 1.5
     sound: {fileID: 0}
   - illustrations:
@@ -171,6 +172,7 @@ MonoBehaviour:
       effect:
       - {fileID: 11400000, guid: 87a564dd258a159439c5a6a94196f04f, type: 2}
       - {fileID: 11400000, guid: d414d029c0bbd9349b14b508a0c8231e, type: 2}
+      - {fileID: 11400000, guid: df2df3859b9ab1f4c8894136da697b6c, type: 2}
     - image: {fileID: 471357812}
       effect:
       - {fileID: 11400000, guid: 004a5a3855d5b1f4aa10d364793ffac2, type: 2}
