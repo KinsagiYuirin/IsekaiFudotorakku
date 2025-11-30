@@ -86,15 +86,11 @@ namespace Kaede.Scripts.Inputs.ComboHandlers.Combo
             if (_isHolding && (input.IsKeyUp(expectedKey) || input.IsKeyUp(_secondKey)))
             {
                 var duration = _elapsed;
-                var bothReleased = input.IsKeyUp(expectedKey) && input.IsKeyUp(_secondKey);
+                var withinWindow = duration >= _requiredTimeRange.x && duration <= _requiredTimeRange.y;
+                
                 ResetHold();
 
-                if (bothReleased && duration >= _requiredTimeRange.x && duration <= _requiredTimeRange.y)
-                {
-                    return ComboInputResult.Correct;
-                }
-
-                return ComboInputResult.Wrong;
+                return withinWindow ? ComboInputResult.Correct : ComboInputResult.Wrong;
             }
 
             if (input.AnyOtherKeyDown(expectedKey, _secondKey))
