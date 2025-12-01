@@ -30,6 +30,7 @@ namespace Kaede.Scripts.GamePlay
         [Title("UI References")]
         [field: SerializeField] public TMP_Text TimerText { get; private set; }
         [field: SerializeField] public Transform ComboPanel { get; private set; }
+        [field: SerializeField] public Transform SubComboPanel { get; private set; }
         [field: SerializeField] public Sprite CookingImage { get; private set; }
         [field: SerializeField] public GameObject CookingImageObject { get; private set; }
         [SerializeField] private GameObject cookingLightEffect;
