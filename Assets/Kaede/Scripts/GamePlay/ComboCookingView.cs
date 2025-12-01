@@ -22,6 +22,35 @@ namespace Kaede.Scripts.GamePlay
     
     public class ComboCookingView : MonoSingleton<ComboCookingView>
     {
+        private sealed class DualComboButtonVisualProxy : IComboButtonVisual
+        {
+            private readonly IComboButtonVisual _primary;
+            private readonly IComboButtonVisual _secondary;
+
+            public DualComboButtonVisualProxy(IComboButtonVisual primary, IComboButtonVisual secondary)
+            {
+                _primary = primary;
+                _secondary = secondary;
+            }
+
+            public void Initialize(ComboKeySetting comboSetting, string displayKey, bool isStringKey)
+            {
+                _primary?.Initialize(comboSetting, displayKey, isStringKey);
+            }
+
+            public void SetState(KeyState state, int? index, float? indexFloat)
+            {
+                _primary?.SetState(state, index, indexFloat);
+                _secondary?.SetState(state, index, indexFloat);
+            }
+
+            public void SetColor(Color color)
+            {
+                _primary?.SetColor(color);
+                _secondary?.SetColor(color);
+            }
+        }
+        
         [Title("Color Settings")]
         [SerializeField] private Color correctKeyColor = Color.green;
         [SerializeField] private Color wrongKeyColor = Color.red;
@@ -46,6 +75,7 @@ namespace Kaede.Scripts.GamePlay
 
         private readonly List<ComboKeySetting> _comboSettings = new();
         private readonly List<IComboButtonVisual> _buttonVisuals = new();
+        private readonly Dictionary<int, IComboButtonVisual> _subButtonVisuals = new();
         public List<IComboButtonVisual> ButtonVisuals => _buttonVisuals ;
         
         #region Unity Lifecycle
@@ -138,14 +168,24 @@ namespace Kaede.Scripts.GamePlay
 
         private void ClearComboPanel()
         {
-            if (ComboPanel == null) return;
-            
-            foreach (Transform child in ComboPanel)
+            if (ComboPanel != null)
             {
-                Destroy(child.gameObject);
+                foreach (Transform child in ComboPanel)
+                {
+                    Destroy(child.gameObject);
+                }
+            }
+
+            if (SubComboPanel != null)
+            {
+                foreach (Transform child in SubComboPanel)
+                {
+                    Destroy(child.gameObject);
+                }
             }
             _comboSettings.Clear();
             _buttonVisuals.Clear();
+            _subButtonVisuals.Clear();
         }
 
         private void CreateKeyIcons(List<ComboKeySetting> comboSettings)
@@ -178,6 +218,7 @@ namespace Kaede.Scripts.GamePlay
                             var dualHoldIcon = Instantiate(holdIconPrefab, ComboPanel);
                             _comboSettings.Add(comboSetting);
                             SetupKeyIcon(dualHoldIcon, comboSetting);
+                            CreateSubDualButton(comboSetting, _buttonVisuals.Count - 1);
                         }
                         break;
                     case {type:ComboType.Stack or ComboType.StackTimer}:
@@ -192,22 +233,54 @@ namespace Kaede.Scripts.GamePlay
             }
         }
         
-        private void SetupKeyIcon(GameObject icon, ComboKeySetting comboSetting)
+        private void SetupKeyIcon(GameObject icon, ComboKeySetting comboSetting, string overrideDisplayKey = null, bool registerVisual = true)
         {
             var visual = icon.GetComponent<IComboButtonVisual>() ?? icon.AddComponent<DefaultComboButtonVisual>();
 
             var key = comboSetting?.key ?? ComboKey.None;
-            var displayKey = comboSetting?.type == ComboType.DualKeyHold
+            var displayKey = overrideDisplayKey ?? (comboSetting?.type == ComboType.DualKeyHold
                 ? GetDualDisplayKey(comboSetting)
-                : GetDisplayKey(key);
+                : GetDisplayKey(key));
 
             visual.Initialize(comboSetting, displayKey, useStringDisplayKey);
             visual.SetState(KeyState.Ideal, null, null);
             visual.SetColor(Color.white);
 
-            _buttonVisuals.Add(visual);
+            if (registerVisual)
+            { _buttonVisuals.Add(visual); }
         }
 
+        private void CreateSubDualButton(ComboKeySetting comboSetting, int mainButtonIndex)
+        {
+            if (SubComboPanel == null) return;
+
+            if (comboSetting.secondKey == ComboKey.None) return;
+
+            if (holdIconPrefab == null) return;
+
+            var subSetting = new ComboKeySetting
+            {
+                key = comboSetting.secondKey,
+                type = ComboType.DualKeyHold,
+                dualHoldTime = comboSetting.dualHoldTime
+            };
+
+            var subIcon = Instantiate(holdIconPrefab, SubComboPanel);
+            var subDisplayKey = GetDisplayKey(subSetting.key);
+            SetupKeyIcon(subIcon, subSetting, subDisplayKey, false);
+
+            var visual = subIcon.GetComponent<IComboButtonVisual>();
+            if (visual != null)
+            {
+                _subButtonVisuals[mainButtonIndex] = visual;
+                if (mainButtonIndex < _buttonVisuals.Count && _buttonVisuals[mainButtonIndex] != null)
+                {
+                    _buttonVisuals[mainButtonIndex] =
+                        new DualComboButtonVisualProxy(_buttonVisuals[mainButtonIndex], visual);
+                }
+            }
+        }
+        
         private string GetDualDisplayKey(ComboKeySetting comboSetting)
         {
             if (comboSetting == null)
