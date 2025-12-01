@@ -26,6 +26,7 @@ namespace Kaede.Scripts.Item
         StackTimer,
         Hold,
         Stack,
+        DualKey,
         DualKeyHold
     }
 
@@ -68,10 +69,15 @@ namespace Kaede.Scripts.Item
         [ShowIf("type", ComboType.Stack)] 
         public int stackCount = 3;
         
-        [ShowIf("type", ComboType.DualKeyHold)] 
+        [ShowIf("IsDualHoldOrDualKey")]
         public ComboKey secondKey = ComboKey.None;
         [ShowIf("type", ComboType.DualKeyHold)] 
         public float dualHoldTime = 1.0f;
+        
+        private bool IsDualHoldOrDualKey()
+        {
+            return type == ComboType.DualKeyHold || type == ComboType.DualKey;
+        }
     }
     
     [CreateAssetMenu(fileName = "ComboPreset", menuName = "Kaede/ComboPreset")]
