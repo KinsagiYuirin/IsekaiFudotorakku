@@ -32,6 +32,12 @@ namespace Kaede.Scripts.Inputs.ComboHandlers.Combo
             var primaryActive = primaryHeld || primaryDown;
             var secondaryActive = secondaryHeld || secondaryDown;
 
+            if (input.AnyOtherKeyDown(expectedKey, _secondKey))
+            {
+                ResetState();
+                return ComboInputResult.Wrong;
+            }
+            
             // ต้องกดพร้อมกัน ถ้ากดปุ่มใดปุ่มหนึ่งก่อนถือว่าผิด
             if (primaryDown && secondaryDown)
             {
@@ -60,12 +66,6 @@ namespace Kaede.Scripts.Inputs.ComboHandlers.Combo
             {
                 _waitingForSecondKey = true;
                 _remainingSimultaneousWindow = SimultaneousGraceSeconds;
-            }
-
-            if (input.AnyOtherKeyDown(expectedKey, _secondKey))
-            {
-                ResetState();
-                return ComboInputResult.Wrong;
             }
 
             return ComboInputResult.None;

@@ -218,7 +218,16 @@ namespace Kaede.Scripts.GamePlay
                             var dualHoldIcon = Instantiate(holdIconPrefab, ComboPanel);
                             _comboSettings.Add(comboSetting);
                             SetupKeyIcon(dualHoldIcon, comboSetting);
-                            CreateSubDualButton(comboSetting, _buttonVisuals.Count - 1);
+                            CreateSubDualButton(comboSetting, _buttonVisuals.Count - 1, holdIconPrefab);
+                        }
+                        break;
+                    case {type: ComboType.DualKey}:
+                        if (normalIconPrefab != null)
+                        {
+                            var dualKeyIcon = Instantiate(normalIconPrefab, ComboPanel);
+                            _comboSettings.Add(comboSetting);
+                            SetupKeyIcon(dualKeyIcon, comboSetting);
+                            CreateSubDualButton(comboSetting, _buttonVisuals.Count - 1, normalIconPrefab);
                         }
                         break;
                     case {type:ComboType.Stack or ComboType.StackTimer}:
@@ -238,7 +247,7 @@ namespace Kaede.Scripts.GamePlay
             var visual = icon.GetComponent<IComboButtonVisual>() ?? icon.AddComponent<DefaultComboButtonVisual>();
 
             var key = comboSetting?.key ?? ComboKey.None;
-            var displayKey = overrideDisplayKey ?? (comboSetting?.type == ComboType.DualKeyHold
+            var displayKey = overrideDisplayKey ?? (comboSetting?.type is ComboType.DualKeyHold or ComboType.DualKey
                 ? GetDualDisplayKey(comboSetting)
                 : GetDisplayKey(key));
 
@@ -250,22 +259,22 @@ namespace Kaede.Scripts.GamePlay
             { _buttonVisuals.Add(visual); }
         }
 
-        private void CreateSubDualButton(ComboKeySetting comboSetting, int mainButtonIndex)
+        private void CreateSubDualButton(ComboKeySetting comboSetting, int mainButtonIndex, GameObject iconPrefab)
         {
             if (SubComboPanel == null) return;
 
             if (comboSetting.secondKey == ComboKey.None) return;
 
-            if (holdIconPrefab == null) return;
+            if (iconPrefab  == null) return;
 
             var subSetting = new ComboKeySetting
             {
                 key = comboSetting.secondKey,
-                type = ComboType.DualKeyHold,
+                type = comboSetting.type,
                 dualHoldTime = comboSetting.dualHoldTime
             };
 
-            var subIcon = Instantiate(holdIconPrefab, SubComboPanel);
+            var subIcon = Instantiate(iconPrefab, SubComboPanel);
             var subDisplayKey = GetDisplayKey(subSetting.key);
             SetupKeyIcon(subIcon, subSetting, subDisplayKey, false);
 
