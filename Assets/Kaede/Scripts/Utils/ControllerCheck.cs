@@ -1,4 +1,6 @@
 using UnityEngine;
+using UnityEngine.EventSystems;
+using UnityEngine.InputSystem;
 
 public class ControllerCheck : MonoBehaviour
 {
@@ -8,9 +10,17 @@ public class ControllerCheck : MonoBehaviour
         
     }
 
-    // Update is called once per frame
-    void Update()
+    private void OnAnyButton(InputControl control)
     {
-        
+        if (control.device is Gamepad)
+        {
+            Debug.Log("Controller is active");
+            SetInputMode(StandaloneInputModule.InputMode.Gamepad);
+        }
+        else if (control.device is Keyboard || control.device is Mouse)
+        {
+            Debug.Log("Keyboard/Mouse is active");
+            SetInputMode(StandaloneInputModule.InputMode.KeyboardMouse);
+        }
     }
 }
