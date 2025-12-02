@@ -8,7 +8,7 @@ namespace Kaede.Scripts.UI
 {
     public class PauseUI : MonoBehaviour
     {
-        [Header("UI References")]
+        [field: Header("UI References")]
         [field: SerializeField] public Button ResumeButton { get; private set; }
         [SerializeField] private Button restartButton;
         [SerializeField] private Button mainMenuButton;

@@ -205,6 +205,7 @@ namespace Kaede.Scripts.Managers
             {
                 ResumeGame();
                 SetPauseMenuVisibility(false);
+                SetInputMode(controllerCheck.CurrentInputMode, null);
             }
             else
             {
@@ -275,27 +276,44 @@ namespace Kaede.Scripts.Managers
                 return;
 
             resultUI.gameObject.SetActive(isVisible);
+            SetInputMode(controllerCheck.CurrentInputMode, resultUI.RestartButton.gameObject);
         }
 
         #region Controller Check
 
         private void SetInputMode(InputMode newMode, GameObject button = null)
         {
-            if (_currentInputMode == newMode) return;
-            _currentInputMode = newMode;
+            var hasEventSystem = EventSystem.current != null;
             
             if (EventSystem.current == null) return;
 
-            if (_currentInputMode == InputMode.Gamepad)
+            if (_currentInputMode != newMode)
             {
-                if (EventSystem.current.currentSelectedGameObject == null && button != null)
-                { controllerCheck.DelaySelect(button).Forget(); }
-                // Cursor.visible = false;
+                _currentInputMode = newMode;
+
+                if (!hasEventSystem) return;
+
+                if (_currentInputMode == InputMode.Gamepad)
+                {
+                    if (EventSystem.current.currentSelectedGameObject == null && button != null)
+                    {
+                        controllerCheck.DelaySelect(button).Forget();
+                    }
+                    // Cursor.visible = false;
+                }
+                else
+                {
+                    EventSystem.current.SetSelectedGameObject(null);
+                    // Cursor.visible = true;
+                }
+
+                return;
             }
-            else
+            if (!hasEventSystem) return;
+
+            if (_currentInputMode == InputMode.Gamepad && EventSystem.current.currentSelectedGameObject == null && button != null)
             {
-                EventSystem.current.SetSelectedGameObject(null);
-                // Cursor.visible = true;
+                controllerCheck.DelaySelect(button).Forget();
             }
         }
 

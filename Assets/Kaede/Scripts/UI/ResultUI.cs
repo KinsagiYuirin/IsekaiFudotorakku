@@ -11,8 +11,8 @@ namespace Kaede.Scripts.UI
 {
     public class ResultUI : MonoBehaviour
     {
-        [Header("UI References")]
-        [SerializeField] private Button restartButton;
+        [field: Header("UI References")]
+        [field: SerializeField] public Button RestartButton {get ; private set;}
         [SerializeField] private Button mainMenuButton;
         [SerializeField] private Button quitButton;
         
@@ -28,7 +28,7 @@ namespace Kaede.Scripts.UI
         private void SetupButtons()
         {
             //if (restartButton != null)
-                restartButton.onClick.AddListener(RestartGame);
+                RestartButton.onClick.AddListener(RestartGame);
                 
             //if (mainMenuButton != null)
                 mainMenuButton.onClick.AddListener(GoToMainMenu);
@@ -44,8 +44,8 @@ namespace Kaede.Scripts.UI
 
         private void OnDestroy()
         {
-            if (restartButton != null)
-                restartButton.onClick.RemoveAllListeners();
+            if (RestartButton != null)
+                RestartButton.onClick.RemoveAllListeners();
                 
             if (mainMenuButton != null)
                 mainMenuButton.onClick.RemoveAllListeners();
