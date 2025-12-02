@@ -1,3 +1,4 @@
+using Cysharp.Threading.Tasks;
 using Kaede.Scripts.Managers;
 using MadDuck.Scripts.Managers;
 using MessagePipe;
@@ -5,6 +6,8 @@ using Sherbert.Framework.Generic;
 using Sirenix.OdinInspector;
 using UnityCommunity.UnitySingleton;
 using UnityEngine;
+using UnityEngine.EventSystems;
+using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
@@ -56,18 +59,22 @@ namespace Kaede.Scripts.UI
         {
             QualitySettings.vSyncCount = 0;
             Application.targetFrameRate = (int)Screen.currentResolution.refreshRateRatio.value;
+            
+            DelaySelect(startButton.gameObject).Forget();
         }
 
         private void OnEnable()
         {
             LoadSceneManager.OnFinishFadeIn += OnFinishLoad;
             LoadSceneManager.OnStartFadeOut += OnStartFadeOut;
+            InputSystem.onAnyButtonPress += OnAnyButton;
         }
 
         private void OnDisable()
         {
             LoadSceneManager.OnFinishFadeIn -= OnFinishLoad;
             LoadSceneManager.OnStartFadeOut -= OnStartFadeOut;
+            InputSystem.onAnyButtonPress -= OnAnyButton;
         }
 
         private void OnDestroy()
@@ -186,6 +193,8 @@ namespace Kaede.Scripts.UI
 
         #endregion
 
+        #region Public Methods
+        
         public void StartGame()
         {
             if (_inputDisabled) return;
@@ -197,12 +206,14 @@ namespace Kaede.Scripts.UI
         {
             if (_inputDisabled) return;
             ShowPanel(MainMenuPanelType.Tutorial);
+            DelaySelect(closeTutorialButton.gameObject).Forget();
         }
         
         public void CloseTutorial()
         {
             if (_inputDisabled) return;
             ShowPanel(MainMenuPanelType.MainMenu);
+            DelaySelect(tutorialButton.gameObject).Forget();
         }
         
         public void ShowSettings()
@@ -234,5 +245,30 @@ namespace Kaede.Scripts.UI
                 Application.Quit();
             #endif
         }
+        
+        #endregion
+
+        #region Private Methods
+
+        private async UniTask DelaySelect(GameObject toSelect = null)
+        {
+            if (Gamepad.current == null && !Gamepad.current.wasUpdatedThisFrame) return;
+            await UniTask.Yield();
+            EventSystem.current.SetSelectedGameObject(toSelect);
+        }
+
+        private void OnAnyButton(InputControl control)
+        {
+            if (control.device is Gamepad)
+            {
+                Debug.Log("Controller is active");
+            }
+            else if (control.device is Keyboard || control.device is Mouse)
+            {
+                Debug.Log("Keyboard/Mouse is active");
+            }
+        }
+        
+        #endregion
     }
 }
