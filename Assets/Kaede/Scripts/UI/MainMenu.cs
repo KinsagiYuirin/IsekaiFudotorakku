@@ -10,6 +10,8 @@ using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using System;
+using UnityEngine.InputSystem.Utilities;
 
 namespace Kaede.Scripts.UI
 {
@@ -32,6 +34,16 @@ namespace Kaede.Scripts.UI
     
     public class MainMenu : MonoSingleton<MainMenu>
     {
+        private IDisposable _anyButtonPressListener; 
+        
+        private enum InputMode
+        {
+            KeyboardMouse,
+            Gamepad
+        }
+        
+        private InputMode _currentInputMode = InputMode.KeyboardMouse;        
+        
         [Title("Panel GameObjects")]
         [SerializeField] private SerializableDictionary<MainMenuPanelType, GameObject> panelGameObjects = new();
         
@@ -60,21 +72,24 @@ namespace Kaede.Scripts.UI
             QualitySettings.vSyncCount = 0;
             Application.targetFrameRate = (int)Screen.currentResolution.refreshRateRatio.value;
             
-            DelaySelect(startButton.gameObject).Forget();
+            if (_currentInputMode == InputMode.Gamepad && startButton != null)
+            {
+                DelaySelect(startButton.gameObject).Forget();
+            }
         }
 
         private void OnEnable()
         {
             LoadSceneManager.OnFinishFadeIn += OnFinishLoad;
             LoadSceneManager.OnStartFadeOut += OnStartFadeOut;
-            InputSystem.onAnyButtonPress += OnAnyButton;
+            _anyButtonPressListener = InputSystem.onAnyButtonPress.Call(OnAnyButton);
         }
 
         private void OnDisable()
         {
             LoadSceneManager.OnFinishFadeIn -= OnFinishLoad;
             LoadSceneManager.OnStartFadeOut -= OnStartFadeOut;
-            InputSystem.onAnyButtonPress -= OnAnyButton;
+            _anyButtonPressListener?.Dispose();
         }
 
         private void OnDestroy()
@@ -201,19 +216,27 @@ namespace Kaede.Scripts.UI
             var nextScene = SceneType.Gameplay;
             LoadSceneManager.Instance.LoadScene(nextScene, LoadSceneMode.Single, false);
         }
-        
+
         public void OpenTutorial()
         {
             if (_inputDisabled) return;
             ShowPanel(MainMenuPanelType.Tutorial);
-            DelaySelect(closeTutorialButton.gameObject).Forget();
+
+            if (_currentInputMode == InputMode.Gamepad && closeTutorialButton != null)
+            {
+                DelaySelect(closeTutorialButton.gameObject).Forget();
+            }
         }
-        
+
         public void CloseTutorial()
         {
             if (_inputDisabled) return;
             ShowPanel(MainMenuPanelType.MainMenu);
-            DelaySelect(tutorialButton.gameObject).Forget();
+
+            if (_currentInputMode == InputMode.Gamepad && tutorialButton != null)
+            {
+                DelaySelect(tutorialButton.gameObject).Forget();
+            }
         }
         
         public void ShowSettings()
@@ -252,20 +275,53 @@ namespace Kaede.Scripts.UI
 
         private async UniTask DelaySelect(GameObject toSelect = null)
         {
-            if (Gamepad.current == null && !Gamepad.current.wasUpdatedThisFrame) return;
+            if (EventSystem.current == null || toSelect == null) return;
             await UniTask.Yield();
             EventSystem.current.SetSelectedGameObject(toSelect);
         }
 
+        private void SetInputMode(InputMode newMode)
+        {
+            if (_currentInputMode == newMode)
+                return;
+
+            _currentInputMode = newMode;
+
+            if (EventSystem.current == null)
+                return;
+
+            if (_currentInputMode == InputMode.Gamepad)
+            {
+                // เข้าสู่โหมด controller: ให้มีปุ่มถูก select เสมอ
+                if (EventSystem.current.currentSelectedGameObject == null && startButton != null)
+                {
+                    DelaySelect(startButton.gameObject).Forget();
+                }
+
+                // ถ้าอยากซ่อนเมาส์เวลาถือจอยก็ทำได้
+                // Cursor.visible = false;
+            }
+            else
+            {
+                // กลับสู่โหมดปกติ: เคลียร์ selection เพื่อให้ hover/click ด้วยเมาส์สบายๆ
+                EventSystem.current.SetSelectedGameObject(null);
+
+                // Cursor.visible = true;
+            }
+        }
+
+        
         private void OnAnyButton(InputControl control)
         {
             if (control.device is Gamepad)
             {
                 Debug.Log("Controller is active");
+                SetInputMode(InputMode.Gamepad);
             }
             else if (control.device is Keyboard || control.device is Mouse)
             {
                 Debug.Log("Keyboard/Mouse is active");
+                SetInputMode(InputMode.KeyboardMouse);
             }
         }
         
