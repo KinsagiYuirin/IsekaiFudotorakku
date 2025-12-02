@@ -1,13 +1,16 @@
 using MadDuck.Scripts.Inputs;
 using R3;
 using System;
+using Cysharp.Threading.Tasks;
 using Kaede.Scripts.GamePlay;
 using Kaede.Scripts.UI;
 using Kaede.Scripts.UI.TodayMenu;
+using Kaede.Scripts.Utils;
 using Sirenix.OdinInspector;
 using TMPro;
 using UnityCommunity.UnitySingleton;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
@@ -21,17 +24,14 @@ namespace Kaede.Scripts.Managers
         [SerializeField] private float readyTime = 3f;
         public float ReadyTime => _isReadyCountdownActive ? _readyTimer : 0f;
         [SerializeField] private TMP_Text readyText;
-        
-        //[Title("Tutorial")]
-        //[SerializeField] private TutorialDemo tutorialDemo;
-        //public bool tutorialCompleted = false;
+        [SerializeField] private ControllerCheck controllerCheck;
         
         [Title("Today Menu")]
         [SerializeField] private TodayManuUI todayManuUI;
         
         [Title("Pause Settings")]
         [SerializeField] private Button pauseButton;
-        [SerializeField] private GameObject pauseMenuUI;
+        [SerializeField] private PauseUI pauseMenuUI;
         [SerializeField] private bool isPaused = false;
         
         [Title("ResultUI")]
@@ -42,6 +42,7 @@ namespace Kaede.Scripts.Managers
         private IDisposable _pauseButtonSubscription;
         private float _readyTimer;
         private bool  _isReadyCountdownActive;
+        private InputMode _currentInputMode = InputMode.KeyboardMouse;
         
         public bool IsPaused
         {
@@ -69,6 +70,29 @@ namespace Kaede.Scripts.Managers
             SetPauseMenuVisibility(false);
             SetInteractable(true);
             PauseGame();
+        }
+        
+        public void Update()
+        {
+            if (!_isReadyCountdownActive) return;
+            CountdownReady();
+        }
+        
+        private void OnEnable()
+        {
+            if (controllerCheck != null)
+            {
+                controllerCheck.InputModeChanged += OnInputModeChanged;
+            }
+        }
+
+        private void OnDisable()
+        {
+            _pauseButtonSubscription?.Dispose();
+            if (controllerCheck != null)
+            {
+                controllerCheck.InputModeChanged -= OnInputModeChanged;
+            }
         }
 
         private void OnDestroy()
@@ -104,20 +128,6 @@ namespace Kaede.Scripts.Managers
         {
             _interactable = interactable;
             SetButtonsInteractable(_interactable);
-        }
-        
-        /// <summary>
-        /// Have changed a bit, called in Update of UIManager
-        /// </summary>
-        public void Update()
-        {
-            if (!_isReadyCountdownActive) return;
-            CountdownReady();
-        }
-
-        private void OnDisable()
-        {
-            UnsubscribeFromInput();
         }
         
         private void CountdownReady()
@@ -187,11 +197,6 @@ namespace Kaede.Scripts.Managers
                 }
             });
         }
-        
-        private void UnsubscribeFromInput()
-        {
-            _pauseButtonSubscription?.Dispose();
-        }
 
         private void TogglePause()
         {
@@ -205,6 +210,7 @@ namespace Kaede.Scripts.Managers
             {
                 PauseGame();
                 SetPauseMenuVisibility(true);
+                SetInputMode(controllerCheck.CurrentInputMode, pauseMenuUI.ResumeButton.gameObject);
             }
         }
 
@@ -260,7 +266,7 @@ namespace Kaede.Scripts.Managers
             if (pauseMenuUI == null)
                 return;
 
-            pauseMenuUI.SetActive(isVisible);
+            pauseMenuUI.gameObject.SetActive(isVisible);
         }
 
         private void SetResultUIVisibility(bool isVisible)
@@ -270,5 +276,35 @@ namespace Kaede.Scripts.Managers
 
             resultUI.gameObject.SetActive(isVisible);
         }
+
+        #region Controller Check
+
+        private void SetInputMode(InputMode newMode, GameObject button = null)
+        {
+            if (_currentInputMode == newMode) return;
+            _currentInputMode = newMode;
+            
+            if (EventSystem.current == null) return;
+
+            if (_currentInputMode == InputMode.Gamepad)
+            {
+                if (EventSystem.current.currentSelectedGameObject == null && button != null)
+                { controllerCheck.DelaySelect(button).Forget(); }
+                // Cursor.visible = false;
+            }
+            else
+            {
+                EventSystem.current.SetSelectedGameObject(null);
+                // Cursor.visible = true;
+            }
+        }
+
+        private void OnInputModeChanged(InputMode newMode)
+        {
+            SetInputMode(newMode);
+        }
+        
+        #endregion
+
     }
 }

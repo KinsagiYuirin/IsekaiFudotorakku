@@ -66,11 +66,6 @@ namespace Kaede.Scripts.UI
         {
             QualitySettings.vSyncCount = 0;
             Application.targetFrameRate = (int)Screen.currentResolution.refreshRateRatio.value;
-            
-            if (_currentInputMode == InputMode.Gamepad && startButton != null)
-            {
-                DelaySelect(startButton.gameObject).Forget();
-            }
         }
 
         private void OnEnable()
@@ -226,7 +221,7 @@ namespace Kaede.Scripts.UI
 
             if (_currentInputMode == InputMode.Gamepad && closeTutorialButton != null)
             {
-                DelaySelect(closeTutorialButton.gameObject).Forget();
+                controllerCheck.DelaySelect(closeTutorialButton.gameObject).Forget();
             }
         }
 
@@ -237,7 +232,7 @@ namespace Kaede.Scripts.UI
 
             if (_currentInputMode == InputMode.Gamepad && tutorialButton != null)
             {
-                DelaySelect(tutorialButton.gameObject).Forget();
+                controllerCheck.DelaySelect(tutorialButton.gameObject).Forget();
             }
         }
         
@@ -274,40 +269,24 @@ namespace Kaede.Scripts.UI
         #endregion
 
         #region Private Methods
-
-        private async UniTask DelaySelect(GameObject toSelect = null)
-        {
-            if (EventSystem.current == null || toSelect == null) return;
-            await UniTask.Yield();
-            EventSystem.current.SetSelectedGameObject(toSelect);
-        }
-
+        
         private void SetInputMode(InputMode newMode)
         {
-            if (_currentInputMode == newMode)
-                return;
+            if (_currentInputMode == newMode) return;
 
             _currentInputMode = newMode;
 
-            if (EventSystem.current == null)
-                return;
+            if (EventSystem.current == null) return;
 
             if (_currentInputMode == InputMode.Gamepad)
             {
-                // เข้าสู่โหมด controller: ให้มีปุ่มถูก select เสมอ
                 if (EventSystem.current.currentSelectedGameObject == null && startButton != null)
-                {
-                    DelaySelect(startButton.gameObject).Forget();
-                }
-
-                // ถ้าอยากซ่อนเมาส์เวลาถือจอยก็ทำได้
+                { controllerCheck.DelaySelect(startButton.gameObject).Forget(); }
                 // Cursor.visible = false;
             }
             else
             {
-                // กลับสู่โหมดปกติ: เคลียร์ selection เพื่อให้ hover/click ด้วยเมาส์สบายๆ
                 EventSystem.current.SetSelectedGameObject(null);
-
                 // Cursor.visible = true;
             }
         }

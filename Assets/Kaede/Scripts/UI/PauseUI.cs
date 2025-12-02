@@ -9,7 +9,7 @@ namespace Kaede.Scripts.UI
     public class PauseUI : MonoBehaviour
     {
         [Header("UI References")]
-        [SerializeField] private Button resumeButton;
+        [field: SerializeField] public Button ResumeButton { get; private set; }
         [SerializeField] private Button restartButton;
         [SerializeField] private Button mainMenuButton;
         [SerializeField] private Button quitButton;
@@ -21,8 +21,8 @@ namespace Kaede.Scripts.UI
         
         private void SetupButtons()
         {
-            if (resumeButton != null)
-                resumeButton.onClick.AddListener(ResumeGame);
+            if (ResumeButton != null)
+                ResumeButton.onClick.AddListener(ResumeGame);
             
             if (restartButton != null)
                 restartButton.onClick.AddListener(RestartGame);
@@ -37,8 +37,8 @@ namespace Kaede.Scripts.UI
         private void OnDestroy()
         {
             // ทำความสะอาด Event Listeners
-            if (resumeButton != null)
-                resumeButton.onClick.RemoveAllListeners();
+            if (ResumeButton != null)
+                ResumeButton.onClick.RemoveAllListeners();
                 
             if (restartButton != null)
                 restartButton.onClick.RemoveAllListeners();

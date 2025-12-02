@@ -1,4 +1,5 @@
 using System;
+using Cysharp.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
@@ -30,6 +31,13 @@ namespace Kaede.Scripts.Utils
             _anyButtonPressListener?.Dispose();
         }
         
+        public async UniTask DelaySelect(GameObject toSelect = null)
+        {
+            if (EventSystem.current == null || toSelect == null) return;
+            await UniTask.Yield();
+            EventSystem.current.SetSelectedGameObject(toSelect);
+        }
+        
         private void OnAnyButton(InputControl control)
         {
             if (control.device is Gamepad)
@@ -46,14 +54,12 @@ namespace Kaede.Scripts.Utils
 
         private void SetInputMode(InputMode newMode)
         {
-            if (CurrentInputMode == newMode)
-                return;
+            if (CurrentInputMode == newMode) return;
 
             CurrentInputMode = newMode;
             InputModeChanged?.Invoke(CurrentInputMode);
 
-            if (EventSystem.current == null)
-                return;
+            if (EventSystem.current == null) return;
 
             if (CurrentInputMode == InputMode.Gamepad && EventSystem.current.currentSelectedGameObject == null)
             {
