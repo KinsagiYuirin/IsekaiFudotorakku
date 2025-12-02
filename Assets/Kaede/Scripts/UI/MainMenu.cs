@@ -11,6 +11,7 @@ using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using System;
+using Kaede.Scripts.Utils;
 using UnityEngine.InputSystem.Utilities;
 
 namespace Kaede.Scripts.UI
@@ -34,15 +35,9 @@ namespace Kaede.Scripts.UI
     
     public class MainMenu : MonoSingleton<MainMenu>
     {
-        private IDisposable _anyButtonPressListener; 
-        
-        private enum InputMode
-        {
-            KeyboardMouse,
-            Gamepad
-        }
-        
-        private InputMode _currentInputMode = InputMode.KeyboardMouse;        
+        [SerializeField] private ControllerCheck controllerCheck;
+
+        private InputMode _currentInputMode = InputMode.KeyboardMouse;
         
         [Title("Panel GameObjects")]
         [SerializeField] private SerializableDictionary<MainMenuPanelType, GameObject> panelGameObjects = new();
@@ -82,14 +77,21 @@ namespace Kaede.Scripts.UI
         {
             LoadSceneManager.OnFinishFadeIn += OnFinishLoad;
             LoadSceneManager.OnStartFadeOut += OnStartFadeOut;
-            _anyButtonPressListener = InputSystem.onAnyButtonPress.Call(OnAnyButton);
+            if (controllerCheck != null)
+            {
+                controllerCheck.InputModeChanged += OnInputModeChanged;
+                SetInputMode(controllerCheck.CurrentInputMode);
+            }
         }
 
         private void OnDisable()
         {
             LoadSceneManager.OnFinishFadeIn -= OnFinishLoad;
             LoadSceneManager.OnStartFadeOut -= OnStartFadeOut;
-            _anyButtonPressListener?.Dispose();
+            if (controllerCheck != null)
+            {
+                controllerCheck.InputModeChanged -= OnInputModeChanged;
+            }
         }
 
         private void OnDestroy()
@@ -311,18 +313,9 @@ namespace Kaede.Scripts.UI
         }
 
         
-        private void OnAnyButton(InputControl control)
+        private void OnInputModeChanged(InputMode  newMode)
         {
-            if (control.device is Gamepad)
-            {
-                Debug.Log("Controller is active");
-                SetInputMode(InputMode.Gamepad);
-            }
-            else if (control.device is Keyboard || control.device is Mouse)
-            {
-                Debug.Log("Keyboard/Mouse is active");
-                SetInputMode(InputMode.KeyboardMouse);
-            }
+            SetInputMode(newMode);
         }
         
         #endregion
