@@ -155,7 +155,6 @@ MonoBehaviour:
       effect:
       - {fileID: 11400000, guid: 061dc283468439b40acc80715281663b, type: 2}
       - {fileID: 11400000, guid: bf134d81678572241b48b51fddd2095e, type: 2}
-      - {fileID: 11400000, guid: df2df3859b9ab1f4c8894136da697b6c, type: 2}
     - image: {fileID: 471357812}
       effect:
       - {fileID: 11400000, guid: c1f5e9845d0c54945ad94d6fb944d570, type: 2}
