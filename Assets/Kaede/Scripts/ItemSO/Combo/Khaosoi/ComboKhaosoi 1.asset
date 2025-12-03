@@ -21,16 +21,21 @@ MonoBehaviour:
     animationClip: {fileID: 0}
     sfxClip: {fileID: 0}
   wrongComboAnimation: {fileID: 0}
-  comboStepAnimations:
-  - {fileID: 7400000, guid: a8a6a94e6bdd703428c1bbedf2921f21, type: 2}
-  - {fileID: 7400000, guid: a8a6a94e6bdd703428c1bbedf2921f21, type: 2}
-  - {fileID: 7400000, guid: a8a6a94e6bdd703428c1bbedf2921f21, type: 2}
-  - {fileID: 7400000, guid: a8a6a94e6bdd703428c1bbedf2921f21, type: 2}
-  - {fileID: 7400000, guid: a8a6a94e6bdd703428c1bbedf2921f21, type: 2}
-  - {fileID: 7400000, guid: a8a6a94e6bdd703428c1bbedf2921f21, type: 2}
-  - {fileID: 7400000, guid: 734607487a6cb3149acd948a38b3ec7e, type: 2}
+  comboStepAnimations: []
   stepComboAnimationAndSfx:
-  - animationClip: {fileID: 0}
+  - animationClip: {fileID: 7400000, guid: a8a6a94e6bdd703428c1bbedf2921f21, type: 2}
+    sfxClip: {fileID: 0}
+  - animationClip: {fileID: 7400000, guid: a8a6a94e6bdd703428c1bbedf2921f21, type: 2}
+    sfxClip: {fileID: 0}
+  - animationClip: {fileID: 7400000, guid: a8a6a94e6bdd703428c1bbedf2921f21, type: 2}
+    sfxClip: {fileID: 0}
+  - animationClip: {fileID: 7400000, guid: a8a6a94e6bdd703428c1bbedf2921f21, type: 2}
+    sfxClip: {fileID: 0}
+  - animationClip: {fileID: 7400000, guid: a8a6a94e6bdd703428c1bbedf2921f21, type: 2}
+    sfxClip: {fileID: 0}
+  - animationClip: {fileID: 7400000, guid: a8a6a94e6bdd703428c1bbedf2921f21, type: 2}
+    sfxClip: {fileID: 0}
+  - animationClip: {fileID: 7400000, guid: 734607487a6cb3149acd948a38b3ec7e, type: 2}
     sfxClip: {fileID: 0}
   comboSequence:
   - key: 5
