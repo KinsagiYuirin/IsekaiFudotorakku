@@ -1,5 +1,6 @@
 using System;
 using UnityEngine;
+using System.Collections;
 
 namespace Kaede.Scripts.Audios
 {
@@ -8,6 +9,11 @@ namespace Kaede.Scripts.Audios
         [SerializeField] private AudioSource bgmSource;
         [SerializeField] private AudioClip firstBgm;
         [SerializeField] private AudioClip secondBgm;
+        
+        [Header("Transition Settings")]
+        [SerializeField] private float fadeDuration = 1.5f;
+
+        private Coroutine transitionRoutine;
 
         private void Start()
         {
@@ -16,22 +22,52 @@ namespace Kaede.Scripts.Audios
 
         public void PlayFirstBgm()
         {
-            if (bgmSource != null && firstBgm != null)
-            {
-                bgmSource.clip = firstBgm;
-                bgmSource.loop = true;
-                bgmSource.Play();
-            }
+            PlayWithTransition(firstBgm);
         }
 
         public void PlaySecondBgm()
         {
-            if (bgmSource != null && secondBgm != null)
+            PlayWithTransition(secondBgm);
+        }
+
+        public void PlayWithTransition(AudioClip newClip)
+        {
+            if (transitionRoutine != null)
+                StopCoroutine(transitionRoutine);
+
+            transitionRoutine = StartCoroutine(TransitionBgm(newClip));
+        }
+
+        private IEnumerator TransitionBgm(AudioClip newClip)
+        {
+            if (bgmSource == null || newClip == null)
+                yield break;
+
+            float startVolume = bgmSource.volume;
+
+            // Fade Out
+            float t = 0f;
+            while (t < fadeDuration)
             {
-                bgmSource.clip = secondBgm;
-                bgmSource.loop = true;
-                bgmSource.Play();
+                t += Time.deltaTime;
+                bgmSource.volume = Mathf.Lerp(startVolume, 0f, t / fadeDuration);
+                yield return null;
             }
+
+            // Switch Clip
+            bgmSource.clip = newClip;
+            bgmSource.Play();
+
+            // Fade In
+            t = 0f;
+            while (t < fadeDuration)
+            {
+                t += Time.deltaTime;
+                bgmSource.volume = Mathf.Lerp(0f, startVolume, t / fadeDuration);
+                yield return null;
+            }
+
+            bgmSource.volume = startVolume;
         }
     }
 }

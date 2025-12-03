@@ -240,9 +240,10 @@ namespace Kaede.Scripts.Managers
         {
             isPaused = true;
             Time.timeScale = 0f;
-            
+
             SetResultUIVisibility(true);
             resultUI?.SetResultScore(index);
+            SetInputMode(controllerCheck.CurrentInputMode, resultUI?.RestartButton.gameObject);
         }
         
         public void QuitGame()
@@ -277,7 +278,6 @@ namespace Kaede.Scripts.Managers
                 return;
 
             resultUI.gameObject.SetActive(isVisible);
-            SetInputMode(controllerCheck.CurrentInputMode, resultUI.RestartButton.gameObject);
         }
 
         #region Controller Check

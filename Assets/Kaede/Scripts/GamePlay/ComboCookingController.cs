@@ -31,7 +31,6 @@ namespace Kaede.Scripts.GamePlay
         [SerializeField] private ComboTimerService timer = new ComboTimerService();
         [SerializeField] private bool needSpacebar;
         [SerializeField] private bool autoPlay;
-        [SerializeField] private BgmManager bgmManager;
         
         [Title("Combo Settings")]
         [field: SerializeField] public List<MenuData> MenuDatasList { get; private set; }
@@ -57,6 +56,7 @@ namespace Kaede.Scripts.GamePlay
         
         [SerializeField] private ComboStepAnimationCooking animationCooking;
         [SerializeField] private ComboCharacterEmotionPlayer characterEmotionPlayer;
+        [SerializeField] private BgmManager bgmManager;
         [SerializeField] private SfxManager sfxManager;
         [SerializeField] private SendFood sendFood;
         [SerializeField] private MangaCutscenePlayer restingCutscenePlayer;
@@ -164,7 +164,7 @@ namespace Kaede.Scripts.GamePlay
             {
                 if (button.isDown)
                 {
-                    RedoStep();
+                    //RedoStep();
                 }
             });
         }
@@ -380,6 +380,7 @@ namespace Kaede.Scripts.GamePlay
             characterEmotionPlayer?.ResetToIdle(true);
             _inputHandler?.SetComboInputEnabled(true);
             restingCutscenePlayer?.Stop();
+            bgmManager?.PlaySecondBgm();
             
             var gameManager = GameManager.Instance;
             gameManager?.StartReadyCountdown();
