@@ -111,7 +111,7 @@ namespace Kaede.Scripts.Item
         public List<AnimationClip> comboStepAnimations = new();
         
         [ShowIf(nameof(useSequentialAnimation))]
-        [LabelText("Wrong Input Animation & SFX"), ListDrawerSettings(Expanded = true, DraggableItems = true)]
+        [LabelText("Input Animation & SFX"), ListDrawerSettings(Expanded = true, DraggableItems = true)]
         public AnimationAndSfx[] stepComboAnimationAndSfx;
         
         [Title("Sequence")]

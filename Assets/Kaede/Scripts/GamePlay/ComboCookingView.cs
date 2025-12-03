@@ -1,9 +1,6 @@
-using System;
 using System.Collections.Generic;
 using Kaede.Scripts.Animation;
 using Kaede.Scripts.Item;
-using Kaede.Scripts.Utils;
-using MadDuck.Scripts.Inputs;
 using Sirenix.OdinInspector;
 using TMPro;
 using UnityCommunity.UnitySingleton;
@@ -69,6 +66,8 @@ namespace Kaede.Scripts.GamePlay
         [SerializeField] private GameObject normalIconPrefab;
         [SerializeField] private GameObject holdIconPrefab;
         [SerializeField] private GameObject stackIconPrefab;
+        [SerializeField] private GameObject dummyIconPrefab;
+        [SerializeField] private GameObject dummyHoldIconPrefab;
         
         [Title("Display Settings")]
         [SerializeField] private bool useStringDisplayKey = false;
@@ -202,6 +201,7 @@ namespace Kaede.Scripts.GamePlay
                             var singleIcon = Instantiate(normalIconPrefab, ComboPanel);
                             _comboSettings.Add(comboSetting);
                             SetupKeyIcon(singleIcon, comboSetting);
+                            CreateSubDualButton(comboSetting, _buttonVisuals.Count - 1, dummyIconPrefab);
                         }
                         break;
                     case {type: ComboType.Hold}:
@@ -210,6 +210,7 @@ namespace Kaede.Scripts.GamePlay
                             var holdIcon = Instantiate(holdIconPrefab, ComboPanel);
                             _comboSettings.Add(comboSetting);
                             SetupKeyIcon(holdIcon, comboSetting);
+                            CreateSubDualButton(comboSetting, _buttonVisuals.Count - 1, dummyHoldIconPrefab);
                         }
                         break;
                     case {type: ComboType.DualKeyHold}:
