@@ -19,7 +19,7 @@ MonoBehaviour:
   comboAnimation: {fileID: 0}
   comboAnimationAndSfx:
     animationClip: {fileID: 7400000, guid: 5dc7b50759baadb4e864b625b88903a0, type: 2}
-    sfxClip: {fileID: 0}
+    sfxClip: {fileID: 8300000, guid: d47b5213d8d9d8845b6e0a7cb2e0c06b, type: 3}
   wrongComboAnimation: {fileID: 0}
   comboStepAnimations: []
   stepComboAnimationAndSfx: []

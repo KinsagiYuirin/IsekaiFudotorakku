@@ -15,7 +15,7 @@ MonoBehaviour:
   displayName: 
   phase: 0
   cookingSprite: {fileID: 0}
-  useSequentialAnimation: 1
+  useSequentialAnimation: 0
   comboAnimation: {fileID: 0}
   comboAnimationAndSfx:
     animationClip: {fileID: 0}

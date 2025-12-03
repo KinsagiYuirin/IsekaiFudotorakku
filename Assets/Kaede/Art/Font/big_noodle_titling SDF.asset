@@ -109,15 +109,15 @@ MonoBehaviour:
   m_GlyphTable:
   - m_Index: 59
     m_Metrics:
-      m_Width: 27.4375
+      m_Width: 26.1875
       m_Height: 64.625
-      m_HorizontalBearingX: 1.265625
+      m_HorizontalBearingX: 4.046875
       m_HorizontalBearingY: 64.625
-      m_HorizontalAdvance: 29.96875
+      m_HorizontalAdvance: 33.03125
     m_GlyphRect:
       m_X: 10
       m_Y: 10
-      m_Width: 28
+      m_Width: 27
       m_Height: 65
     m_Scale: 1
     m_AtlasIndex: 0
@@ -154,11 +154,11 @@ MonoBehaviour:
     m_ClassDefinitionType: 0
   - m_Index: 85
     m_Metrics:
-      m_Width: 26.09375
+      m_Width: 28.078125
       m_Height: 64.625
-      m_HorizontalBearingX: 3.15625
+      m_HorizontalBearingX: 4.046875
       m_HorizontalBearingY: 64.625
-      m_HorizontalAdvance: 32.40625
+      m_HorizontalAdvance: 36.1875
     m_GlyphRect:
       m_X: 10
       m_Y: 262
@@ -182,13 +182,13 @@ MonoBehaviour:
     m_Scale: 1
     m_AtlasIndex: 0
     m_ClassDefinitionType: 0
-  - m_Index: 75
+  - m_Index: 81
     m_Metrics:
-      m_Width: 8.640625
+      m_Width: 28.984375
       m_Height: 64.625
-      m_HorizontalBearingX: 4.046875
+      m_HorizontalBearingX: 3.59375
       m_HorizontalBearingY: 64.625
-      m_HorizontalAdvance: 16.734375
+      m_HorizontalAdvance: 36.1875
     m_GlyphRect:
       m_X: 57
       m_Y: 10
@@ -197,13 +197,13 @@ MonoBehaviour:
     m_Scale: 1
     m_AtlasIndex: 0
     m_ClassDefinitionType: 0
-  - m_Index: 80
+  - m_Index: 55
     m_Metrics:
-      m_Width: 26.546875
+      m_Width: 25.1875
       m_Height: 64.625
-      m_HorizontalBearingX: 4.046875
+      m_HorizontalBearingX: 0.90625
       m_HorizontalBearingY: 64.625
-      m_HorizontalAdvance: 34.65625
+      m_HorizontalAdvance: 27
     m_GlyphRect:
       m_X: 57
       m_Y: 94
@@ -227,13 +227,13 @@ MonoBehaviour:
     m_Scale: 1
     m_AtlasIndex: 0
     m_ClassDefinitionType: 0
-  - m_Index: 19
+  - m_Index: 74
     m_Metrics:
-      m_Width: 26.734375
+      m_Width: 27.90625
       m_Height: 64.625
       m_HorizontalBearingX: 4.046875
       m_HorizontalBearingY: 64.625
-      m_HorizontalAdvance: 34.828125
+      m_HorizontalAdvance: 36
     m_GlyphRect:
       m_X: 10
       m_Y: 346
