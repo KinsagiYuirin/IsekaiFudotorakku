@@ -62,6 +62,7 @@ namespace Kaede.Scripts.GamePlay
         [field: SerializeField] public GameObject CookingImageObject { get; private set; }
         [SerializeField] private GameObject cookingLightEffect;
         [field: SerializeField] public TMP_Text ComboText { get; private set; }
+        [SerializeField] private GameObject stove;
          
         [Title("Prefabs")]
         [SerializeField] private GameObject normalIconPrefab;
@@ -408,6 +409,15 @@ namespace Kaede.Scripts.GamePlay
             if (element != null)
             {
                 element.SetActive(active);
+            }
+        }
+        
+        // ชั่วคราว
+        private void SetStove(bool active)
+        {
+            if (stove != null)
+            {
+                stove.gameObject.SetActive(active);
             }
         }
         #endregion

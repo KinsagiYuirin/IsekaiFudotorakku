@@ -8438,6 +8438,7 @@ MonoBehaviour:
   <CookingImageObject>k__BackingField: {fileID: 878576954}
   cookingLightEffect: {fileID: 32923939}
   <ComboText>k__BackingField: {fileID: 85986212}
+  stove: {fileID: 2036305173}
   normalIconPrefab: {fileID: 1147449572475279101, guid: 9bef29be7d4dfd4488468388b3730a79, type: 3}
   holdIconPrefab: {fileID: 1147449572475279101, guid: 66e42ee9f6faaa44eb5255d458518d90, type: 3}
   stackIconPrefab: {fileID: 1147449572475279101, guid: 12165a1547e7b0249a229980a22e786f, type: 3}
@@ -8499,22 +8500,20 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   <AllMenuInLevel>k__BackingField:
   - {fileID: 11400000, guid: 9037bbceaf49321409b5c0477176bc64, type: 2}
-  - {fileID: 11400000, guid: 1fb12396c08cfac4b8a17e27696de961, type: 2}
-  - {fileID: 11400000, guid: ff5e1c1e42069614b9c8f333ada88f21, type: 2}
   appetizerRandomMenuCount: 5
   mainCourseRandomMenuCount: 5
   dessertRandomMenuCount: 0
   appetizerRandomMenu:
-  - {fileID: 11400000, guid: 1fb12396c08cfac4b8a17e27696de961, type: 2}
   - {fileID: 11400000, guid: ff5e1c1e42069614b9c8f333ada88f21, type: 2}
   - {fileID: 11400000, guid: 1fb12396c08cfac4b8a17e27696de961, type: 2}
   - {fileID: 11400000, guid: ff5e1c1e42069614b9c8f333ada88f21, type: 2}
+  - {fileID: 11400000, guid: 9037bbceaf49321409b5c0477176bc64, type: 2}
   - {fileID: 11400000, guid: 9037bbceaf49321409b5c0477176bc64, type: 2}
   mainCourseRandomMenu:
-  - {fileID: 11400000, guid: ff5e1c1e42069614b9c8f333ada88f21, type: 2}
   - {fileID: 11400000, guid: 9037bbceaf49321409b5c0477176bc64, type: 2}
   - {fileID: 11400000, guid: 9037bbceaf49321409b5c0477176bc64, type: 2}
-  - {fileID: 11400000, guid: ff5e1c1e42069614b9c8f333ada88f21, type: 2}
+  - {fileID: 11400000, guid: 1fb12396c08cfac4b8a17e27696de961, type: 2}
+  - {fileID: 11400000, guid: 9037bbceaf49321409b5c0477176bc64, type: 2}
   - {fileID: 11400000, guid: 9037bbceaf49321409b5c0477176bc64, type: 2}
   dessertRandomMenu: []
 --- !u!114 &1835431557
@@ -10413,7 +10412,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &2109660078
 RectTransform:
   m_ObjectHideFlags: 0

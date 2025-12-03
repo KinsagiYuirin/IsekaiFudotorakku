@@ -70,6 +70,7 @@ namespace Kaede.Scripts.Managers
             SetPauseMenuVisibility(false);
             SetInteractable(true);
             PauseGame();
+            todayManuUI.gameObject.SetActive(true);
         }
         
         public void Update()
