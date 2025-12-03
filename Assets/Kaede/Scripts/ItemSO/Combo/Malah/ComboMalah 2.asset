@@ -16,12 +16,10 @@ MonoBehaviour:
   phase: 0
   cookingSprite: {fileID: 0}
   useSequentialAnimation: 1
-  comboAnimation: {fileID: 0}
   comboAnimationAndSfx:
     animationClip: {fileID: 0}
     sfxClip: {fileID: 0}
   wrongComboAnimation: {fileID: 0}
-  comboStepAnimations: []
   stepComboAnimationAndSfx:
   - animationClip: {fileID: 7400000, guid: 6b6f60affc28b9d45ae9d21db40b1dfb, type: 2}
     sfxClip: {fileID: 8300000, guid: 6300f9e913a2ef14ebce60ce74cf3de5, type: 3}
@@ -76,5 +74,5 @@ MonoBehaviour:
     pressCount: 2
     holdTime: 1
     stackCount: 3
-    secondKey: 5
+    secondKey: 7
     dualHoldTime: 1
