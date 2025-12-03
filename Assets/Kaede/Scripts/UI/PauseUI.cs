@@ -56,6 +56,7 @@ namespace Kaede.Scripts.UI
             gameObject.SetActive(false);
             AudioListener.pause = false;
             GameManager.Instance.IsPaused = false;
+            GameManager.Instance.ResumeGame();
         }
 
         private void RestartGame()

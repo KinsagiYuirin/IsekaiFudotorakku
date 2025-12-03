@@ -172,7 +172,12 @@ namespace Kaede.Scripts.Managers
                 readyText.gameObject.SetActive(true);
             }
         }
-
+        
+        public void SetComboEnabled(bool enabled)
+        {
+            ComboCookingController.Instance.SetComboEnabled(enabled);
+        }
+        
         private void CompleteReadyCountdown()
         {
             _isReadyCountdownActive = false;
@@ -220,7 +225,7 @@ namespace Kaede.Scripts.Managers
         {
             isPaused = true;
             Time.timeScale = 0f;
-            ComboCookingController.Instance.SetComboEnabled(false);
+            SetComboEnabled(false);
         }
 
         public void ResumeGame()
@@ -235,7 +240,7 @@ namespace Kaede.Scripts.Managers
 
             isPaused = false;
             Time.timeScale = 1f;
-            ComboCookingController.Instance.SetComboEnabled(true);
+            SetComboEnabled(true);
         }
         
         public void GameOver(float index)
