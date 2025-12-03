@@ -3296,6 +3296,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 852097100}
+  - component: {fileID: 852097101}
   m_Layer: 5
   m_Name: SubPanel
   m_TagString: Untagged
@@ -3322,6 +3323,32 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: -229.62038}
   m_SizeDelta: {x: 0.00012207, y: 269.18}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &852097101
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 852097099}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 30649d3a9faa99c48a7b1166b86bf2a0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Padding:
+    m_Left: 0
+    m_Right: 0
+    m_Top: 0
+    m_Bottom: 0
+  m_ChildAlignment: 4
+  m_Spacing: -500
+  m_ChildForceExpandWidth: 1
+  m_ChildForceExpandHeight: 1
+  m_ChildControlWidth: 0
+  m_ChildControlHeight: 0
+  m_ChildScaleWidth: 0
+  m_ChildScaleHeight: 0
+  m_ReverseArrangement: 0
 --- !u!1 &860200192
 GameObject:
   m_ObjectHideFlags: 0
@@ -8414,6 +8441,8 @@ MonoBehaviour:
   normalIconPrefab: {fileID: 1147449572475279101, guid: 9bef29be7d4dfd4488468388b3730a79, type: 3}
   holdIconPrefab: {fileID: 1147449572475279101, guid: 66e42ee9f6faaa44eb5255d458518d90, type: 3}
   stackIconPrefab: {fileID: 1147449572475279101, guid: 12165a1547e7b0249a229980a22e786f, type: 3}
+  dummyIconPrefab: {fileID: 1147449572475279101, guid: cc79ca45762dd924db12f7db586e35ce, type: 3}
+  dummyHoldIconPrefab: {fileID: 1147449572475279101, guid: 2adaeb751ff5028489ba0897868deefa, type: 3}
   useStringDisplayKey: 0
 --- !u!114 &1835431554
 MonoBehaviour:
@@ -8469,18 +8498,24 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   <AllMenuInLevel>k__BackingField:
-  - {fileID: 11400000, guid: ab292bc6c23448944b9d1779a6694c71, type: 2}
+  - {fileID: 11400000, guid: 9037bbceaf49321409b5c0477176bc64, type: 2}
+  - {fileID: 11400000, guid: 1fb12396c08cfac4b8a17e27696de961, type: 2}
+  - {fileID: 11400000, guid: ff5e1c1e42069614b9c8f333ada88f21, type: 2}
   appetizerRandomMenuCount: 5
   mainCourseRandomMenuCount: 5
   dessertRandomMenuCount: 0
   appetizerRandomMenu:
   - {fileID: 11400000, guid: 1fb12396c08cfac4b8a17e27696de961, type: 2}
-  - {fileID: 11400000, guid: 9037bbceaf49321409b5c0477176bc64, type: 2}
+  - {fileID: 11400000, guid: ff5e1c1e42069614b9c8f333ada88f21, type: 2}
   - {fileID: 11400000, guid: 1fb12396c08cfac4b8a17e27696de961, type: 2}
+  - {fileID: 11400000, guid: ff5e1c1e42069614b9c8f333ada88f21, type: 2}
+  - {fileID: 11400000, guid: 9037bbceaf49321409b5c0477176bc64, type: 2}
   mainCourseRandomMenu:
   - {fileID: 11400000, guid: ff5e1c1e42069614b9c8f333ada88f21, type: 2}
   - {fileID: 11400000, guid: 9037bbceaf49321409b5c0477176bc64, type: 2}
-  - {fileID: 11400000, guid: 1fb12396c08cfac4b8a17e27696de961, type: 2}
+  - {fileID: 11400000, guid: 9037bbceaf49321409b5c0477176bc64, type: 2}
+  - {fileID: 11400000, guid: ff5e1c1e42069614b9c8f333ada88f21, type: 2}
+  - {fileID: 11400000, guid: 9037bbceaf49321409b5c0477176bc64, type: 2}
   dessertRandomMenu: []
 --- !u!114 &1835431557
 MonoBehaviour:

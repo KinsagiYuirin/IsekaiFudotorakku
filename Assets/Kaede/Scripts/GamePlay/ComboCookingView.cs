@@ -6,6 +6,7 @@ using TMPro;
 using UnityCommunity.UnitySingleton;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.UI;
 
 namespace Kaede.Scripts.GamePlay
 {
@@ -264,13 +265,23 @@ namespace Kaede.Scripts.GamePlay
         {
             if (SubComboPanel == null) return;
 
-            if (comboSetting.secondKey == ComboKey.None) return;
-
             if (iconPrefab  == null) return;
+            
+            var isDummyIcon = iconPrefab == dummyIconPrefab || iconPrefab == dummyHoldIconPrefab;
+            if (isDummyIcon && comboSetting.secondKey == ComboKey.None)
+            {
+                var dummyIcon = Instantiate(iconPrefab, SubComboPanel);
+                HideDummyVisuals(dummyIcon);
+                return;
+            }
 
+            if (comboSetting.secondKey == ComboKey.None) return;
+            
             var subSetting = new ComboKeySetting
             {
-                key = comboSetting.secondKey,
+                key = isDummyIcon && comboSetting.secondKey == ComboKey.None
+                    ? ComboKey.None
+                    : comboSetting.secondKey,
                 type = comboSetting.type,
                 dualHoldTime = comboSetting.dualHoldTime
             };
@@ -288,6 +299,14 @@ namespace Kaede.Scripts.GamePlay
                     _buttonVisuals[mainButtonIndex] =
                         new DualComboButtonVisualProxy(_buttonVisuals[mainButtonIndex], visual);
                 }
+            }
+        }
+        
+        private static void HideDummyVisuals(GameObject dummyIcon)
+        {
+            foreach (var graphic in dummyIcon.GetComponentsInChildren<Graphic>(true))
+            {
+                graphic.enabled = false;
             }
         }
         
