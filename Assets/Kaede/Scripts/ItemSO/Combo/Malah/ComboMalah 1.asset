@@ -24,13 +24,13 @@ MonoBehaviour:
   comboStepAnimations: []
   stepComboAnimationAndSfx:
   - animationClip: {fileID: 7400000, guid: 48e2df4ce362b9a4ead2e3e6f3bb17ab, type: 2}
-    sfxClip: {fileID: 0}
+    sfxClip: {fileID: 8300000, guid: 2ef5f68b0f645c44dba62c5855644030, type: 3}
   - animationClip: {fileID: 7400000, guid: abd85c6a7b6819e498518abcbde00f95, type: 2}
-    sfxClip: {fileID: 0}
+    sfxClip: {fileID: 8300000, guid: 2ef5f68b0f645c44dba62c5855644030, type: 3}
   - animationClip: {fileID: 7400000, guid: 38c03fa647fc851458e5aae3c4eb0894, type: 2}
-    sfxClip: {fileID: 0}
+    sfxClip: {fileID: 8300000, guid: 2ef5f68b0f645c44dba62c5855644030, type: 3}
   - animationClip: {fileID: 7400000, guid: b19df8dad1bd1c04eb272cafff80b45e, type: 2}
-    sfxClip: {fileID: 0}
+    sfxClip: {fileID: 8300000, guid: b3d833f042461fb4f826e7238cbef8aa, type: 3}
   comboSequence:
   - key: 5
     type: 0
