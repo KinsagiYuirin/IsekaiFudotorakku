@@ -1,7 +1,6 @@
 using System.Collections.Generic;
 using Kaede.Scripts.GamePlay;
 using Kaede.Scripts.Item;
-using Kaede.Scripts.Utils;
 using PrimeTween;
 using Sirenix.OdinInspector;
 using TMPro;

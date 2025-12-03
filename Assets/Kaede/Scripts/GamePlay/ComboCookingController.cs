@@ -30,7 +30,8 @@ namespace Kaede.Scripts.GamePlay
         [Title("Game Settings")]
         [SerializeField] private ComboTimerService timer = new ComboTimerService();
         [SerializeField] private bool needSpacebar;
-        [SerializeField] private bool autoPlay; 
+        [SerializeField] private bool autoPlay;
+        [SerializeField] private BgmManager bgmManager;
         
         [Title("Combo Settings")]
         [field: SerializeField] public List<MenuData> MenuDatasList { get; private set; }
