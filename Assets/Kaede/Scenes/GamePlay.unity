@@ -8241,7 +8241,7 @@ MonoBehaviour:
     hideAfterFinish: 0
     autoAdvance: 1
     autoAdvanceDelay: 1.5
-    sound: {fileID: 0}
+    sound: {fileID: 8300000, guid: 1498edc8f7603164ea85f53bc7a5c486, type: 3}
   - illustrations:
     - image: {fileID: 395951768}
       effect:
@@ -8257,7 +8257,7 @@ MonoBehaviour:
     hideAfterFinish: 0
     autoAdvance: 1
     autoAdvanceDelay: 0.5
-    sound: {fileID: 0}
+    sound: {fileID: 8300000, guid: ebd55f6ead315ae469dbc67fa9266190, type: 3}
   - illustrations:
     - image: {fileID: 1963502611}
       effect:
@@ -8266,7 +8266,7 @@ MonoBehaviour:
     hideAfterFinish: 0
     autoAdvance: 1
     autoAdvanceDelay: 1
-    sound: {fileID: 0}
+    sound: {fileID: 8300000, guid: ed93418ab3ff3184fb2d8f521ab70f53, type: 3}
   - illustrations:
     - image: {fileID: 1145312855}
       effect:
@@ -8278,7 +8278,7 @@ MonoBehaviour:
     hideAfterFinish: 0
     autoAdvance: 1
     autoAdvanceDelay: 1
-    sound: {fileID: 0}
+    sound: {fileID: 8300000, guid: 82b12fa6255ec2d438649f3c969b27e9, type: 3}
   - illustrations:
     - image: {fileID: 1795107156}
       effect:
@@ -8292,7 +8292,7 @@ MonoBehaviour:
     hideAfterFinish: 0
     autoAdvance: 1
     autoAdvanceDelay: 2
-    sound: {fileID: 0}
+    sound: {fileID: 8300000, guid: 9284f6373b6357b4fb0a8311bbfc273c, type: 3}
   - illustrations:
     - image: {fileID: 1963502611}
       effect:
@@ -9050,11 +9050,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   <AllMenuInLevel>k__BackingField:
-  - {fileID: 11400000, guid: 9037bbceaf49321409b5c0477176bc64, type: 2}
   - {fileID: 11400000, guid: 1fb12396c08cfac4b8a17e27696de961, type: 2}
+  - {fileID: 11400000, guid: 9037bbceaf49321409b5c0477176bc64, type: 2}
   - {fileID: 11400000, guid: ff5e1c1e42069614b9c8f333ada88f21, type: 2}
-  appetizerRandomMenuCount: 1
-  mainCourseRandomMenuCount: 1
+  appetizerRandomMenuCount: 5
+  mainCourseRandomMenuCount: 5
   dessertRandomMenuCount: 0
   appetizerRandomMenu:
   - {fileID: 11400000, guid: ff5e1c1e42069614b9c8f333ada88f21, type: 2}
@@ -9874,6 +9874,7 @@ MonoBehaviour:
   bgmSource: {fileID: 1909740031}
   firstBgm: {fileID: 8300000, guid: 87d4d3182f45808488aae48bf0c52f5f, type: 3}
   secondBgm: {fileID: 8300000, guid: cc71e8c492b013d4785a4ad19516e3e8, type: 3}
+  fadeDuration: 1.5
 --- !u!1 &1936164340
 GameObject:
   m_ObjectHideFlags: 0

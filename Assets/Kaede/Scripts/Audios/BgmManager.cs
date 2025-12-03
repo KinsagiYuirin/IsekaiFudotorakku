@@ -11,13 +11,15 @@ namespace Kaede.Scripts.Audios
         [SerializeField] private AudioClip secondBgm;
         
         [Header("Transition Settings")]
-        [SerializeField] private float fadeDuration = 1.5f;
+        [SerializeField] private float fadeDuration = 0.5f;
 
         private Coroutine transitionRoutine;
 
         private void Start()
         {
-            PlayFirstBgm();
+            bgmSource.clip = firstBgm;
+            bgmSource.loop = true;
+            bgmSource.Play();
         }
 
         public void PlayFirstBgm()

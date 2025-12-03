@@ -215,11 +215,12 @@ namespace Kaede.Scripts.Managers
                 SetInputMode(controllerCheck.CurrentInputMode, pauseMenuUI.ResumeButton.gameObject);
             }
         }
-
+        
         public void PauseGame()
         {
             isPaused = true;
             Time.timeScale = 0f;
+            ComboCookingController.Instance.SetComboEnabled(false);
         }
 
         public void ResumeGame()
@@ -234,6 +235,7 @@ namespace Kaede.Scripts.Managers
 
             isPaused = false;
             Time.timeScale = 1f;
+            ComboCookingController.Instance.SetComboEnabled(true);
         }
         
         public void GameOver(float index)

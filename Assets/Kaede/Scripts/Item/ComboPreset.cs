@@ -96,19 +96,11 @@ namespace Kaede.Scripts.Item
         public bool useSequentialAnimation;
         
         [HideIf(nameof(useSequentialAnimation))]
-        [LabelText("Animation")]
-        public AnimationClip comboAnimation;
-        
-        [HideIf(nameof(useSequentialAnimation))]
         [LabelText("Setting Animation & SFX")]
         public AnimationAndSfx comboAnimationAndSfx;
         
         [LabelText("Wrong Input Animation")]
         public AnimationClip wrongComboAnimation;
-        
-        [ShowIf(nameof(useSequentialAnimation))]
-        [LabelText("Sequential Animations"), ListDrawerSettings(Expanded = true, DraggableItems = true)]
-        public List<AnimationClip> comboStepAnimations = new();
         
         [ShowIf(nameof(useSequentialAnimation))]
         [LabelText("Input Animation & SFX"), ListDrawerSettings(Expanded = true, DraggableItems = true)]
@@ -124,16 +116,10 @@ namespace Kaede.Scripts.Item
         {
             if (useSequentialAnimation)
             {
-                //var clips = comboStepAnimations?.Where(clip => clip != null).ToList();
                 var clips = stepComboAnimationAndSfx
                     ?.Where(entry => entry?.animationClip != null)
                     .Select(entry => entry.animationClip)
                     .ToList();
-                
-                if ((clips?.Count ?? 0) == 0)
-                {
-                    clips = comboStepAnimations?.Where(animationClip => animationClip != null).ToList();
-                }
                 
                 if (clips is { Count: > 0 })
                 {
@@ -145,7 +131,7 @@ namespace Kaede.Scripts.Item
                 }
             }
             
-            var singleClip = comboAnimationAndSfx?.animationClip ?? comboAnimation;
+            var singleClip = comboAnimationAndSfx?.animationClip;
             if (singleClip != null)
             {
                 return ComboStepAnimationDefinition.FromSingle(singleClip, wrongComboAnimation);

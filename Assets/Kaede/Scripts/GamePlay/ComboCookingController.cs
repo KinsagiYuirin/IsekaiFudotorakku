@@ -342,6 +342,11 @@ namespace Kaede.Scripts.GamePlay
                 }   
             }
         }
+        
+        public void SetComboEnabled(bool enabled)
+        {
+            _inputHandler?.SetComboInputEnabled(enabled);
+        }
         #endregion
 
         #region Utill
@@ -365,7 +370,7 @@ namespace Kaede.Scripts.GamePlay
             animationCooking?.Stop();
             _inputProcessor?.ResetState();
             characterEmotionPlayer?.ResetToIdle(true);
-            _inputHandler?.SetComboInputEnabled(false);
+            SetComboEnabled(false);
             restingCutscenePlayer?.Play();
         }
         
@@ -378,7 +383,7 @@ namespace Kaede.Scripts.GamePlay
             animationCooking?.Stop();
             ShowCurrentCombo();
             characterEmotionPlayer?.ResetToIdle(true);
-            _inputHandler?.SetComboInputEnabled(true);
+            SetComboEnabled(true);
             restingCutscenePlayer?.Stop();
             bgmManager?.PlaySecondBgm();
             
