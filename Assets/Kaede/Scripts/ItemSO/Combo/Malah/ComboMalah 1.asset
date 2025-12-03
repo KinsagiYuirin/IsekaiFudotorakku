@@ -17,12 +17,20 @@ MonoBehaviour:
   cookingSprite: {fileID: 0}
   useSequentialAnimation: 1
   comboAnimation: {fileID: 0}
+  comboAnimationAndSfx:
+    animationClip: {fileID: 0}
+    sfxClip: {fileID: 0}
   wrongComboAnimation: {fileID: 0}
-  comboStepAnimations:
-  - {fileID: 7400000, guid: 48e2df4ce362b9a4ead2e3e6f3bb17ab, type: 2}
-  - {fileID: 7400000, guid: abd85c6a7b6819e498518abcbde00f95, type: 2}
-  - {fileID: 7400000, guid: 38c03fa647fc851458e5aae3c4eb0894, type: 2}
-  - {fileID: 7400000, guid: b19df8dad1bd1c04eb272cafff80b45e, type: 2}
+  comboStepAnimations: []
+  stepComboAnimationAndSfx:
+  - animationClip: {fileID: 7400000, guid: 48e2df4ce362b9a4ead2e3e6f3bb17ab, type: 2}
+    sfxClip: {fileID: 0}
+  - animationClip: {fileID: 7400000, guid: abd85c6a7b6819e498518abcbde00f95, type: 2}
+    sfxClip: {fileID: 0}
+  - animationClip: {fileID: 7400000, guid: 38c03fa647fc851458e5aae3c4eb0894, type: 2}
+    sfxClip: {fileID: 0}
+  - animationClip: {fileID: 7400000, guid: b19df8dad1bd1c04eb272cafff80b45e, type: 2}
+    sfxClip: {fileID: 0}
   comboSequence:
   - key: 5
     type: 0
@@ -30,39 +38,53 @@ MonoBehaviour:
     pressCount: 2
     holdTime: 1
     stackCount: 3
+    secondKey: 0
+    dualHoldTime: 1
   - key: 6
     type: 0
     buttonDuration: 0.3
     pressCount: 2
     holdTime: 1
     stackCount: 3
+    secondKey: 0
+    dualHoldTime: 1
   - key: 6
     type: 0
     buttonDuration: 0.3
     pressCount: 2
     holdTime: 1
     stackCount: 3
+    secondKey: 0
+    dualHoldTime: 1
   - key: 1
     type: 0
     buttonDuration: 0.3
     pressCount: 2
     holdTime: 1
     stackCount: 3
+    secondKey: 0
+    dualHoldTime: 1
   - key: 3
     type: 0
     buttonDuration: 0.3
     pressCount: 2
     holdTime: 1
     stackCount: 3
+    secondKey: 0
+    dualHoldTime: 1
   - key: 3
     type: 0
     buttonDuration: 0.3
     pressCount: 2
     holdTime: 1
     stackCount: 3
+    secondKey: 0
+    dualHoldTime: 1
   - key: 1
     type: 0
     buttonDuration: 0.3
     pressCount: 2
     holdTime: 1
     stackCount: 3
+    secondKey: 0
+    dualHoldTime: 1
