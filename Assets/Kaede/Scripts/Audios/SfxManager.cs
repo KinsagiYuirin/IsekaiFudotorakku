@@ -13,6 +13,7 @@ namespace Kaede.Scripts.Audios
         
         [Title("Audio Settings")]
         [SerializeField] private AudioSource _audioSource;
+        [SerializeField] private AudioSource _sfxFailSource;
         [SerializeField] private AudioSource _cookingSfxSource;
         
         [SerializeField, DisplayAsString] private List<AudioClip> _sfxClips = new();
@@ -28,9 +29,9 @@ namespace Kaede.Scripts.Audios
         
         public void PlayFailureSound()
         {
-            if (_audioSource != null && _failureClip != null)
+            if (_sfxFailSource != null && _failureClip != null)
             {
-                _audioSource.PlayOneShot(_failureClip);
+                _sfxFailSource.PlayOneShot(_failureClip);
             }
         }
         
