@@ -24,8 +24,7 @@ namespace Kaede.Scripts.UI
 
         private void Start()
         {
-            if (!GameManager.Instance.test)
-                UpdateTutorialDisplay();
+            UpdateTutorialDisplay();
         }
 
         private void SetupButtons()
@@ -89,7 +88,7 @@ namespace Kaede.Scripts.UI
 
         private void CloseTutorial()
         {
-            gameObject.SetActive(false);
+            //gameObject.SetActive(false);
         }
     }
 }
