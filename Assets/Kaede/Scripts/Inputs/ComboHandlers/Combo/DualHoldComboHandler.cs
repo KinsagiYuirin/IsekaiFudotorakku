@@ -15,6 +15,7 @@ namespace Kaede.Scripts.Inputs.ComboHandlers.Combo
         private float _remainingSimultaneousWindow;
         private bool _waitingForSecondKey;
         private bool _isHolding;
+        private bool _pendingCompletion;
         private readonly ComboKey _secondKey;
         private const float SimultaneousGraceSeconds = 0.1f;
         public float Progress => _maxAmount <= 0f ? 0f : Mathf.Clamp01(_elapsed / _maxAmount);
@@ -29,6 +30,12 @@ namespace Kaede.Scripts.Inputs.ComboHandlers.Combo
         public ComboInputResult CheckInput(PlayerInputHandler input, ComboKey expectedKey,
             CancellationToken ct, IComboButtonVisual visual)
         {
+            if (_pendingCompletion)
+            {
+                _pendingCompletion = false;
+                return ComboInputResult.Complete;
+            }
+            
             var primaryDown = input.IsKeyDown(expectedKey);
             var secondaryDown = input.IsKeyDown(_secondKey);
             
@@ -57,6 +64,7 @@ namespace Kaede.Scripts.Inputs.ComboHandlers.Combo
                         if (_remainingSimultaneousWindow <= 0f || (!primaryActive && !secondaryActive))
                         {
                             ResetHold();
+                            _pendingCompletion = true;
                             return ComboInputResult.Wrong;
                         }
                     }
@@ -75,6 +83,7 @@ namespace Kaede.Scripts.Inputs.ComboHandlers.Combo
                 if (_elapsed > _requiredTimeRange.y)
                 {
                     ResetHold();
+                    _pendingCompletion = true;
                     return ComboInputResult.Wrong;
                 }
 
@@ -88,6 +97,7 @@ namespace Kaede.Scripts.Inputs.ComboHandlers.Combo
                 var withinWindow = duration >= _requiredTimeRange.x && duration <= _requiredTimeRange.y;
                 
                 ResetHold();
+                _pendingCompletion = true;
 
                 return withinWindow ? ComboInputResult.Correct : ComboInputResult.Wrong;
             }
@@ -98,11 +108,6 @@ namespace Kaede.Scripts.Inputs.ComboHandlers.Combo
                 return ComboInputResult.Wrong;
             }
 
-            if (input.IsKeyUp(expectedKey) || input.AnyOtherKeyUp(expectedKey))
-            {
-                return ComboInputResult.Complete;
-            }
-            
             return ComboInputResult.None;
         }
 
@@ -110,7 +115,6 @@ namespace Kaede.Scripts.Inputs.ComboHandlers.Combo
         {
             _isHolding = false;
             _waitingForSecondKey = false;
-            _elapsed = 0f;
             _remainingSimultaneousWindow = 0f;
         }
 
