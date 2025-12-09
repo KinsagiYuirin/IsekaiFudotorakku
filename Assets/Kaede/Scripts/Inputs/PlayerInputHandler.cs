@@ -463,6 +463,7 @@ namespace MadDuck.Scripts.Inputs
             return false;
         }
 
+
         public bool AnyOtherKeyDown(ComboKey expectedKey, ComboKey secondaryExpectedKey)
         {
             foreach (ComboKey key in Enum.GetValues(typeof(ComboKey)))
@@ -480,7 +481,37 @@ namespace MadDuck.Scripts.Inputs
 
             return false;
         }
+        
+        public bool AnyOtherKeyUp(ComboKey expectedKey)
+        {
+            foreach (ComboKey key in Enum.GetValues(typeof(ComboKey)))
+            {
+                if (key == ComboKey.None || key == expectedKey)
+                    continue;
 
+                if (IsKeyUp(key))
+                    return true;
+            }
+            return false;
+        }
+
+        public bool AnyOtherKeyUp(ComboKey expectedKey, ComboKey secondaryExpectedKey)
+        {
+            foreach (ComboKey key in Enum.GetValues(typeof(ComboKey)))
+            {
+                if (key == ComboKey.None || key == expectedKey || key == secondaryExpectedKey)
+                {
+                    continue;
+                }
+
+                if (IsKeyUp(key))
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+        
         #endregion
     }
 }

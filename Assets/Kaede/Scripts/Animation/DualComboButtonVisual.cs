@@ -46,7 +46,7 @@ namespace Kaede.Scripts.Animation
         [SerializeField, DisplayAsString] private float currentIndexPercent = 1f;
         
         [Title("Dynamic Sizing")]
-        [SerializeField] private bool useDynamicSizing = false;   // สำหรับ Dual ปล่อย false ปุ่มจะไม่ยืด
+        [SerializeField] private bool useDynamicSizing = false;
         [SerializeField] private float baseWidth = 100f;
         [SerializeField] private float pixelsPerSecond = 40f;
         [SerializeField] private Vector2 sizeRange = new Vector2(80f, 400f);

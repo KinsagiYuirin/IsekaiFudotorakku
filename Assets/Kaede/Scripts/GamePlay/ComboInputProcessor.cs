@@ -80,10 +80,13 @@ namespace Kaede.Scripts.GamePlay
                         _view.PressCorrectKey(model.CurrentComboIndex);
                         model.ScoreManager.AddPendingStepScore(_scorePerButton);
                         model.ScoreManager.AddCombo();
-                        NextCombo(model);
                         _view.UpdateComboText(model.ScoreManager.ComboCount);
                         break;
-
+                    
+                    case ComboInputResult.Complete:
+                        NextCombo(model);
+                        break;
+                    
                     case ComboInputResult.Wrong:
                         _sfxManager.PlayFailureSound();
                         TriggerAnimation(false);
@@ -94,8 +97,9 @@ namespace Kaede.Scripts.GamePlay
                             model.ScoreManager.ResetCombo();
                             _view.UpdateComboText(model.ScoreManager.ComboCount);
                         }
-                        NextCombo(model);
+                        //NextCombo(model);
                         break;
+                    
                     case ComboInputResult.Holding:
                         BeginHoldEmotion();
                         break;

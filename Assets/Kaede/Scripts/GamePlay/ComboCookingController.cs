@@ -22,7 +22,8 @@ namespace Kaede.Scripts.GamePlay
         Progress,
         Correct,
         Wrong,
-        Holding
+        Holding,
+        Complete
     }
     
     public class ComboCookingController : MonoSingleton<ComboCookingController>

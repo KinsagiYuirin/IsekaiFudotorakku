@@ -12,11 +12,18 @@ namespace Kaede.Scripts.Inputs.ComboHandlers.Combo
         public ComboInputResult CheckInput(PlayerInputHandler input, ComboKey expectedKey, CancellationToken ct, IComboButtonVisual visual)
         {
             if (input.IsKeyDown(expectedKey))
+            {
                 return ComboInputResult.Correct;
+            }
 
             if (input.AnyOtherKeyDown(expectedKey))
             {
                 return ComboInputResult.Wrong;
+            }
+
+            if (input.AnyOtherKeyUp(expectedKey))
+            {
+                return ComboInputResult.Complete;
             }
             
             return ComboInputResult.None;

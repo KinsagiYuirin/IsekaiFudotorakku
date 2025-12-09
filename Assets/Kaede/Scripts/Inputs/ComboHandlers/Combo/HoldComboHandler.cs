@@ -26,10 +26,16 @@ namespace Kaede.Scripts.Inputs.ComboHandlers.Combo
         {
             if (input.IsKeyHeld(expectedKey))
             {
+                if (!_isHolding)
+                {
+                    _isHolding = true;
+                    _elapsed = 0f;
+                }
+                
                 _elapsed += Time.deltaTime;
                 if (_elapsed > _requiredTimeRange.y)
                 {
-                    _elapsed = 0f;
+                    ResetHold();
                     return ComboInputResult.Wrong;
                 }
                 visual.SetState(KeyState.Active, null, _elapsed);
@@ -37,8 +43,14 @@ namespace Kaede.Scripts.Inputs.ComboHandlers.Combo
             }
             if (input.IsKeyUp(expectedKey))
             {
+                if (!_isHolding)
+                { 
+                    ResetHold();
+                    return ComboInputResult.None;
+                }
+                
                 var t = _elapsed;
-                _elapsed = 0f;
+                ResetHold();
 
                 if (t >= _requiredTimeRange.x && t <= _requiredTimeRange.y)
                 {
@@ -49,8 +61,14 @@ namespace Kaede.Scripts.Inputs.ComboHandlers.Combo
             }
 
             if (!input.AnyOtherKeyDown(expectedKey)) return ComboInputResult.None;
-            _elapsed = 0f;
+            ResetHold();
             return ComboInputResult.Wrong;
+        }
+        
+        private void ResetHold()
+        {
+            _elapsed = 0f;
+            _isHolding = false;
         }
     }
 }
