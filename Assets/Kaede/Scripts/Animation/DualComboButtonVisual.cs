@@ -40,6 +40,7 @@ namespace Kaede.Scripts.Animation
         [SerializeField] private TMP_Text labelText;
 
         [Header("Slide Bar")]
+        [SerializeField] private Image barImage;
         [SerializeField] private Image fillImage;
         [SerializeField] private float updateSpeed = 1f;
         [SerializeField, DisplayAsString] private float currentIndexPercent = 1f;
@@ -74,6 +75,7 @@ namespace Kaede.Scripts.Animation
         
         private void Awake()
         {
+            barImage ??= GetComponentInChildren<Image>();
             fillImage ??= GetComponentInChildren<Image>();
             labelText ??= GetComponentInChildren<TMP_Text>();
             
@@ -249,6 +251,7 @@ namespace Kaede.Scripts.Animation
             
             _fillImageRect.anchorMin        = new Vector2(0f, 0.5f);
             _fillImageRect.anchorMax        = new Vector2(1f, 0.5f);
+            
             _fillImageRect.anchoredPosition = Vector2.zero;
             
             var fillSize = _fillImageRect.sizeDelta;
