@@ -83,10 +83,6 @@ namespace Kaede.Scripts.GamePlay
                         _view.UpdateComboText(model.ScoreManager.ComboCount);
                         break;
                     
-                    case ComboInputResult.Complete:
-                        NextCombo(model);
-                        break;
-                    
                     case ComboInputResult.Wrong:
                         _sfxManager.PlayFailureSound();
                         TriggerAnimation(false);
@@ -102,6 +98,9 @@ namespace Kaede.Scripts.GamePlay
                     
                     case ComboInputResult.Holding:
                         BeginHoldEmotion();
+                        break;
+                    case ComboInputResult.Complete:
+                        NextCombo(model);
                         break;
                     case ComboInputResult.None:
                     default:

@@ -16,16 +16,16 @@ namespace Kaede.Scripts.Inputs.ComboHandlers.Combo
                 return ComboInputResult.Correct;
             }
 
+
             if (input.AnyOtherKeyDown(expectedKey))
             {
                 return ComboInputResult.Wrong;
             }
-
-            if (input.AnyOtherKeyUp(expectedKey))
+            
+            if (input.IsKeyUp(expectedKey) || input.AnyOtherKeyUp(expectedKey))
             {
                 return ComboInputResult.Complete;
             }
-            
             return ComboInputResult.None;
         }
     }
