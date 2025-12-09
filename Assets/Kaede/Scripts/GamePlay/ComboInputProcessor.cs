@@ -80,6 +80,7 @@ namespace Kaede.Scripts.GamePlay
                         _view.PressCorrectKey(model.CurrentComboIndex);
                         model.ScoreManager.AddPendingStepScore(_scorePerButton);
                         model.ScoreManager.AddCombo();
+                        //NextCombo(model);
                         _view.UpdateComboText(model.ScoreManager.ComboCount);
                         break;
                     

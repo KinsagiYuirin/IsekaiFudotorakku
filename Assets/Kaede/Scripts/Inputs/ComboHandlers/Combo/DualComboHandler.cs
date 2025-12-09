@@ -68,6 +68,10 @@ namespace Kaede.Scripts.Inputs.ComboHandlers.Combo
                 _remainingSimultaneousWindow = SimultaneousGraceSeconds;
             }
 
+            if (input.IsKeyUp(expectedKey) || input.AnyOtherKeyUp(expectedKey))
+            {
+                return ComboInputResult.Complete;
+            }
             return ComboInputResult.None;
         }
         

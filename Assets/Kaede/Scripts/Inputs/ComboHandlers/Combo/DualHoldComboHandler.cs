@@ -98,6 +98,11 @@ namespace Kaede.Scripts.Inputs.ComboHandlers.Combo
                 return ComboInputResult.Wrong;
             }
 
+            if (input.IsKeyUp(expectedKey) || input.AnyOtherKeyUp(expectedKey))
+            {
+                return ComboInputResult.Complete;
+            }
+            
             return ComboInputResult.None;
         }
 

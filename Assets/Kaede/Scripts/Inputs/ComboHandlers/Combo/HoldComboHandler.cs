@@ -60,9 +60,18 @@ namespace Kaede.Scripts.Inputs.ComboHandlers.Combo
                 return ComboInputResult.Wrong;
             }
 
-            if (!input.AnyOtherKeyDown(expectedKey)) return ComboInputResult.None;
-            ResetHold();
-            return ComboInputResult.Wrong;
+            if (input.AnyOtherKeyDown(expectedKey))
+            {
+                ResetHold();
+                return ComboInputResult.Wrong;
+            }
+
+            if (input.IsKeyUp(expectedKey) || input.AnyOtherKeyUp(expectedKey))
+            {
+                return ComboInputResult.Complete;
+            }
+            
+            return ComboInputResult.None;
         }
         
         private void ResetHold()

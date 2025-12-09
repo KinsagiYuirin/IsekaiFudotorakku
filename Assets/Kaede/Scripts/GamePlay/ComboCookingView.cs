@@ -128,7 +128,7 @@ namespace Kaede.Scripts.GamePlay
 
         public void PressWrongKey(int comboIndex)
         {
-            SetKeySprite(comboIndex, KeyState.Ideal);
+            SetKeySprite(comboIndex, KeyState.Active);
             SetKeyColor(comboIndex, wrongKeyColor);
         }
         
@@ -373,7 +373,7 @@ namespace Kaede.Scripts.GamePlay
         {
             var nextIndex = comboIndex + 1;
             Debug.Log($"PrepareNextButton - Current: {comboIndex}, Next: {nextIndex}, Total buttons: {ComboPanel.childCount}");
-            if (nextIndex < ComboPanel.childCount)
+            if (nextIndex < _buttonVisuals.Count)
             {
                 SetKeySprite(nextIndex, KeyState.Prepare);
             }
