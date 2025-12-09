@@ -58,14 +58,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 0}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 44d32359271e72746adb2dbba1662b35, type: 3}
+  m_Sprite: {fileID: 0}
   m_Type: 3
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -133,14 +133,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 0}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: f864d273f1df6ed4d8de14d0e1421b6f, type: 3}
+  m_Sprite: {fileID: 0}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -165,7 +165,7 @@ GameObject:
   - component: {fileID: 4656430328711411994}
   - component: {fileID: -2631633700790150971}
   m_Layer: 5
-  m_Name: Dual Hold Button
+  m_Name: Dummy Dual Hold Button
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -230,7 +230,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1147449572475279101}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
   m_Name: 
@@ -243,7 +243,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 5435592366743510017, guid: e9315a4eafdfa114db6899cb744a176b, type: 3}
+  m_Sprite: {fileID: 0}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -265,32 +265,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2766bbb3990290646ba6fc39eb1d2af4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  iconImage1: {fileID: 8074369896953440071}
-  iconImage2: {fileID: 8728374791126756407}
+  iconImage1: {fileID: 0}
+  iconImage2: {fileID: 0}
   labelText: {fileID: 3758292827327587621}
   barImage: {fileID: 6885369330539401771}
   fillImage: {fileID: 8125303326650330900}
-  updateSpeed: 5
+  updateSpeed: 1
   currentIndexPercent: 1
   useDynamicSizing: 1
   baseWidth: 150
-  pixelsPerSecond: 60
+  pixelsPerSecond: 40
   sizeRange: {x: 100, y: 400}
   layoutElement: {fileID: 251972248414950566}
   fallbackSprite: {fileID: 0}
-  spriteEntries:
-  - key: 1
-    site: 0
-    idealSprite: {fileID: 21300000, guid: f864d273f1df6ed4d8de14d0e1421b6f, type: 3}
-    prepareSprite: {fileID: 21300000, guid: f864d273f1df6ed4d8de14d0e1421b6f, type: 3}
-    currentSprite: {fileID: 21300000, guid: f864d273f1df6ed4d8de14d0e1421b6f, type: 3}
-    activeSprite: {fileID: 21300000, guid: f864d273f1df6ed4d8de14d0e1421b6f, type: 3}
-  - key: 5
-    site: 1
-    idealSprite: {fileID: 21300000, guid: 46345b48dbc9ac94ca4c770af7a772ff, type: 3}
-    prepareSprite: {fileID: 21300000, guid: 46345b48dbc9ac94ca4c770af7a772ff, type: 3}
-    currentSprite: {fileID: 21300000, guid: 46345b48dbc9ac94ca4c770af7a772ff, type: 3}
-    activeSprite: {fileID: 21300000, guid: 46345b48dbc9ac94ca4c770af7a772ff, type: 3}
+  spriteEntries: []
   gamepadSpriteEntries: []
   needSmoothFill: 0
   holdDuration: 0
@@ -366,14 +354,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 0}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: e234d0e254820924da66b959d79b9837, type: 3}
+  m_Sprite: {fileID: 0}
   m_Type: 3
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -577,14 +565,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 0}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 46345b48dbc9ac94ca4c770af7a772ff, type: 3}
+  m_Sprite: {fileID: 0}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1

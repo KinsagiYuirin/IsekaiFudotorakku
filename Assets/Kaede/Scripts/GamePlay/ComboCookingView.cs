@@ -68,9 +68,13 @@ namespace Kaede.Scripts.GamePlay
         [SerializeField] private GameObject normalIconPrefab;
         [SerializeField] private GameObject holdIconPrefab;
         [SerializeField] private GameObject stackIconPrefab;
+        [SerializeField] private GameObject dualHoldKeyIconPrefab;
+        
+        [Title("Dummy")]
         [SerializeField] private GameObject dummyIconPrefab;
         [SerializeField] private GameObject dummyHoldIconPrefab;
-        [SerializeField] private GameObject dualHoldKeyIconPrefab;
+        [SerializeField] private GameObject dummyDualHoldIconPrefab;
+
         
         [Title("Display Settings")]
         [SerializeField] private bool useStringDisplayKey = false;
@@ -222,7 +226,7 @@ namespace Kaede.Scripts.GamePlay
                             var dualHoldIcon = Instantiate(dualHoldKeyIconPrefab, ComboPanel);
                             _comboSettings.Add(comboSetting);
                             SetupKeyIcon(dualHoldIcon, comboSetting);
-                            CreateSubDualButton(comboSetting, _buttonVisuals.Count - 1, dummyHoldIconPrefab);
+                            CreateSubDualButton(comboSetting, _buttonVisuals.Count - 1, dummyDualHoldIconPrefab);
                         }
                         break;
                     case {type: ComboType.DualKey}:

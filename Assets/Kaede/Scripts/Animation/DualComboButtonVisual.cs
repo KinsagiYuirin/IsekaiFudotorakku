@@ -332,6 +332,11 @@ namespace Kaede.Scripts.Animation
 
         private void ApplySprite(KeyState state)
         {
+            if (iconImage1 == null || iconImage2 == null)
+            { 
+                return;
+            }
+            
             // ซ้าย = Left, ขวา = Right
             if (iconImage1 != null)
             {
