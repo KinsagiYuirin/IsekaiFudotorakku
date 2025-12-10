@@ -41,7 +41,7 @@ namespace Kaede.Scripts.Inputs.ComboHandlers.Combo
             
             var primaryActive = primaryHeld || primaryDown;
             var secondaryActive = secondaryHeld || secondaryDown;
-            
+
             if (primaryUp || secondaryUp || input.AnyOtherKeyUp(expectedKey, _secondKey))
             {
                 _pendingCompletion = false;

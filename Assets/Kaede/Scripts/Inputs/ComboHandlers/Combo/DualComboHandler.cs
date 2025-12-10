@@ -71,7 +71,7 @@ namespace Kaede.Scripts.Inputs.ComboHandlers.Combo
                 _remainingSimultaneousWindow = SimultaneousGraceSeconds;
             }
 
-            if (input.IsKeyUp(expectedKey) || input.AnyOtherKeyUp(expectedKey))
+            if (primaryUp || secondaryUp || input.AnyOtherKeyUp(expectedKey, _secondKey))
             {
                 return ComboInputResult.Complete;
             }
