@@ -61,7 +61,6 @@ namespace Kaede.Scripts.GamePlay
         [field: SerializeField] public Sprite CookingImage { get; private set; }
         [field: SerializeField] public GameObject CookingImageObject { get; private set; }
         [field: SerializeField] public TMP_Text ComboText { get; private set; }
-        [SerializeField] private GameObject stove;
         
         [Title("Light & Effects")]
         [SerializeField] private GameObject cookingLightEffect;
@@ -131,12 +130,14 @@ namespace Kaede.Scripts.GamePlay
         {
             SetKeySprite(comboIndex, KeyState.Active);
             SetKeyColor(comboIndex, correctKeyColor);
+            LightEffectWhenPress(true);
         }
 
         public void PressWrongKey(int comboIndex)
         {
             SetKeySprite(comboIndex, KeyState.Active);
             SetKeyColor(comboIndex, wrongKeyColor);
+            LightEffectWhenPress(false);
         }
         
         public void CompleteCombo()
@@ -165,6 +166,12 @@ namespace Kaede.Scripts.GamePlay
             SetUIElementActive(ComboPanel?.gameObject, !isResting);
             SetUIElementActive(CookingImageObject?.gameObject, !isResting);
             SetUIElementActive(cookingLightEffect?.gameObject, !isResting);
+            SetUIElementActive(cookingFailEffect?.gameObject, !isResting);
+        }
+
+        public void SetFailEffect(bool isActive)
+        {
+            SetUIElementActive(cookingFailEffect?.gameObject, isActive);
         }
 
         public void HideShowTimer(float alpha)
@@ -419,16 +426,22 @@ namespace Kaede.Scripts.GamePlay
                 element.SetActive(active);
             }
         }
-        
-        // ชั่วคราว
-        private void SetStove(bool active)
-        {
-            if (stove != null)
-            {
-                stove.gameObject.SetActive(active);
-            }
-        }
         #endregion
         
+        #region Test Methods
+
+        private void LightEffectWhenPress(bool isCorrect)
+        {
+            if (cookingLightEffect == null || cookingFailEffect == null)
+            {
+                Debug.LogWarning("Cooking light or fail effect is not assigned.");
+                return;
+            }
+            
+            cookingLightEffect.SetActive(isCorrect);
+            cookingFailEffect.SetActive(!isCorrect);
+        }
+        
+        #endregion
     }
 }

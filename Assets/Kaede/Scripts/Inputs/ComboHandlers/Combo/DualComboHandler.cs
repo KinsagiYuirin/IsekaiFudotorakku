@@ -29,6 +29,9 @@ namespace Kaede.Scripts.Inputs.ComboHandlers.Combo
             var primaryHeld = input.IsKeyHeld(expectedKey);
             var secondaryHeld = input.IsKeyHeld(_secondKey);
             
+            var primaryUp = input.IsKeyUp(expectedKey);
+            var secondaryUp = input.IsKeyUp(_secondKey);
+            
             var primaryActive = primaryHeld || primaryDown;
             var secondaryActive = secondaryHeld || secondaryDown;
 
@@ -62,7 +65,7 @@ namespace Kaede.Scripts.Inputs.ComboHandlers.Combo
                     return ComboInputResult.Correct;
                 }
             }
-            else if (primaryDown ^ secondaryDown)
+            if (!primaryActive && !secondaryActive && (primaryUp || secondaryUp || input.AnyOtherKeyUp(expectedKey, _secondKey)))
             {
                 _waitingForSecondKey = true;
                 _remainingSimultaneousWindow = SimultaneousGraceSeconds;

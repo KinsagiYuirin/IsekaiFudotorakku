@@ -273,9 +273,9 @@ MonoBehaviour:
   updateSpeed: 5
   currentIndexPercent: 1
   useDynamicSizing: 1
-  baseWidth: 150
-  pixelsPerSecond: 60
-  sizeRange: {x: 100, y: 400}
+  baseWidth: 250
+  pixelsPerSecond: 250
+  sizeRange: {x: 300, y: 800}
   layoutElement: {fileID: 251972248414950566}
   fallbackSprite: {fileID: 0}
   spriteEntries:

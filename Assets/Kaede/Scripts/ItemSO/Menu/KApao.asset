@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Kapao
   m_EditorClassIdentifier: 
   menuName: kapao
-  foodType: 3
+  foodType: 1
   menuLevel: 1
   steps:
   - preset: {fileID: 11400000, guid: 03dfa2455f8934940a817294acd65cf2, type: 2}
@@ -25,4 +25,5 @@ MonoBehaviour:
   - preset: {fileID: 11400000, guid: bff2f168f0941e949855f28593401dc8, type: 2}
     overrideSequence: 0
     customSequence: []
-  menuSprite: {fileID: 6841128214485677621, guid: 6166c33652e0c784da0ca402648674ba, type: 3}
+  menuSprite: {fileID: 21300000, guid: 6693753a2c02452488a4f4bb3ada03c0, type: 3}
+  menuFailSprite: {fileID: 0}

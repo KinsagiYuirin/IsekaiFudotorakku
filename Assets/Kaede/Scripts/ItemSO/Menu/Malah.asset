@@ -25,4 +25,5 @@ MonoBehaviour:
   - preset: {fileID: 11400000, guid: 19e48516be4bd324dae4f9d334f87db8, type: 2}
     overrideSequence: 0
     customSequence: []
-  menuSprite: {fileID: -1240688201547671087, guid: 0b787d1e8e557ed469aa590564628421, type: 3}
+  menuSprite: {fileID: 21300000, guid: 0b787d1e8e557ed469aa590564628421, type: 3}
+  menuFailSprite: {fileID: -1734495355800838998, guid: a9c225ad2084b6f48bf39b95a0198e59, type: 3}

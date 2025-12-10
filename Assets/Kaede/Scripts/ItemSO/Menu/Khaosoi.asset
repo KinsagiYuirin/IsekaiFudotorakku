@@ -26,3 +26,4 @@ MonoBehaviour:
     overrideSequence: 0
     customSequence: []
   menuSprite: {fileID: 21300000, guid: 4219c8451a5db8045a147bd025e1fb23, type: 3}
+  menuFailSprite: {fileID: 5617262850592375055, guid: 91515c577f50f5842b1ea23422fd15a4, type: 3}

@@ -30,21 +30,24 @@ namespace Kaede.Scripts.Inputs.ComboHandlers.Combo
         public ComboInputResult CheckInput(PlayerInputHandler input, ComboKey expectedKey,
             CancellationToken ct, IComboButtonVisual visual)
         {
-            if (_pendingCompletion)
-            {
-                _pendingCompletion = false;
-                return ComboInputResult.Complete;
-            }
-            
             var primaryDown = input.IsKeyDown(expectedKey);
             var secondaryDown = input.IsKeyDown(_secondKey);
             
             var primaryHeld = input.IsKeyHeld(expectedKey);
             var secondaryHeld = input.IsKeyHeld(_secondKey);
             
+            var primaryUp = input.IsKeyUp(expectedKey);
+            var secondaryUp = input.IsKeyUp(_secondKey);
+            
             var primaryActive = primaryHeld || primaryDown;
             var secondaryActive = secondaryHeld || secondaryDown;
-
+            
+            if (primaryUp || secondaryUp || input.AnyOtherKeyUp(expectedKey, _secondKey))
+            {
+                _pendingCompletion = false;
+                return ComboInputResult.Complete;
+            }
+            
             if (!_isHolding)
             {
                 if (primaryActive && secondaryActive)

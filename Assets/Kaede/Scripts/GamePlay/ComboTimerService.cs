@@ -38,6 +38,7 @@ namespace Kaede.Scripts.GamePlay
             ResetTimer();
             UpdateTimerText();
             _view?.SetRestingMode(false);
+            _view?.SetFailEffect(false);
         }
 
         public void Tick(float deltaTime)
@@ -118,6 +119,7 @@ namespace Kaede.Scripts.GamePlay
             currentTimer = maxTimePerCombo;
             UpdateTimerText();
             _view?.SetRestingMode(false);
+            _view?.SetFailEffect(false);
             RestFinished?.Invoke();
             _hasTriggered = false;
         }
