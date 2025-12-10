@@ -45,7 +45,7 @@ namespace Kaede.Scripts.Inputs.ComboHandlers.Combo
             if (_pendingCompletion)
             {
                 ResetHold();
-                _pendingCompletion = true;
+                _pendingCompletion = false;
                 return _isHolding ? ComboInputResult.Wrong : ComboInputResult.None;
             }
             
