@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: 0b787d1e8e557ed469aa590564628421
+guid: 6693753a2c02452488a4f4bb3ada03c0
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: -1240688201547671087
-    second: '[paper icon] malah_0'
+      213: -8179091512952495314
+    second: paper_icon_kaprao_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -113,13 +113,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: '[paper icon] malah_0'
+      name: paper_icon_kaprao_0
       rect:
         serializedVersion: 2
-        x: 74
-        y: 0
-        width: 959
-        height: 1091
+        x: 94
+        y: 159
+        width: 975
+        height: 877
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -128,8 +128,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 1d99bb577a038cee0800000000000000
-      internalID: -1240688201547671087
+      spriteID: e23ed098a970e7e80800000000000000
+      internalID: -8179091512952495314
       vertices: []
       indices: 
       edges: []
@@ -148,7 +148,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      '[paper icon] malah_0': -1240688201547671087
+      paper_icon_kaprao_0: -8179091512952495314
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

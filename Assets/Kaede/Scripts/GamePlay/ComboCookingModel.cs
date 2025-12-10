@@ -66,6 +66,7 @@ namespace Kaede.Scripts.GamePlay
             
             CurrentMenuIndex++;
             CurrentComboIndex = 0;
+            ScoreManager.ResetComboFail();
             ResetStep();
         }
 

@@ -32,6 +32,7 @@ namespace Kaede.Scripts.GamePlay
         [SerializeField] private ComboTimerService timer = new ComboTimerService();
         [SerializeField] private bool needSpacebar;
         [SerializeField] private bool autoPlay;
+        [SerializeField] private int maxFailToSendFood;
         
         [Title("Combo Settings")]
         [field: SerializeField] public List<MenuData> MenuDatasList { get; private set; }
@@ -243,7 +244,7 @@ namespace Kaede.Scripts.GamePlay
             var hasNext = _model.NextStep();
             if (!hasNext)
             {
-                sendFood.SetToStartPosition(_model.MenuDatas[_model.CurrentMenuIndex].menuSprite);
+                ActiveSendFood(_model.MenuDatas[_model.CurrentMenuIndex]);
                 _inputHandler?.SetComboInputEnabled(false);
                 await timer.PauseTimerForSeconds(timer.DelayAfterFinishMenu);
                 NextMenu().Forget();;
@@ -351,6 +352,19 @@ namespace Kaede.Scripts.GamePlay
         #endregion
 
         #region Utill
+        
+        private void ActiveSendFood(MenuData menuData)
+        {
+            if (menuData == null) return;
+
+            var menuSprite = menuData.menuSprite;
+            if (_model.ScoreManager.ComboFailCount >= maxFailToSendFood)
+            {
+                menuSprite = menuData.menuFailSprite;
+            }
+            sendFood.SetToStartPosition(menuSprite);
+        }
+        
         private void HandleComboTimeout()
         {
             _model.ResetCombo();

@@ -19,6 +19,7 @@ namespace Kaede.Scripts.Managers
         public List<float> CurrentStepScores => new List<float>(_currentStepScores);
         private float _pendingStepScore;
         public int ComboCount = 0;
+        public int ComboFailCount = 0;
         
         #region Score Methods
         public void SetPendingStepScore(float score)
@@ -68,11 +69,22 @@ namespace Kaede.Scripts.Managers
             ComboCount++;
         }
         
+        public void AddComboFail()
+        {
+            ComboFailCount++;
+        }
+        
         public void ResetCombo()
         {
             ComboCount = 0;
+            AddComboFail();
         }
 
+        public void ResetComboFail()
+        {
+            ComboFailCount = 0;
+        }
+        
         #endregion
         
         #region Redo Methods

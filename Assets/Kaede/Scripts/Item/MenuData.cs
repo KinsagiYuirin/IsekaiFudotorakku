@@ -52,6 +52,7 @@ namespace Kaede.Scripts.Item
 
         [Title("References")]
         [PreviewField(70)] public Sprite menuSprite;
+        [PreviewField(70)] public Sprite menuFailSprite;
         
         private float _totalTime;
         private float _totalScore;

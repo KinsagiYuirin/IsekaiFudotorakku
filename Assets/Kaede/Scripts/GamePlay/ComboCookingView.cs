@@ -60,9 +60,12 @@ namespace Kaede.Scripts.GamePlay
         [field: SerializeField] public Transform SubComboPanel { get; private set; }
         [field: SerializeField] public Sprite CookingImage { get; private set; }
         [field: SerializeField] public GameObject CookingImageObject { get; private set; }
-        [SerializeField] private GameObject cookingLightEffect;
         [field: SerializeField] public TMP_Text ComboText { get; private set; }
         [SerializeField] private GameObject stove;
+        
+        [Title("Light & Effects")]
+        [SerializeField] private GameObject cookingLightEffect;
+        [SerializeField] private GameObject cookingFailEffect;
          
         [Title("Prefabs")]
         [SerializeField] private GameObject normalIconPrefab;
@@ -426,5 +429,6 @@ namespace Kaede.Scripts.GamePlay
             }
         }
         #endregion
+        
     }
 }
