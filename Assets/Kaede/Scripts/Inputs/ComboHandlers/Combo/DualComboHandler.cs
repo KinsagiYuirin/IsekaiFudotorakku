@@ -41,7 +41,6 @@ namespace Kaede.Scripts.Inputs.ComboHandlers.Combo
                 return ComboInputResult.Wrong;
             }
             
-            // ต้องกดพร้อมกัน ถ้ากดปุ่มใดปุ่มหนึ่งก่อนถือว่าผิด
             if (primaryDown && secondaryDown)
             {
                 ResetState();
@@ -51,12 +50,6 @@ namespace Kaede.Scripts.Inputs.ComboHandlers.Combo
             if (_waitingForSecondKey)
             {
                 _remainingSimultaneousWindow -= Time.deltaTime;
-                var anyActive = primaryActive || secondaryActive;
-                if (!anyActive || _remainingSimultaneousWindow <= 0f)
-                {
-                    ResetState();
-                    return ComboInputResult.Wrong;
-                }
 
                 var secondPressedWhileFirstActive = (primaryDown && secondaryActive) || (secondaryDown && primaryActive);
                 if (secondPressedWhileFirstActive)
@@ -64,15 +57,22 @@ namespace Kaede.Scripts.Inputs.ComboHandlers.Combo
                     ResetState();
                     return ComboInputResult.Correct;
                 }
+                
+                if (_remainingSimultaneousWindow <= 0f)
+                {
+                    ResetState();
+                    return ComboInputResult.Wrong;
+                }
             }
-            if (!primaryActive && !secondaryActive && (primaryUp || secondaryUp || input.AnyOtherKeyUp(expectedKey, _secondKey)))
+            else if (!primaryActive && !secondaryActive && (primaryUp || secondaryUp))
             {
                 _waitingForSecondKey = true;
                 _remainingSimultaneousWindow = SimultaneousGraceSeconds;
             }
-
-            if (primaryUp || secondaryUp || input.AnyOtherKeyUp(expectedKey, _secondKey))
+            
+            if (primaryUp || secondaryUp)
             {
+                ResetState();
                 return ComboInputResult.Complete;
             }
             return ComboInputResult.None;

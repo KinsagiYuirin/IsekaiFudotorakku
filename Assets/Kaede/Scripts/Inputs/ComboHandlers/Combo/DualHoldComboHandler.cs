@@ -42,10 +42,11 @@ namespace Kaede.Scripts.Inputs.ComboHandlers.Combo
             var primaryActive = primaryHeld || primaryDown;
             var secondaryActive = secondaryHeld || secondaryDown;
 
-            if (primaryUp || secondaryUp || input.AnyOtherKeyUp(expectedKey, _secondKey))
+            if (_pendingCompletion)
             {
-                _pendingCompletion = false;
-                return ComboInputResult.Complete;
+                ResetHold();
+                _pendingCompletion = true;
+                return _isHolding ? ComboInputResult.Wrong : ComboInputResult.None;
             }
             
             if (!_isHolding)
@@ -77,6 +78,7 @@ namespace Kaede.Scripts.Inputs.ComboHandlers.Combo
             if (_waitingForSecondKey && !primaryActive && !secondaryActive)
             {
                 ResetHold();
+                _pendingCompletion = true;
                 return ComboInputResult.Wrong;
             }
 
@@ -101,13 +103,13 @@ namespace Kaede.Scripts.Inputs.ComboHandlers.Combo
                 
                 ResetHold();
                 _pendingCompletion = true;
-
                 return withinWindow ? ComboInputResult.Correct : ComboInputResult.Wrong;
             }
             
             if (input.AnyOtherKeyDown(expectedKey, _secondKey))
             {
                 ResetHold();
+                _pendingCompletion = true;
                 return ComboInputResult.Wrong;
             }
 
