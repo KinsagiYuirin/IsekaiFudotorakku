@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Kaede.Scripts.GamePlay;
 using Kaede.Scripts.Item;
+using PrimeTween;
 using Sirenix.OdinInspector;
 using TMPro;
 using UnityEngine;
@@ -39,75 +40,47 @@ namespace Kaede.Scripts.Animation
         [SerializeField] private Image iconImage2;   // ขวา = ปุ่มสอง
         [SerializeField] private TMP_Text labelText;
 
-        [Header("Slide Bar")]
-        [SerializeField] private Image barImage;
-        [SerializeField] private Image fillImage;
-        [SerializeField] private float updateSpeed = 1f;
-        [SerializeField, DisplayAsString] private float currentIndexPercent = 1f;
-        
-        [Title("Dynamic Sizing")]
-        [SerializeField] private bool useDynamicSizing = false;
-        [SerializeField] private float baseWidth = 100f;
-        [SerializeField] private float pixelsPerSecond = 40f;
-        [SerializeField] private Vector2 sizeRange = new Vector2(80f, 400f);
-        [SerializeField] private LayoutElement layoutElement;
+        [Title("Animation Setting")] 
+        [SerializeField] private float scaleUp = 1.2f;
+        [SerializeField] private float scaleDown = 1.0f;
+        [SerializeField] private float durationPhase1 = 0.1f;
+        [SerializeField] private float durationPhase2 = 0.1f;
 
         [Title("Sprite Settings")]
         [SerializeField] private Sprite fallbackSprite;
+        //[SerializeField] private Sprite grayBackGroundSprite; // ไม่ได้ใช้ใน Logic กดครั้งเดียว
+        //[SerializeField] private Sprite lightBackGroundSprite; // ไม่ได้ใช้ใน Logic กดครั้งเดียว
         [SerializeField] private SpriteEntry[] spriteEntries;
         [SerializeField] private SpriteEntry[] gamepadSpriteEntries;
-        
-        private RectTransform _rectTransform;
-        private RectTransform _fillImageRect;
 
-        [Header("Details")]
-        [SerializeField] private bool needSmoothFill = true;
-
-        [SerializeField, DisplayAsString] private float holdDuration;
-        private bool _isHolding;
-
-        // คีย์ซ้าย–ขวา (ปุ่มแรก/ปุ่มสอง)
+        private Sequence pressSequence;
+        private Vector3 originalScale1;
+        private Vector3 originalScale2;
+            
         [SerializeField, DisplayAsString] private ComboKey _leftKey = ComboKey.None;
         [SerializeField, DisplayAsString] private ComboKey _rightKey = ComboKey.None;
         
-        // 🔸 ใช้ KeySite ใน dictionary ด้วย
         private readonly Dictionary<(ComboKey key, SpriteEntry.KeySite site, KeyState state), Sprite> _spriteLookup = new();
         
         private void Awake()
         {
-            barImage ??= GetComponentInChildren<Image>();
-            fillImage ??= GetComponentInChildren<Image>();
+            iconImage1 ??= GetComponent<Image>();
+            iconImage2 ??= GetComponent<Image>();
             labelText ??= GetComponentInChildren<TMP_Text>();
             
+            // เก็บขนาดเริ่มต้นของทั้งสองไอคอนไว้สำหรับทำ Animation
+            if (iconImage1 != null) originalScale1 = iconImage1.transform.localScale;
+            if (iconImage2 != null) originalScale2 = iconImage2.transform.localScale;
+
             InitializeSpriteLookup();
-
-            _rectTransform = GetComponent<RectTransform>();
-            if (fillImage != null)
-                _fillImageRect = fillImage.GetComponent<RectTransform>();
-
-            if (layoutElement == null)
-            {
-                layoutElement = GetComponent<LayoutElement>();
-                if (layoutElement == null)
-                {
-                    layoutElement = gameObject.AddComponent<LayoutElement>();
-                }
-            }
-
-            ResetProgress();
         }
 
         public void Initialize(ComboKeySetting comboSetting, string displayKey, bool isStringKey)
         {
-            holdDuration = comboSetting switch
-            {
-                { type: ComboType.Hold }        => comboSetting.holdTime,
-                { type: ComboType.DualKeyHold } => comboSetting.dualHoldTime,
-                _                               => 1f
-            };
+            // ไม่มีการคำนวณ Duration แล้ว เพราะเป็นปุ่มกดธรรมดา
 
-            // ตรงนี้ map ให้ตรงกับ ComboKeySetting ของโปรเจกต์จริง
-            if (comboSetting.type == ComboType.DualKeyHold)
+            // Map ปุ่ม ซ้าย/ขวา
+            if (comboSetting.type == ComboType.DualKeyHold || comboSetting.type == ComboType.DualKey)
             {
                 _leftKey  = comboSetting.key;        // ปุ่มแรก (ซ้าย)
                 _rightKey = comboSetting.secondKey;  // ปุ่มสอง (ขวา)
@@ -133,28 +106,26 @@ namespace Kaede.Scripts.Animation
                     labelText.text = displayKey;
                 }
             }
-
-            UpdateLayoutElementSize();
-            ResetProgress();
         }
 
         public void SetState(KeyState state, int? index, float? indexFloat)
         {
             _ = index;
+            _ = indexFloat;
+            
             ApplySprite(state);
 
             switch (state)
             {
                 case KeyState.Active:
-                    UpdateProgress(indexFloat ?? 0f); // indexFloat = elapsedTime
+                    // เมื่อกดสำเร็จ ให้เล่น Animation เด้งดึ๋ง (เหมือน DefaultComboButtonVisual)
+                    OnPointDownAnimation();
                     break;
                 case KeyState.Current:
                 case KeyState.Prepare:
-                    _isHolding = false;
-                    break;
                 case KeyState.Ideal:
                 default:
-                    ResetProgress();
+                    // สถานะปกติแค่เปลี่ยน Sprite (จัดการใน ApplySprite แล้ว)
                     break;
             }
         }
@@ -166,125 +137,27 @@ namespace Kaede.Scripts.Animation
             if (iconImage2 != null)
                 iconImage2.color = color;
         }
-        
-        private void UpdateProgress(float elapsedTime)
+
+        private void OnPointDownAnimation()
         {
-            if (!_isHolding)
+            // หยุด Sequence เดิมถ้ามี
+            if (pressSequence.isAlive) pressSequence.Stop();
+            
+            pressSequence = Sequence.Create();
+
+            // Animate Icon 1 (Left)
+            if (iconImage1 != null)
             {
-                _isHolding = true;
-                ApplyFill(0f);
+                pressSequence.Group(Tween.LocalScale(iconImage1.transform, originalScale1, originalScale1 * scaleUp, durationPhase1));
+                pressSequence.Group(Tween.LocalScale(iconImage1.transform, originalScale1 * scaleUp, originalScale1 * scaleDown, durationPhase2, startDelay: durationPhase1));
             }
 
-            var targetPercent = holdDuration <= 0f 
-                ? 1f 
-                : Mathf.Clamp01(elapsedTime / holdDuration);
-            ApplyFill(targetPercent);
-        }
-
-        private void ApplyFill(float targetPercent)
-        {
-            targetPercent = Mathf.Clamp01(targetPercent);
-
-            if (needSmoothFill && updateSpeed > Mathf.Epsilon)
+            // Animate Icon 2 (Right)
+            if (iconImage2 != null)
             {
-                var t = 1f - Mathf.Exp(-updateSpeed * Time.deltaTime);
-                currentIndexPercent = Mathf.Lerp(currentIndexPercent, targetPercent, t);
+                pressSequence.Group(Tween.LocalScale(iconImage2.transform, originalScale2, originalScale2 * scaleUp, durationPhase1));
+                pressSequence.Group(Tween.LocalScale(iconImage2.transform, originalScale2 * scaleUp, originalScale2 * scaleDown, durationPhase2, startDelay: durationPhase1));
             }
-            else
-            {
-                currentIndexPercent = targetPercent;
-            }
-
-            if (fillImage != null)
-            {
-                fillImage.fillAmount = currentIndexPercent;
-            }
-        }
-        
-        private void ResetProgress()
-        {
-            _isHolding = false;
-            currentIndexPercent = 0f;
-            ApplyFill(0f);
-        }
-            
-        private void UpdateLayoutElementSize()
-        {
-            // ถ้าไม่อยากให้ปุ่มยืด ปล่อย useDynamicSizing = false
-            if (!useDynamicSizing)
-            {
-                SetupFillImageAnchors();
-                StartCoroutine(RebuildLayoutNextFrame());
-                return;
-            }
-
-            var calculatedWidth = baseWidth + (holdDuration * pixelsPerSecond);
-            var targetWidth = Mathf.Clamp(calculatedWidth, sizeRange.x, sizeRange.y);
-            
-            Debug.Log($"Calculating size: Duration={holdDuration}s, Target Width={targetWidth}px");
-            
-            if (layoutElement != null)
-            {
-                layoutElement.preferredWidth = targetWidth;
-                layoutElement.flexibleWidth  = 0f;
-                layoutElement.minWidth       = targetWidth;
-            }
-            
-            if (_rectTransform != null)
-            {
-                var sizeDelta = _rectTransform.sizeDelta;
-                sizeDelta.x = targetWidth;
-                _rectTransform.sizeDelta = sizeDelta;
-                
-                Debug.Log($"RectTransform size set to: {_rectTransform.sizeDelta.x}");
-            }
-            
-            SetupFillImageAnchors();
-            StartCoroutine(RebuildLayoutNextFrame());
-        }
-
-        private void SetupFillImageAnchors()
-        {
-            if (_fillImageRect == null) return;
-            
-            Debug.Log("Setting up fillImage anchors...");
-            
-            _fillImageRect.anchorMin        = new Vector2(0f, 0.5f);
-            _fillImageRect.anchorMax        = new Vector2(1f, 0.5f);
-            
-            _fillImageRect.anchoredPosition = Vector2.zero;
-            
-            var fillSize = _fillImageRect.sizeDelta;
-            fillSize.y = gameObject.GetComponent<RectTransform>().sizeDelta.y;
-            fillSize.x = 0f;
-            _fillImageRect.sizeDelta = fillSize;
-            
-            _fillImageRect.offsetMin = new Vector2(2f, -fillSize.y / 2f);
-            _fillImageRect.offsetMax = new Vector2(-2f, fillSize.y / 2f);
-            
-            Debug.Log($"FillImage anchor set: {_fillImageRect.anchorMin} to {_fillImageRect.anchorMax}");
-        }
-
-        private IEnumerator RebuildLayoutNextFrame()
-        {
-            yield return null;
-            
-            Debug.Log("Rebuilding layout...");
-            
-            if (transform.parent != null)
-            {
-                var parentRect = transform.parent as RectTransform;
-                if (parentRect != null)
-                {
-                    LayoutRebuilder.ForceRebuildLayoutImmediate(parentRect);
-                    Debug.Log("Parent layout rebuilt");
-                }
-            }
-            
-            if (_rectTransform != null)
-                LayoutRebuilder.ForceRebuildLayoutImmediate(_rectTransform);
-
-            Debug.Log($"Final sizes - GameObject: {_rectTransform.sizeDelta.x}, FillImage: {_fillImageRect?.sizeDelta.x}");
         }
         
         private void InitializeSpriteLookup()
@@ -302,11 +175,7 @@ namespace Kaede.Scripts.Animation
                 foreach (var entry in gamepadSpriteEntries)
                 {
                     if (entry == null) continue;
-
-                    TryRegisterSprite(entry.key, entry.site, KeyState.Ideal,   entry.idealSprite);
-                    TryRegisterSprite(entry.key, entry.site, KeyState.Prepare, entry.prepareSprite);
-                    TryRegisterSprite(entry.key, entry.site, KeyState.Current, entry.currentSprite);
-                    TryRegisterSprite(entry.key, entry.site, KeyState.Active,  entry.activeSprite);
+                    RegisterEntry(entry);
                 }
             }
             else
@@ -314,25 +183,28 @@ namespace Kaede.Scripts.Animation
                 foreach (var entry in spriteEntries)
                 {
                     if (entry == null) continue;
-
-                    TryRegisterSprite(entry.key, entry.site, KeyState.Ideal,   entry.idealSprite);
-                    TryRegisterSprite(entry.key, entry.site, KeyState.Prepare, entry.prepareSprite);
-                    TryRegisterSprite(entry.key, entry.site, KeyState.Current, entry.currentSprite);
-                    TryRegisterSprite(entry.key, entry.site, KeyState.Active,  entry.activeSprite);
+                    RegisterEntry(entry);
                 }
             }
+        }
+
+        private void RegisterEntry(SpriteEntry entry)
+        {
+            TryRegisterSprite(entry.key, entry.site, KeyState.Ideal,   entry.idealSprite);
+            TryRegisterSprite(entry.key, entry.site, KeyState.Prepare, entry.prepareSprite);
+            TryRegisterSprite(entry.key, entry.site, KeyState.Current, entry.currentSprite);
+            TryRegisterSprite(entry.key, entry.site, KeyState.Active,  entry.activeSprite);
         }
 
         private void TryRegisterSprite(ComboKey key, SpriteEntry.KeySite site, KeyState state, Sprite sprite)
         {
             if (sprite == null) return;
-
             _spriteLookup[(key, site, state)] = sprite;
         }
 
         private void ApplySprite(KeyState state)
         {
-            if (iconImage1 == null || iconImage2 == null)
+            if (iconImage1 == null && iconImage2 == null)
             { 
                 return;
             }
@@ -376,4 +248,3 @@ namespace Kaede.Scripts.Animation
         }
     }
 }
-

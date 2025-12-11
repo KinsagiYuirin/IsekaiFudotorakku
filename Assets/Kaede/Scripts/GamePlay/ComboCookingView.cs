@@ -70,6 +70,7 @@ namespace Kaede.Scripts.GamePlay
         [SerializeField] private GameObject normalIconPrefab;
         [SerializeField] private GameObject holdIconPrefab;
         [SerializeField] private GameObject stackIconPrefab;
+        [SerializeField] private GameObject dualKeyIconPrefab;
         [SerializeField] private GameObject dualHoldKeyIconPrefab;
         
         [Title("Dummy")]
@@ -218,7 +219,7 @@ namespace Kaede.Scripts.GamePlay
                             var singleIcon = Instantiate(normalIconPrefab, ComboPanel);
                             _comboSettings.Add(comboSetting);
                             SetupKeyIcon(singleIcon, comboSetting);
-                            CreateSubDualButton(comboSetting, _buttonVisuals.Count - 1, dummyIconPrefab);
+                            //CreateSubDualButton(comboSetting, _buttonVisuals.Count - 1, dummyIconPrefab);
                         }
                         break;
                     case {type: ComboType.Hold}:
@@ -227,7 +228,7 @@ namespace Kaede.Scripts.GamePlay
                             var holdIcon = Instantiate(holdIconPrefab, ComboPanel);
                             _comboSettings.Add(comboSetting);
                             SetupKeyIcon(holdIcon, comboSetting);
-                            CreateSubDualButton(comboSetting, _buttonVisuals.Count - 1, dummyHoldIconPrefab);
+                            //CreateSubDualButton(comboSetting, _buttonVisuals.Count - 1, dummyHoldIconPrefab);
                         }
                         break;
                     case {type: ComboType.DualKeyHold}:
@@ -236,16 +237,16 @@ namespace Kaede.Scripts.GamePlay
                             var dualHoldIcon = Instantiate(dualHoldKeyIconPrefab, ComboPanel);
                             _comboSettings.Add(comboSetting);
                             SetupKeyIcon(dualHoldIcon, comboSetting);
-                            CreateSubDualButton(comboSetting, _buttonVisuals.Count - 1, dummyDualHoldIconPrefab);
+                            //CreateSubDualButton(comboSetting, _buttonVisuals.Count - 1, dummyDualHoldIconPrefab);
                         }
                         break;
                     case {type: ComboType.DualKey}:
                         if (normalIconPrefab != null)
                         {
-                            var dualKeyIcon = Instantiate(normalIconPrefab, ComboPanel);
+                            var dualKeyIcon = Instantiate(dualKeyIconPrefab, ComboPanel);
                             _comboSettings.Add(comboSetting);
                             SetupKeyIcon(dualKeyIcon, comboSetting);
-                            CreateSubDualButton(comboSetting, _buttonVisuals.Count - 1, normalIconPrefab);
+                            //CreateSubDualButton(comboSetting, _buttonVisuals.Count - 1, normalIconPrefab);
                         }
                         break;
                     case {type:ComboType.Stack or ComboType.StackTimer}:

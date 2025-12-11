@@ -218,6 +218,13 @@ namespace Kaede.Scripts.Animation
 
             return fallbackSprite;
         }
+        
+        private void OnCurrentAnimation()
+        {
+            pressSequence = Sequence.Create();
+            pressSequence.Chain(Tween.LocalScale(iconImage.rectTransform, originalScale, originalScale * scaleUp, durationPhase1));
+            pressSequence.Chain(Tween.LocalScale(iconImage.rectTransform, originalScale * scaleUp, originalScale * scaleDown, durationPhase2));
+        }
 
         private void OnPointDownAnimation()
         {
