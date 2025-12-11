@@ -9,9 +9,9 @@ namespace Kaede.Scripts.Inputs.ComboHandlers.Combo
 {
     public class DualComboHandler : IComboHandler
     {
-
         private float _remainingSimultaneousWindow;
         private bool _waitingForSecondKey;
+        private bool _isActionDone;
         private readonly ComboKey _secondKey;
         private const float SimultaneousGraceSeconds = 0.1f;
 
@@ -23,26 +23,39 @@ namespace Kaede.Scripts.Inputs.ComboHandlers.Combo
         public ComboInputResult CheckInput(PlayerInputHandler input, ComboKey expectedKey,
             CancellationToken ct, IComboButtonVisual visual)
         {
+            if (_isActionDone)
+            {
+                bool expectedUp = input.IsKeyUp(expectedKey) || !input.IsKeyHeld(expectedKey);
+                bool secondUp = input.IsKeyUp(_secondKey) || !input.IsKeyHeld(_secondKey);
+
+                if (expectedUp || secondUp)
+                {
+                    _isActionDone = false;
+                    ResetState();
+                    return ComboInputResult.Complete;
+                }
+                return ComboInputResult.None;
+            }
+
             var primaryDown = input.IsKeyDown(expectedKey);
             var secondaryDown = input.IsKeyDown(_secondKey);
             
             var primaryHeld = input.IsKeyHeld(expectedKey);
             var secondaryHeld = input.IsKeyHeld(_secondKey);
             
-            var primaryUp = input.IsKeyUp(expectedKey);
-            var secondaryUp = input.IsKeyUp(_secondKey);
-            
             var primaryActive = primaryHeld || primaryDown;
             var secondaryActive = secondaryHeld || secondaryDown;
 
             if (input.AnyOtherKeyDown(expectedKey, _secondKey))
             {
+                _isActionDone = true; 
                 ResetState();
                 return ComboInputResult.Wrong;
             }
-            
+
             if (primaryDown && secondaryDown)
             {
+                _isActionDone = true;
                 ResetState();
                 return ComboInputResult.Correct;
             }
@@ -54,27 +67,25 @@ namespace Kaede.Scripts.Inputs.ComboHandlers.Combo
                 var secondPressedWhileFirstActive = (primaryDown && secondaryActive) || (secondaryDown && primaryActive);
                 if (secondPressedWhileFirstActive)
                 {
+                    _isActionDone = true;
                     ResetState();
                     return ComboInputResult.Correct;
                 }
                 
-                if (_remainingSimultaneousWindow <= 0f)
+                if ((!primaryActive && !secondaryActive) || _remainingSimultaneousWindow <= 0f)
                 {
+                    _isActionDone = true;
                     ResetState();
                     return ComboInputResult.Wrong;
                 }
             }
-            else if (!primaryActive && !secondaryActive && (primaryUp || secondaryUp))
+
+            if (!_waitingForSecondKey && !_isActionDone && (primaryDown ^ secondaryDown))
             {
-                _waitingForSecondKey = true;
-                _remainingSimultaneousWindow = SimultaneousGraceSeconds;
+                 _waitingForSecondKey = true;
+                 _remainingSimultaneousWindow = SimultaneousGraceSeconds;
             }
             
-            if (primaryUp || secondaryUp)
-            {
-                ResetState();
-                return ComboInputResult.Complete;
-            }
             return ComboInputResult.None;
         }
         

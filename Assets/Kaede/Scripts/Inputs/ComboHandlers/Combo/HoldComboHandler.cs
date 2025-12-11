@@ -14,7 +14,7 @@ namespace Kaede.Scripts.Inputs.ComboHandlers.Combo
         private readonly float _maxAmount;
         private readonly Vector2 _requiredTimeRange;
         private bool _isHolding;
-        private bool _pendingCompletion;
+        private bool _isActionDone; // ใช้แทน _pendingCompletion เพื่อสื่อความหมายชัดเจนและคุม Flow ได้ดีกว่า
         
         public float Progress => _maxAmount <= 0f ? 0f : Mathf.Clamp01(_elapsed / _maxAmount);
 
@@ -26,58 +26,56 @@ namespace Kaede.Scripts.Inputs.ComboHandlers.Combo
         
         public ComboInputResult CheckInput(PlayerInputHandler input, ComboKey expectedKey, CancellationToken ct, IComboButtonVisual visual)
         {
-            if (_pendingCompletion)
+            if (_isActionDone)
             {
-                _pendingCompletion = false;
-                return ComboInputResult.Complete;
+                if (input.IsKeyUp(expectedKey) || !input.IsKeyHeld(expectedKey) || input.AnyOtherKeyUp(expectedKey))
+                {
+                    _isActionDone = false;
+                    return ComboInputResult.Complete;
+                }
+                return ComboInputResult.None;
             }
             
-            if (input.IsKeyHeld(expectedKey))
+            if (input.IsKeyDown(expectedKey) && !_isHolding)
             {
-                if (!_isHolding)
+                _isHolding = true;
+                _elapsed = 0f;
+            }
+
+            if (_isHolding)
+            {
+                if (input.IsKeyHeld(expectedKey))
                 {
-                    _isHolding = true;
-                    _elapsed = 0f;
+                    _elapsed += Time.deltaTime;
+                    
+                    if (_elapsed > _requiredTimeRange.y)
+                    {
+                        ResetHold();
+                        _isActionDone = true;
+                        return ComboInputResult.Wrong;
+                    }
+                    visual.SetState(KeyState.Active, null, _elapsed);
+                    return ComboInputResult.Holding;
                 }
                 
-                _elapsed += Time.deltaTime;
-                if (_elapsed > _requiredTimeRange.y)
+                if (input.IsKeyUp(expectedKey) || !input.IsKeyHeld(expectedKey))
                 {
+                    var t = _elapsed;
                     ResetHold();
-                _pendingCompletion = true;
-                    
+                    _isActionDone = true;
+
+                    if (t >= _requiredTimeRange.x && t <= _requiredTimeRange.y)
+                    {
+                        return ComboInputResult.Correct;
+                    }
                     return ComboInputResult.Wrong;
                 }
-                visual.SetState(KeyState.Active, null, _elapsed);
-                return ComboInputResult.Holding;
-            }
-            if (input.IsKeyUp(expectedKey))
-            {
-                if (!_isHolding)
-                { 
-                    ResetHold();
-                    _pendingCompletion = true;
-                    return ComboInputResult.None;
-                }
-                
-                var t = _elapsed;
-                ResetHold();
-                _pendingCompletion = true;
-                
-
-                if (t >= _requiredTimeRange.x && t <= _requiredTimeRange.y)
-                {
-                    return ComboInputResult.Correct;
-                }
-                //visual.SetState(KeyState.Ideal);
-                return ComboInputResult.Wrong;
             }
 
             if (input.AnyOtherKeyDown(expectedKey))
             {
                 ResetHold();
-                _pendingCompletion = true;
-                
+                _isActionDone = true;
                 return ComboInputResult.Wrong;
             }
             

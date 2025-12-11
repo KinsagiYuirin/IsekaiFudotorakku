@@ -18,6 +18,7 @@ namespace Kaede.Scripts.Inputs.ComboHandlers.Combo
         private bool _pendingCompletion;
         private readonly ComboKey _secondKey;
         private const float SimultaneousGraceSeconds = 0.1f;
+        
         public float Progress => _maxAmount <= 0f ? 0f : Mathf.Clamp01(_elapsed / _maxAmount);
 
         public DualHoldComboHandler(float requiredTime, ComboKey secondKey)
@@ -30,23 +31,26 @@ namespace Kaede.Scripts.Inputs.ComboHandlers.Combo
         public ComboInputResult CheckInput(PlayerInputHandler input, ComboKey expectedKey,
             CancellationToken ct, IComboButtonVisual visual)
         {
+            if (_pendingCompletion)
+            {
+                _pendingCompletion = false;
+                return ComboInputResult.Complete;
+            }
+
             var primaryDown = input.IsKeyDown(expectedKey);
             var secondaryDown = input.IsKeyDown(_secondKey);
             
             var primaryHeld = input.IsKeyHeld(expectedKey);
             var secondaryHeld = input.IsKeyHeld(_secondKey);
             
-            var primaryUp = input.IsKeyUp(expectedKey);
-            var secondaryUp = input.IsKeyUp(_secondKey);
-            
             var primaryActive = primaryHeld || primaryDown;
             var secondaryActive = secondaryHeld || secondaryDown;
 
-            if (_pendingCompletion)
+            if (input.AnyOtherKeyDown(expectedKey, _secondKey))
             {
                 ResetHold();
-                _pendingCompletion = false;
-                return _isHolding ? ComboInputResult.Wrong : ComboInputResult.None;
+                _pendingCompletion = true;
+                return ComboInputResult.Wrong;
             }
             
             if (!_isHolding)
@@ -74,43 +78,33 @@ namespace Kaede.Scripts.Inputs.ComboHandlers.Combo
                     }
                 }
             }
-
-            if (_waitingForSecondKey && !primaryActive && !secondaryActive)
+            
+            if (_isHolding)
             {
-                ResetHold();
-                _pendingCompletion = true;
-                return ComboInputResult.Wrong;
-            }
-
-            if (_isHolding && primaryActive && secondaryActive)
-            {
-                _elapsed += Time.deltaTime;
-                if (_elapsed > _requiredTimeRange.y)
+                if (primaryActive && secondaryActive)
                 {
+                    _elapsed += Time.deltaTime;
+                    
+                    if (_elapsed > _requiredTimeRange.y)
+                    {
+                        ResetHold();
+                        _pendingCompletion = true;
+                        return ComboInputResult.Wrong;
+                    }
+
+                    visual.SetState(KeyState.Active, null, _elapsed);
+                    return ComboInputResult.Holding;
+                }
+                
+                if (input.IsKeyUp(expectedKey) || input.IsKeyUp(_secondKey) || !primaryActive || !secondaryActive)
+                {
+                    var duration = _elapsed;
+                    var withinWindow = duration >= _requiredTimeRange.x && duration <= _requiredTimeRange.y;
+                    
                     ResetHold();
                     _pendingCompletion = true;
-                    return ComboInputResult.Wrong;
+                    return withinWindow ? ComboInputResult.Correct : ComboInputResult.Wrong;
                 }
-
-                visual.SetState(KeyState.Active, null, _elapsed);
-                return ComboInputResult.Holding;
-            }
-
-            if (_isHolding && (input.IsKeyUp(expectedKey) || input.IsKeyUp(_secondKey)))
-            {
-                var duration = _elapsed;
-                var withinWindow = duration >= _requiredTimeRange.x && duration <= _requiredTimeRange.y;
-                
-                ResetHold();
-                _pendingCompletion = true;
-                return withinWindow ? ComboInputResult.Correct : ComboInputResult.Wrong;
-            }
-            
-            if (input.AnyOtherKeyDown(expectedKey, _secondKey))
-            {
-                ResetHold();
-                _pendingCompletion = true;
-                return ComboInputResult.Wrong;
             }
 
             return ComboInputResult.None;
