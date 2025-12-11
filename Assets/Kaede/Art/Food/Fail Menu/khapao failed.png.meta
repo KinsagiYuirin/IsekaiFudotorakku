@@ -147,7 +147,8 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      khapao failed_0: 8607003348878040635
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

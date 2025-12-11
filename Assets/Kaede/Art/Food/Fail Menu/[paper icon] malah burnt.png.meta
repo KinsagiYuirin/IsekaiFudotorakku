@@ -172,7 +172,9 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      '[paper icon] malah burnt_0': -1734495355800838998
+      '[paper icon] malah burnt_1': -1423950762561521102
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
