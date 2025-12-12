@@ -1,6 +1,7 @@
 using System;
 using Kaede.Scripts.Managers;
 using Sirenix.OdinInspector;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -14,6 +15,7 @@ namespace Kaede.Scripts.UI
         [SerializeField] private Button nextButton;
         [SerializeField] private Button prevButton;
         [SerializeField] private Button closeButton;
+        [SerializeField] private TMP_Text pageText;
         
         private int _currentIndex = 0;
 
@@ -58,6 +60,7 @@ namespace Kaede.Scripts.UI
             {
                 tutorialImage.sprite = tutorialImages[_currentIndex];
             }
+            UpdatePageText();
         }
         
         private void NextPage()
@@ -89,6 +92,14 @@ namespace Kaede.Scripts.UI
         private void CloseTutorial()
         {
             //gameObject.SetActive(false);
+        }
+
+        private void UpdatePageText()
+        {
+            if (pageText != null)
+            {
+                pageText.text = $"Page {_currentIndex + 1} / {tutorialImages.Length}";
+            }
         }
     }
 }

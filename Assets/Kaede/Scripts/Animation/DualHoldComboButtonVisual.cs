@@ -175,9 +175,9 @@ namespace Kaede.Scripts.Animation
         private void SetGrayColor(bool isGray)
         {
             var grayColor = new Color(0.5f, 0.5f, 0.5f);
-            if (iconImage1 != null)
+            if (barImage != null)
                 barImage.color = isGray ? grayColor : Color.white;
-            if (iconImage2 != null)
+            if (fillImage != null)
                 fillImage.color = isGray ? grayColor : Color.white;
         }
         

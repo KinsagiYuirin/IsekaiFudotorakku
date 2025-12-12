@@ -67,7 +67,7 @@ namespace Kaede.Scripts.UI
                         niceText.text = "Perfect!";
                         break;
                         
-                    case < 1000:
+                    case > 500:
                         niceText.text = "Nice!";
                         break;
                     
