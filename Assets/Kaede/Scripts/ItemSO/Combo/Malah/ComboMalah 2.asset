@@ -22,6 +22,8 @@ MonoBehaviour:
   wrongComboAnimation: {fileID: 0}
   stepComboAnimationAndSfx:
   - animationClip: {fileID: 7400000, guid: 6b6f60affc28b9d45ae9d21db40b1dfb, type: 2}
+    sfxClip: {fileID: 8300000, guid: f139b7ee5aa3c7c41b4035e34360938c, type: 3}
+  - animationClip: {fileID: 7400000, guid: 6b6f60affc28b9d45ae9d21db40b1dfb, type: 2}
     sfxClip: {fileID: 8300000, guid: 6300f9e913a2ef14ebce60ce74cf3de5, type: 3}
   - animationClip: {fileID: 7400000, guid: 1d23cf77b22095a4689a5796aa9c5408, type: 2}
     sfxClip: {fileID: 8300000, guid: 6300f9e913a2ef14ebce60ce74cf3de5, type: 3}
