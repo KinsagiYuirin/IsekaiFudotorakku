@@ -16,17 +16,15 @@ MonoBehaviour:
   phase: 1
   cookingSprite: {fileID: 0}
   useSequentialAnimation: 1
-  comboAnimation: {fileID: 7400000, guid: 5dc7b50759baadb4e864b625b88903a0, type: 2}
   comboAnimationAndSfx:
     animationClip: {fileID: 0}
     sfxClip: {fileID: 0}
   wrongComboAnimation: {fileID: 0}
-  comboStepAnimations: []
   stepComboAnimationAndSfx:
   - animationClip: {fileID: 7400000, guid: abcadfba162600846a371eb95146fb89, type: 2}
     sfxClip: {fileID: 0}
   - animationClip: {fileID: 7400000, guid: cf90d53995be1be4c8e43cd510643f83, type: 2}
-    sfxClip: {fileID: 0}
+    sfxClip: {fileID: 8300000, guid: 403c7e42f09b8c84a8b0b20648f908d1, type: 3}
   comboSequence:
   - key: 7
     type: 5

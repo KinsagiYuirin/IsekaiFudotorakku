@@ -16,25 +16,23 @@ MonoBehaviour:
   phase: 1
   cookingSprite: {fileID: 0}
   useSequentialAnimation: 1
-  comboAnimation: {fileID: 0}
   comboAnimationAndSfx:
     animationClip: {fileID: 0}
     sfxClip: {fileID: 0}
   wrongComboAnimation: {fileID: 0}
-  comboStepAnimations: []
   stepComboAnimationAndSfx:
   - animationClip: {fileID: 7400000, guid: a8a6a94e6bdd703428c1bbedf2921f21, type: 2}
-    sfxClip: {fileID: 0}
+    sfxClip: {fileID: 8300000, guid: ceac2fee117eca14b8370fa3f96602e7, type: 3}
   - animationClip: {fileID: 7400000, guid: a8a6a94e6bdd703428c1bbedf2921f21, type: 2}
-    sfxClip: {fileID: 0}
+    sfxClip: {fileID: 8300000, guid: ceac2fee117eca14b8370fa3f96602e7, type: 3}
   - animationClip: {fileID: 7400000, guid: a8a6a94e6bdd703428c1bbedf2921f21, type: 2}
-    sfxClip: {fileID: 0}
+    sfxClip: {fileID: 8300000, guid: ceac2fee117eca14b8370fa3f96602e7, type: 3}
   - animationClip: {fileID: 7400000, guid: a8a6a94e6bdd703428c1bbedf2921f21, type: 2}
-    sfxClip: {fileID: 0}
+    sfxClip: {fileID: 8300000, guid: ceac2fee117eca14b8370fa3f96602e7, type: 3}
   - animationClip: {fileID: 7400000, guid: a8a6a94e6bdd703428c1bbedf2921f21, type: 2}
-    sfxClip: {fileID: 0}
+    sfxClip: {fileID: 8300000, guid: ceac2fee117eca14b8370fa3f96602e7, type: 3}
   - animationClip: {fileID: 7400000, guid: a8a6a94e6bdd703428c1bbedf2921f21, type: 2}
-    sfxClip: {fileID: 0}
+    sfxClip: {fileID: 8300000, guid: ceac2fee117eca14b8370fa3f96602e7, type: 3}
   - animationClip: {fileID: 7400000, guid: 734607487a6cb3149acd948a38b3ec7e, type: 2}
     sfxClip: {fileID: 0}
   comboSequence:
