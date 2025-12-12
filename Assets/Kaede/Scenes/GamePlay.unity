@@ -5309,6 +5309,7 @@ MonoBehaviour:
   nextButton: {fileID: 0}
   prevButton: {fileID: 0}
   closeButton: {fileID: 0}
+  pageText: {fileID: 0}
 --- !u!114 &1203022329
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -9095,7 +9096,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   timer:
-    restingTime: 7
+    restingTime: 6.58
     maxTimePerCombo: 20
     currentTimer: 0
     dividerTimeScore: 2
@@ -9103,7 +9104,7 @@ MonoBehaviour:
     delayBeforeGameOver: 0.5
   needSpacebar: 0
   autoPlay: 0
-  maxFailToSendFood: 2
+  maxFailToSendFood: 5
   <MenuDatasList>k__BackingField: []
   <TimeBetweenCombos>k__BackingField: 1
   scorePerButton: 5

@@ -401,9 +401,6 @@ namespace Kaede.Scripts.GamePlay
             SetComboEnabled(true);
             restingCutscenePlayer?.Stop();
             bgmManager?.PlaySecondBgm();
-            
-            var gameManager = GameManager.Instance;
-            gameManager?.StartReadyCountdown();
         }
         #endregion
     }

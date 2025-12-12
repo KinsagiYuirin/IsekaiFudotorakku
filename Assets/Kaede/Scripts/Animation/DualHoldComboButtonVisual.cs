@@ -148,17 +148,21 @@ namespace Kaede.Scripts.Animation
                 case KeyState.Active:
                     UpdateProgress(indexFloat ?? 0f); // indexFloat = elapsedTime
                     SetGrayColor(true);
+                    SetAlpha(0.8f);
                     break;
                 case KeyState.Current:
                     SetGrayColor(false);
+                    SetAlpha(1f);
                     break;
                 case KeyState.Prepare:
                     _isHolding = false;
                     SetGrayColor(true);
+                    SetAlpha(0.8f);
                     break;
                 case KeyState.Ideal:
                 default:
                     SetGrayColor(true);
+                    SetAlpha(0.4f);
                     ResetProgress();
                     break;
             }
@@ -179,6 +183,23 @@ namespace Kaede.Scripts.Animation
                 barImage.color = isGray ? grayColor : Color.white;
             if (fillImage != null)
                 fillImage.color = isGray ? grayColor : Color.white;
+        }
+        
+        private void SetAlpha(float alpha)
+        {
+            if (barImage != null)
+            {
+                Color color = barImage.color;
+                color.a = alpha;
+                barImage.color = color;
+            }
+
+            if (fillImage != null)
+            {
+                Color color = fillImage.color;
+                color.a = alpha;
+                fillImage.color = color;
+            }
         }
         
         private void UpdateProgress(float elapsedTime)
